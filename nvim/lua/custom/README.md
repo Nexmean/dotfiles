@@ -11,7 +11,7 @@
 
 ## Requirements
 - neovim
-- luv (version from brew doesn't works properly)
+- luv (version from brew doesn't work properly)
 - haskell-language-server
 - stylish-haskell
 - neovide (optional: for better GUI)
