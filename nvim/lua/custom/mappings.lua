@@ -1,10 +1,4 @@
 return {
-   disable = {
-      n = {
-         ["q"] = "",
-      },
-   },
-
    nvterm_user = {
       -- macos fixes
       -- toggle in terminal mode
