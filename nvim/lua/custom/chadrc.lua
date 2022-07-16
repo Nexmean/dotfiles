@@ -1,5 +1,3 @@
-local plugin_confs = require "custom.plugins.configs"
-
 local M = {}
 
 -- make sure you maintain the structure of `core/default_config.lua` here,
@@ -19,34 +17,13 @@ M.options = {
 }
 
 M.plugins = {
-   user = require('custom.plugins'),
-   override = {
-      ["kyazdani42/nvim-tree.lua"] = plugin_confs.nvimtree,
-      ["nvim-telescope/telescope.nvim"] = {
-         extensions = {
-            file_browser = {},
-            persisted = {},
-            ["ui-select"] = {},
-         },
-         extensions_list = {
-            "file_browser",
-            "persisted",
-            "ui-select",
-         },
-      },
-      ["NvChad/ui"] = {
-         statusline = {
-            overriden_modules = function ()
-               return require "custom.ui.statusline.modules"
-            end
-         },
-      },
-   },
+   user = require "custom.plugins",
+   override = require "custom.plugins.override",
    options = {
       lspconfig = {
          setup_lspconf = "custom.plugins.configs.lspconfig"
-      }
-   }
+      },
+   },
 }
 
 M.mappings = require("custom.mappings")
