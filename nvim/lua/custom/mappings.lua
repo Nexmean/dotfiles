@@ -127,6 +127,11 @@ return {
       n = {
          ["<leader>ds"] = { "<cmd> Telescope lsp_document_symbols <CR>", "   document symbols" },
          ["<leader>ws"] = { "<cmd> Telescope lsp_dynamic_workspace_symbols <CR>", "   workspace symbols" },
+         -- git
+         ["<leader>gb"] = { "<cmd> Telescope git_branches <CR>", "  git branches" },
+         ["<leader>gc"] = { "<cmd> Telescope git_commits <CR>", "  git commits" },
+         ["<leader>gs"] = { "<cmd> Telescope git_stash <CR>", "  git stashes" },
+         ["<leader>dc"] = { "<cmd> Telescope git_bcommits <CR>", "  git document commits" },
          -- lsp
          ["gi"] = { "<cmd> Telescope lsp_implementations <CR>", "   lsp implementation" },
          ["gr"] = { "<cmd> Telescope lsp_references <CR>", "   lsp references" },
@@ -160,6 +165,12 @@ return {
    telescope_frecency_user = {
       n = {
          ["<leader>fr"] = { "<cmd> Telescope frecency <CR>", "   find recent files" }
+      }
+   },
+
+   neogit_user = {
+      n = {
+         ["<leader>gn"] = { "<cmd> Neogit <CR> ", "  open neogit" }
       }
    },
 }

@@ -19,7 +19,7 @@ M.options = {
 local my_hl = require "custom.ui.neogit"
 
 M.ui = {
-   hl_override = my_hl,
+   hl_add = my_hl,
 }
 
 M.plugins = {

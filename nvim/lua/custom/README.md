@@ -7,6 +7,7 @@
 - haskell highlighting, lsp and formatting
 - vim-surround, easymotion(hop.nvim), scrollbar
 - editorconfig
+- neogit and telescope git integration
 - plugins are lazy loading so neovim starts blazingly fast
 
 ## Requirements

@@ -11,11 +11,11 @@ return {
 
    NeogitDiffAdd = {
       bg = "black",
-      fg = "vibrant_green",
+      fg = "green",
    },
    NeogitDiffAddHighlight = {
       bg = "lightbg",
-      fg = "vibrant_green",
+      fg = "green",
    },
    NeogitDiffDelete = {
       bg = "black",
