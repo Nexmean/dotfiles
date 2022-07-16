@@ -94,4 +94,9 @@ return {
       module = "telescope._extensions.ui-select",
       fn = "vim.lsp.buf.code_action",
    },
+
+   ["nvim-telescope/telescope-frecency.nvim"] = {
+      requires = "tami5/sqlite.lua",
+      module = "telescope._extensions.frecency",
+   },
 }

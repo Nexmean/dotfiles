@@ -125,7 +125,6 @@ return {
 
    telescope_user = {
       n = {
-         ["<leader>fr"] = { "<cmd> Telescope oldfiles <CR>", "   find recent files" },
          ["<leader>ds"] = { "<cmd> Telescope lsp_document_symbols <CR>", "   document symbols" },
          ["<leader>ws"] = { "<cmd> Telescope lsp_dynamic_workspace_symbols <CR>", "   workspace symbols" },
          -- lsp
@@ -147,6 +146,12 @@ return {
    tabs_user = {
       n = {
          ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab"}
+         ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab" }
+      }
+   },
+   telescope_frecency_user = {
+      n = {
+         ["<leader>fr"] = { "<cmd> Telescope frecency <CR>", "   find recent files" }
       }
    },
 }
