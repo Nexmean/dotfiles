@@ -68,12 +68,6 @@ return {
       end,
    },
 
-   ["nvim-telescope/telescope-file-browser.nvim"] = {
-      as = "telescope-file-browser.nvim",
-      after = "telescope.nvim",
-      module = "telescope._extensions.file_browser",
-   },
-
    ["gpanders/editorconfig.nvim"] = {
       as = "editorconfig.nvim"
    },
