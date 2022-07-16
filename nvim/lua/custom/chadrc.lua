@@ -1,5 +1,4 @@
 local plugin_confs = require "custom.plugins.configs"
-local custom_statusline = require "custom.ui.statusline"
 
 local M = {}
 
@@ -19,14 +18,6 @@ M.options = {
    end
 }
 
-M.ui = {
-   statusline = {
-      override = {
-         run = custom_statusline.run
-      }
-   }
-}
-
 M.plugins = {
    user = require('custom.plugins'),
    override = {
@@ -41,6 +32,13 @@ M.plugins = {
             "file_browser",
             "persisted",
             "ui-select",
+         },
+      },
+      ["NvChad/ui"] = {
+         statusline = {
+            overriden_modules = function ()
+               return require "custom.ui.statusline.modules"
+            end
          },
       },
    },

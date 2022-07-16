@@ -74,15 +74,6 @@ return {
       module = "telescope._extensions.file_browser",
    },
 
-   -- ["nvim-telescope/telescope-ui-select.nvim"] = {
-   --    as = "telescope-ui-select.nvim",
-   --    after = "telescope.nvim",
-   --    module = "telescope._extension.ui-select",
-   --    config = function ()
-   --       require("telescope").load_extension "ui-select"
-   --    end
-   -- }
-
    ["gpanders/editorconfig.nvim"] = {
       as = "editorconfig.nvim"
    },
