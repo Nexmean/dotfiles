@@ -95,6 +95,17 @@ return {
          require("persisted").setup {
             autoload = true,
             use_git_branch = true,
+            before_save = function ()
+               while (vim.fn.bufname() == "NeogitStatus" or vim.fn.bufname() == "NeogitCommitView") do
+                  if vim.fn.tabpagenr "$" == 1 then
+                     pcall(vim.cmd, "tabnew")
+                  else
+                     pcall(vim.cmd, "tabclose")
+                  end
+               end
+               pcall(vim.cmd, "bw NeogitStatus")
+               pcall(vim.cmd, "bw NeogitCommitView")
+            end
          }
       end,
    },
