@@ -12,6 +12,7 @@
 ## Requirements
 - neovim
 - luv (version from brew doesn't work properly)
+- nerd font
 - haskell-language-server
 - stylish-haskell
 - neovide (optional: for better GUI)
