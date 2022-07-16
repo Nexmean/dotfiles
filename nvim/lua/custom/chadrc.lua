@@ -16,6 +16,10 @@ M.options = {
    end
 }
 
+M.ui = {
+   hl_override = require "custom.ui.neogit",
+}
+
 M.plugins = {
    user = require "custom.plugins",
    override = require "custom.plugins.override",

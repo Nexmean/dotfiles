@@ -37,12 +37,21 @@ return {
    },
 
    ["TimUntersberger/neogit"] = {
-      requires = "nvim-lua/plenary.nvim",
+      requires = { "nvim-lua/plenary.nvim" },
+      after = { "base46" },
       cmd = "Neogit",
       module = "neogit",
       config = function ()
-         require("neogit").setup {}
-      end
+         require("neogit").setup {
+            disable_commit_confirmation = true,
+            disable_context_highlighting = false,
+            signs = {
+                section = { "", "" },
+                item = { "", "" },
+                hunk = { "", "" },
+            },
+         }
+      end,
    },
 
    ["mhartington/formatter.nvim"] = {
