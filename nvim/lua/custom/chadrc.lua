@@ -13,6 +13,7 @@ M.options = {
       vim.g.neovide_cursor_animation_length = 0
       vim.g.neovide_scroll_animation_length = 0.3
       vim.opt.guifont = "JetbrainsMono Nerd Font:h18"
+      vim.o.sessionoptions = "buffers,curdir,folds,winpos,winsize"
    end
 }
 
