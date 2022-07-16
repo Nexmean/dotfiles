@@ -125,6 +125,7 @@ return {
 
    telescope_user = {
       n = {
+         ["<leader>fr"] = { "<cmd> Telescope resume <CR>", "   repeat recent search" },
          ["<leader>ds"] = { "<cmd> Telescope lsp_document_symbols <CR>", "   document symbols" },
          ["<leader>ws"] = { "<cmd> Telescope lsp_dynamic_workspace_symbols <CR>", "   workspace symbols" },
          -- git
@@ -164,7 +165,7 @@ return {
 
    telescope_frecency_user = {
       n = {
-         ["<leader>fr"] = { "<cmd> Telescope frecency <CR>", "   find recent files" }
+         ["<leader>fo"] = { "<cmd> Telescope frecency <CR>", "   find recent (old) files" }
       }
    },
 
