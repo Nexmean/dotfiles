@@ -145,10 +145,18 @@ return {
 
    tabs_user = {
       n = {
-         ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab"}
          ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab" }
       }
    },
+
+   persisted_user = {
+      n = {
+         ["<leader>ss"] = { "<cmd> SessionStart <CR>", "session start" },
+         ["<leader>sl"] = { "<cmd> Telescope persisted <CR>", "session list" },
+         ["<leader>sx"] = { "<cmd> SessionStop <CR>", "session stop" },
+      },
+   },
+
    telescope_frecency_user = {
       n = {
          ["<leader>fr"] = { "<cmd> Telescope frecency <CR>", "   find recent files" }

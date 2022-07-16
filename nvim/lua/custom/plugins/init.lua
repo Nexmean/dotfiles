@@ -72,21 +72,22 @@ return {
       as = "editorconfig.nvim"
    },
 
-   ["olimorris/persisted.nvim"] = {
-      as = "persisted.nvim",
-      after = "telescope.nvim",
-      cmd = {"SessionLoad", "SessionSave", "SessionLoadLast", "SessionStart", "SessionStop", "SessionToggle"},
-      module = "telescope._extensions.persisted",
-      config = function ()
-          require("persisted").setup()
-      end
-   },
 
    ["nvim-telescope/telescope-ui-select.nvim"] = {
       as = "telescope-ui-select.nvim",
       after = "telescope.nvim",
       module = "telescope._extensions.ui-select",
       fn = "vim.lsp.buf.code_action",
+   },
+
+   ["olimorris/persisted.nvim"] = {
+      as = "persisted.nvim",
+      config = function ()
+         require("persisted").setup {
+            autoload = true,
+            use_git_branch = true,
+         }
+      end,
    },
 
    ["nvim-telescope/telescope-frecency.nvim"] = {
