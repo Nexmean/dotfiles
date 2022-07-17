@@ -6,8 +6,9 @@ local separators = (type(sep_style) == "table" and sep_style) or require("nvchad
 local sep_r = separators["right"]
 
 return function()
-   local icon = "  "
+   local icon = " "
 
+   local dir = ""
    local filename = (fn.expand "%" == "" and "Empty ") or fn.expand "%:t"
 
    if filename ~= "Empty " then
@@ -15,26 +16,28 @@ return function()
 
       if devicons_present then
          local ft_icon = devicons.get_icon(filename)
-         icon = (ft_icon ~= nil and " " .. ft_icon) or ""
+         icon = (ft_icon ~= nil and ft_icon) or ""
       end
 
-      local filepath = (fn.expand "%" == "" and "Empty ") or fn.expand "%"
-      local rel_filepath = utils.filepath.relative_filepath(filepath)
+      local filepath = fn.expand "%"
+      if string.find(filepath, "/") ~= nil then
+         local rel_filepath = utils.filepath.relative(filepath)
 
-      if vim.o.columns > 300 and #rel_filepath < 120 then
-         filename = rel_filepath
-      elseif vim.o.columns > 200 and #rel_filepath < 80 then
-         filename = rel_filepath
-      elseif vim.o.columns > 140 and #rel_filepath < 50 then
-         filename = rel_filepath
-      elseif vim.o.columns > 100 and #rel_filepath < 30 then
-         filename = rel_filepath
+         local fp_fit = (#rel_filepath / (vim.o.columns - 30)) < 0.3
+
+         if fp_fit then
+            dir, filename = utils.filepath.split_dir(rel_filepath)
+         else
+            dir, filename = utils.filepath.split_dir(utils.filepath.short(rel_filepath))
+         end
       else
-         filename = utils.filepath.short(rel_filepath)
+         filename = filepath
       end
-
-      filename = " " .. filename .. " "
    end
 
-   return "%#St_file_info#" .. icon .. filename .. "%#St_file_sep#" .. sep_r
+   return (
+      "%#St_file_info#" .. icon .. " "
+      .. "%#St_file_info_dir#" .. dir .. "%#St_file_info#" .. filename
+      .. " " .. "%#St_file_sep#" .. sep_r
+   )
 end

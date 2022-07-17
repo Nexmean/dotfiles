@@ -10,6 +10,11 @@ function M.split(fp)
    return res
 end
 
+function M.split_dir(fp)
+   local dir, filename = string.match(fp, "(.*/)([^/]+)")
+   return dir, filename
+end
+
 function M.short(fp)
    local res
    if string.sub(fp, 1, 1) == "/" then
@@ -37,7 +42,7 @@ function M.short(fp)
    return res
 end
 
-function M.relative_filepath(filepath)
+function M.relative(filepath)
    local cwd = fn.getcwd() .. "/"
    local home = vim.env.HOME .. "/"
 
@@ -49,6 +54,5 @@ function M.relative_filepath(filepath)
       return filepath
    end
 end
-
 
 return M

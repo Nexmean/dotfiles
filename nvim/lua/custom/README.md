@@ -16,7 +16,6 @@
 - nerd font
 - haskell-language-server
 - stylish-haskell
-- neovide (optional: for better GUI)
 
 ## Setup
 - install [neovim](http://neovim.io/)

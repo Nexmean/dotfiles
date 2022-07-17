@@ -1,4 +1,5 @@
 return {
+   -- Neogit
    NeogitNotificationInfo = {
       fg = "green",
    },
@@ -36,5 +37,11 @@ return {
    NeogitHunkHeaderHighlight = {
       bg = "grey",
       fg = "white",
-   }
+   },
+
+   -- statusline
+   St_file_info_dir = {
+      bg = "lightbg",
+      fg = "light_grey",
+   },
 }

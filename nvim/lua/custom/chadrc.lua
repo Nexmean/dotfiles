@@ -17,10 +17,12 @@ M.options = {
    end
 }
 
-local my_hl = require "custom.ui.neogit"
+local hl_add = require "custom.ui.hl_add"
+local hl_override = require "custom.ui.hl_override"
 
 M.ui = {
-   hl_add = my_hl,
+   hl_add = hl_add,
+   hl_override = hl_override,
 }
 
 M.plugins = {
