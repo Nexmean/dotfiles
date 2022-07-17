@@ -28,15 +28,19 @@ return {
    },
    NeogitDiffContextHighlight = {
       bg = "black2",
-      fg = "light_grey",
    },
    NeogitHunkHeader = {
       bg = "lightbg",
-      fg = "white",
    },
    NeogitHunkHeaderHighlight = {
       bg = "grey",
-      fg = "white",
+   },
+   NeogitCommitViewHeader = {
+      bg = "teal",
+      fg = "black",
+   },
+   NeogitFilePath = {
+      fg = "dark_purple"
    },
 
    -- statusline

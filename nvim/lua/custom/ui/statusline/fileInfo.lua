@@ -6,7 +6,7 @@ local separators = (type(sep_style) == "table" and sep_style) or require("nvchad
 local sep_r = separators["right"]
 
 return function()
-   local icon = " "
+   local icon = "  "
 
    local dir = ""
    local filename = (fn.expand "%" == "" and "Empty ") or fn.expand "%:t"
@@ -16,7 +16,7 @@ return function()
 
       if devicons_present then
          local ft_icon = devicons.get_icon(filename)
-         icon = (ft_icon ~= nil and ft_icon) or ""
+         icon = (ft_icon ~= nil and ft_icon .. " ") or ""
       end
 
       local filepath = fn.expand "%"
@@ -36,7 +36,7 @@ return function()
    end
 
    return (
-      "%#St_file_info#" .. icon .. " "
+      "%#St_file_info#" .. icon
       .. "%#St_file_info_dir#" .. dir .. "%#St_file_info#" .. filename
       .. " " .. "%#St_file_sep#" .. sep_r
    )
