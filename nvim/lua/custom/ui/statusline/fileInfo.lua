@@ -20,7 +20,10 @@ return function()
       end
 
       local filepath = fn.expand "%"
-      if string.find(filepath, "/") ~= nil then
+
+      if string.sub(filepath, 1, 5) == "term:" then
+         filename = fn.expand "%:t"
+      elseif string.find(filepath, "/") ~= nil then
          local rel_filepath = utils.filepath.relative(filepath)
 
          local fp_fit = (#rel_filepath / (vim.o.columns - 30)) < 0.3

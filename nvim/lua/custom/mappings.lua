@@ -125,7 +125,9 @@ return {
 
    telescope_user = {
       n = {
-         ["<leader>fr"] = { "<cmd> Telescope resume <CR>", "   repeat recent search" },
+         ["<leader>fd"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>",  "   find in current document" },
+         ["<leader>fr"] = { "<cmd> Telescope resume <CR>",  "   repeat recent search" },
+         ["<leader>fp"] = { "<cmd> Telescope pickers <CR>", "   find previous searches" },
          ["<leader>ds"] = { "<cmd> Telescope lsp_document_symbols <CR>", "   document symbols" },
          ["<leader>ws"] = { "<cmd> Telescope lsp_dynamic_workspace_symbols <CR>", "   workspace symbols" },
          -- git

@@ -115,4 +115,13 @@ return {
       requires = "tami5/sqlite.lua",
       module = "telescope._extensions.frecency",
    },
+
+   ["sindrets/diffview.nvim"] = {
+      as = "diffview.nvim",
+      requires = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" },
+      after = "plenary.nvim",
+      config = function ()
+         require("diffview").setup()
+      end
+   },
 }
