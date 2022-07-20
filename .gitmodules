@@ -1,0 +1,3 @@
+[submodule "deps/tree-sitter-haskell"]
+	path = deps/tree-sitter-haskell
+	url = git@github.com:tree-sitter/tree-sitter-haskell.git
