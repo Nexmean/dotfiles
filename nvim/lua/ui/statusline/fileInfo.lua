@@ -1,4 +1,4 @@
-local utils = require "custom.utils"
+local utils = require "utils"
 
 local fn = vim.fn
 local sep_style = vim.g.statusline_sep_style
