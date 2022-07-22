@@ -17,24 +17,17 @@ M.options = {
    end
 }
 
-local hl_add = require "custom.ui.hl_add"
-local hl_override = require "custom.ui.hl_override"
-
-M.ui = {
-   hl_add = hl_add,
-   hl_override = hl_override,
-}
-
 M.plugins = {
-   user = require "custom.plugins",
-   override = require "custom.plugins.override",
+   override = {},
+   remove = {},
+   user = {},
    options = {
       lspconfig = {
-         setup_lspconf = "custom.plugins.configs.lspconfig"
+         setup_lspconf = "", -- path of lspconfig file
       },
    },
 }
 
-M.mappings = require("custom.mappings")
+M.mappings = require "conf.mappings"
 
 return M
