@@ -17,18 +17,6 @@ M.options = {
    end
 }
 
-local hl_add = require "ui.hl_add"
-local hl_override = require "ui.hl_override"
-
-M.ui = {
-   hl_add = hl_add,
-   hl_override = hl_override,
-   changed_themes = {},
-   theme_toggle = { "onedark", "one_light" },
-   theme = "onedark", -- default theme
-   transparency = false,
-}
-
 M.plugins = {
    override = {},
    remove = {},

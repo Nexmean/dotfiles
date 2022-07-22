@@ -4,19 +4,17 @@ if not present then
    return
 end
 
-require("base46").load_highlight "cmp"
-
 vim.opt.completeopt = "menuone,noselect"
 
 local function border(hl_name)
    return {
-      { "╭", hl_name },
+      { "┌", hl_name },
       { "─", hl_name },
-      { "╮", hl_name },
+      { "┐", hl_name },
       { "│", hl_name },
-      { "╯", hl_name },
+      { "┘", hl_name },
       { "─", hl_name },
-      { "╰", hl_name },
+      { "└", hl_name },
       { "│", hl_name },
    }
 end
@@ -47,7 +45,7 @@ local options = {
    },
    formatting = {
       format = function(_, vim_item)
-         local icons = require("nvchad_ui.icons").lspkind
+         local icons = require("ui.icons").lspkind
          vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
          return vim_item
       end,
@@ -96,8 +94,5 @@ local options = {
       { name = "path" },
    },
 }
-
--- check for any override
-options = require("core.utils").load_override(options, "hrsh7th/nvim-cmp")
 
 cmp.setup(options)

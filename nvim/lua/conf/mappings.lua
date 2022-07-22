@@ -40,17 +40,6 @@ M.general = {
       ["<leader>n"] = { "<cmd> set nu! <CR>", "   toggle line number" },
       ["<leader>rn"] = { "<cmd> set rnu! <CR>", "   toggle relative number" },
 
-      -- update nvchad
-      ["<leader>uu"] = { "<cmd> :NvChadUpdate <CR>", "  update nvchad" },
-
-      ["<leader>tt"] = {
-         function()
-            require("base46").toggle_theme()
-         end,
-
-         "   toggle theme",
-      },
-
       -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using <cmd> :map
@@ -76,19 +65,15 @@ M.general = {
    },
 }
 
-M.tabufline = {
-
+M.bufferline = {
    n = {
       -- new buffer
       ["<S-b>"] = { "<cmd> enew <CR>", "烙 new buffer" },
 
       -- cycle through buffers
-      ["<TAB>"] = { "<cmd> Tbufnext <CR>", "  goto next buffer" },
-      ["<S-Tab>"] = { "<cmd> Tbufprev <CR> ", "  goto prev buffer" },
-
-      -- cycle through tabs
-      ["<leader>tp"] = { "<cmd> tabprevious <CR>", "  goto next tab" },
-      ["<leader>tn"] = { "<cmd> tabnext <CR> ", "  goto prev tab" },
+      ["<TAB>"] = { "<cmd> BufferLineCycleNext <CR>", "  goto next buffer" },
+      ["<S-Tab>"] = { "<cmd> BufferLineCyclePrev <CR> ", "  goto prev buffer" },
+      ["gB"] = { "<cmd> BufferLinePick <CR>", "   goto tab"},
 
       -- close buffer + hide terminal buffer
       ["<leader>x"] = {
@@ -199,7 +184,7 @@ M.lspconfig = {
          function()
             vim.lsp.buf.formatting()
          end,
-         "   lsp formatting",
+         "  lsp formatting",
       },
 
       ["<leader>wa"] = {
@@ -241,14 +226,14 @@ M.telescope = {
       -- find
       ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "  find files" },
       ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "  find all" },
-      ["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "   live grep" },
+      ["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "  live grep" },
       ["<leader>fb"] = { "<cmd> Telescope buffers sort_lastused=true <CR>", "  find buffers" },
       ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "  help page" },
-      ["<leader>fo"] = { "<cmd> Telescope frecency <CR>", "   find recent (old) files" },
+      ["<leader>fo"] = { "<cmd> Telescope frecency <CR>", "  find recent (old) files" },
       ["<leader>tk"] = { "<cmd> Telescope keymaps <CR>", "   show keys" },
-      ["<leader>fd"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>",  "   find in current document" },
-      ["<leader>fr"] = { "<cmd> Telescope resume <CR>",  "   repeat recent search" },
-      ["<leader>fp"] = { "<cmd> Telescope pickers <CR>", "   find previous searches" },
+      ["<leader>fd"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>",  "  find in current document" },
+      ["<leader>fr"] = { "<cmd> Telescope resume <CR>",  "  repeat recent search" },
+      ["<leader>fp"] = { "<cmd> Telescope pickers <CR>", "  find previous searches" },
 
       -- git
       ["<leader>cm"] = { "<cmd> Telescope git_commits <CR>", "   git commits" },
@@ -267,12 +252,15 @@ M.telescope = {
 
       -- pick a hidden term
       ["<leader>pt"] = { "<cmd> Telescope terms <CR>", "   pick hidden term" },
-
-      -- theme switcher
-      ["<leader>th"] = { "<cmd> Telescope themes <CR>", "   nvchad themes" },
    },
    v = {
-
+      ["<leader>fw"] = {
+         function ()
+            local selected_text = require("utils.selection").get_visual_selection()
+            require("telescope.builtin").live_grep { default_text = selected_text }
+         end,
+         "  live grep" ,
+      }
    },
 }
 

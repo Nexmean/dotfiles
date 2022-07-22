@@ -6,23 +6,6 @@ local plugins = {
    ["wbthomason/packer.nvim"] = {},
    ["NvChad/extensions"] = { module = { "telescope", "nvchad" } },
 
-   ["NvChad/base46"] = {
-      config = function()
-         local ok, base46 = pcall(require, "base46")
-
-         if ok then
-            base46.load_theme()
-         end
-      end,
-   },
-
-   ["NvChad/ui"] = {
-      after = "base46",
-      config = function()
-         require("plugins.configs.nvchad_ui").load_ui_plugins()
-      end,
-   },
-
    ["NvChad/nvterm"] = {
       module = "nvterm",
       config = function()
@@ -33,7 +16,7 @@ local plugins = {
    ["kyazdani42/nvim-web-devicons"] = {
       module = "nvim-web-devicons",
       config = function()
-         require("plugins.configs.others").devicons()
+         require("plugins.configs.devicons").setup()
       end,
    },
 
@@ -149,14 +132,6 @@ local plugins = {
       end,
    },
 
-   ["goolord/alpha-nvim"] = {
-      after = "base46",
-      disable = true,
-      config = function()
-         require "plugins.configs.alpha"
-      end,
-   },
-
    ["numToStr/Comment.nvim"] = {
       module = "Comment",
       keys = { "gc", "gb" },
@@ -228,7 +203,6 @@ local plugins = {
 
    ["TimUntersberger/neogit"] = {
       requires = { "nvim-lua/plenary.nvim" },
-      after = { "base46" },
       cmd = "Neogit",
       module = "neogit",
       config = function ()
@@ -305,6 +279,48 @@ local plugins = {
       requires = "tami5/sqlite.lua",
       module = "telescope._extensions.frecency",
    },
+
+   ["akinsho/bufferline.nvim"] = {
+      tag = "v2.*",
+      requires = "kyazdani42/nvim-web-devicons",
+      after = "rose-pine",
+      config = function ()
+         require('bufferline').setup {
+            options = {
+               show_tab_indicators = false,
+            },
+         }
+      end,
+   },
+
+   ["rose-pine/neovim"] = {
+       as = "rose-pine",
+       tag = "v1.*",
+       config = function()
+         require("rose-pine").setup {
+            dark_variant = "moon"
+         }
+         vim.cmd("colorscheme rose-pine")
+       end,
+   },
+
+   ["nvim-lualine/lualine.nvim"] = {
+      requires = "kyazdani42/nvim-web-devicons",
+      after = "rose-pine",
+      config = function ()
+         require("lualine").setup {
+            options = {
+               theme = "rose-pine",
+               section_separators = { left = '', right = '█'},
+               component_separators = { left = '', right = '' }
+            },
+            sections = {
+               lualine_y = {'location'},
+               lualine_z = {}
+            }
+         }
+      end
+   }
 }
 
 require("core.packer").run(plugins)

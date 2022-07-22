@@ -29,8 +29,6 @@ M.blankline = function()
       return
    end
 
-   require("base46").load_highlight "blankline"
-
    local options = {
       indentLine_enabled = 1,
       filetype_exclude = {
@@ -51,7 +49,6 @@ M.blankline = function()
       show_current_context_start = true,
    }
 
-   options = load_override(options, "lukas-reineke/indent-blankline.nvim")
    blankline.setup(options)
 end
 
@@ -93,7 +90,6 @@ M.comment = function()
    end
 
    local options = {}
-   options = load_override(options, "numToStr/Comment.nvim")
    nvim_comment.setup(options)
 end
 
@@ -109,7 +105,6 @@ M.luasnip = function()
       updateevents = "TextChanged,TextChangedI",
    }
 
-   options = load_override(options, "L3MON4D3/LuaSnip")
    luasnip.config.set_config(options)
    require("luasnip.loaders.from_vscode").lazy_load()
    require("luasnip.loaders.from_vscode").lazy_load { paths = vim.g.luasnippets_path or "" }
@@ -133,33 +128,10 @@ M.gitsigns = function()
       return
    end
 
-   require("base46").load_highlight "git"
-
    local options = {
-      signs = {
-         add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
-         change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
-         delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
-         topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
-         changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
-      },
    }
 
-   options = load_override(options, "lewis6991/gitsigns.nvim")
    gitsigns.setup(options)
-end
-
-M.devicons = function()
-   local present, devicons = pcall(require, "nvim-web-devicons")
-
-   if present then
-      require("base46").load_highlight "devicons"
-
-      local options = { override = require("nvchad_ui.icons").devicons }
-      options = require("core.utils").load_override(options, "kyazdani42/nvim-web-devicons")
-
-      devicons.setup(options)
-   end
 end
 
 return M

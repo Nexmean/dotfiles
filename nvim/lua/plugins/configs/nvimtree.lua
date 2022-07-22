@@ -4,8 +4,6 @@ if not present then
    return
 end
 
-require("base46").load_highlight "nvimtree"
-
 local options = {
    filters = {
       dotfiles = false,

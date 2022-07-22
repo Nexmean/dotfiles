@@ -4,8 +4,7 @@ if not present then
    return
 end
 
-require("base46").load_highlight "lsp"
-require "nvchad_ui.lsp"
+require "ui.lsp"
 
 local M = {}
 local utils = require "core.utils"
@@ -25,10 +24,6 @@ M.on_attach = function(client, bufnr)
 
    local lsp_mappings = utils.load_config().mappings.lspconfig
    utils.load_mappings({ lsp_mappings }, { buffer = bufnr })
-
-   if client.server_capabilities.signatureHelpProvider then
-      require("nvchad_ui.signature").setup(client)
-   end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
