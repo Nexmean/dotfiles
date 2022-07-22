@@ -4,14 +4,6 @@ local plugins = {
 
    ["nvim-lua/plenary.nvim"] = { module = "plenary" },
    ["wbthomason/packer.nvim"] = {},
-   ["NvChad/extensions"] = { module = { "telescope", "nvchad" } },
-
-   ["NvChad/nvterm"] = {
-      module = "nvterm",
-      config = function()
-         require "plugins.configs.nvterm"
-      end,
-   },
 
    ["kyazdani42/nvim-web-devicons"] = {
       module = "nvim-web-devicons",
@@ -27,16 +19,6 @@ local plugins = {
       end,
       config = function()
          require("plugins.configs.others").blankline()
-      end,
-   },
-
-   ["NvChad/nvim-colorizer.lua"] = {
-      opt = true,
-      setup = function()
-         require("core.lazy_load").colorizer()
-      end,
-      config = function()
-         require("plugins.configs.others").colorizer()
       end,
    },
 
