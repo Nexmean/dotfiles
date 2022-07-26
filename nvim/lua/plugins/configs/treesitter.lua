@@ -14,8 +14,20 @@ parser_configs.haskell = {
 
 local options = {
    ensure_installed = {
-      "lua",
+      "c", "cpp",
+      "bash",
       "haskell",
+      "javascript", "typescript",
+      "json", "toml", "yaml",
+      "lua", "fennel",
+      "make",
+      "markdown",
+      "nix",
+      "norg",
+      "proto",
+      "python",
+      "rust",
+      "sql",
    },
    highlight = {
       enable = true,
@@ -24,3 +36,12 @@ local options = {
 }
 
 treesitter.setup(options)
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+vim.api.nvim_create_autocmd({"BufReadPost", "FileReadPost"}, {
+   pattern = "*",
+   command = "normal zR",
+})
+
