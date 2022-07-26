@@ -9,7 +9,9 @@ local options = {
    -- then any lsp server you setup by lspconfig is going to get installed automatically!
 
    -- ensure_installed = { "lua" },
-   automatic_installation = true,
+   automatic_installation = {
+      exclude = { "hls" }
+   },
 
    ui = {
       icons = {
