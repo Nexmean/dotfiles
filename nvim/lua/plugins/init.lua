@@ -1,9 +1,29 @@
 vim.cmd "packadd packer.nvim"
 
 local plugins = {
-
-   ["nvim-lua/plenary.nvim"] = { module = "plenary" },
    ["wbthomason/packer.nvim"] = {},
+
+   ["udayvir-singh/tangerine.nvim"] = {},
+
+   ["EdenEast/nightfox.nvim"] = {
+      config = function()
+         require("nightfox").setup {
+            groups = {
+               all = {
+                  NvimTreeNormal = { fg = "fg1", bg = "bg1" },
+                  TelescopeNormal = { bg = "bg0" },
+                  TelescopeBorder = { bg = "bg0", fg = "bg0" },
+               },
+            },
+         }
+
+         vim.cmd "colorscheme duskfox"
+
+         require("ui.colors").generate_user_config_highlights()
+      end,
+   },
+
+   ["nvim-lua/plenary.nvim"] = {},
 
    ["kyazdani42/nvim-web-devicons"] = {
       module = "nvim-web-devicons",
@@ -116,7 +136,7 @@ local plugins = {
 
    ["numToStr/Comment.nvim"] = {
       module = "Comment",
-      keys = { "gc", "gb" },
+      keys = { "gc" },
       config = function()
          require("plugins.configs.others").comment()
       end,
@@ -133,8 +153,12 @@ local plugins = {
 
    ["nvim-telescope/telescope.nvim"] = {
       cmd = "Telescope",
+      after = "persisted.nvim",
       config = function()
-         require "plugins.configs.telescope"
+         local telescope = require "telescope"
+         local config = require "plugins.configs.telescope"
+         telescope.setup(config)
+         telescope.load_extension "persisted"
       end,
    },
 
@@ -147,20 +171,20 @@ local plugins = {
    },
 
    ["neovimhaskell/haskell-vim"] = {
-      ft = {'haskell', 'cabal'},
+      ft = { "haskell", "cabal" },
    },
 
    ["kylechui/nvim-surround"] = {
-      config = function ()
-         require('nvim-surround').setup {}
+      config = function()
+         require("nvim-surround").setup {}
       end,
    },
 
    ["phaazon/hop.nvim"] = {
       branch = "v2",
-      config = function ()
+      config = function()
          require("hop").setup {}
-      end
+      end,
    },
 
    ["folke/trouble.nvim"] = {
@@ -168,48 +192,30 @@ local plugins = {
       module = "trouble",
       after = "nvim-web-devicons",
       cmd = "Trouble",
-      config = function ()
+      config = function()
          require("trouble").setup {
             action_keys = {
-               cancel = "<C-[>"
-            }
-         }
-      end
-   },
-
-   ["petertriho/nvim-scrollbar"] = {
-      config = function ()
-         require("scrollbar").setup {}
-      end
-   },
-
-   ["TimUntersberger/neogit"] = {
-      requires = { "nvim-lua/plenary.nvim" },
-      cmd = "Neogit",
-      module = "neogit",
-      config = function ()
-         require("neogit").setup {
-            disable_commit_confirmation = true,
-            disable_context_highlighting = false,
-            disable_insert_on_commit = false,
-            signs = {
-                section = { "", "" },
-                item = { "", "" },
-                hunk = { "", "" },
+               cancel = "<C-[>",
             },
          }
       end,
    },
 
+   ["petertriho/nvim-scrollbar"] = {
+      config = function()
+         require("scrollbar").setup {}
+      end,
+   },
+
    ["mhartington/formatter.nvim"] = {
-      cmd = {"Format", "FormatWrite"},
-      config = function ()
+      cmd = { "Format", "FormatWrite" },
+      config = function()
          require("formatter").setup {
             logging = true,
             log_level = vim.log.levels.WARN,
             filetype = {
                haskell = {
-                  function ()
+                  function()
                      return {
                         exe = "stylish-haskell",
                         stdin = true,
@@ -225,25 +231,26 @@ local plugins = {
    },
 
    ["gpanders/editorconfig.nvim"] = {
-      as = "editorconfig.nvim"
+      as = "editorconfig.nvim",
    },
-
 
    ["nvim-telescope/telescope-ui-select.nvim"] = {
       as = "telescope-ui-select.nvim",
       after = "telescope.nvim",
-      module = "telescope._extensions.ui-select",
       fn = "vim.lsp.buf.code_action",
+      config = function()
+         require("telescope").load_extension "ui-select"
+      end,
    },
 
    ["olimorris/persisted.nvim"] = {
       as = "persisted.nvim",
-      config = function ()
+      config = function()
          require("persisted").setup {
             autoload = true,
             use_git_branch = true,
-            before_save = function ()
-               while (vim.fn.bufname() == "NeogitStatus" or vim.fn.bufname() == "NeogitCommitView") do
+            before_save = function()
+               while vim.fn.bufname() == "NeogitStatus" or vim.fn.bufname() == "NeogitCommitView" do
                   if vim.fn.tabpagenr "$" == 1 then
                      pcall(vim.cmd, "tabnew")
                   else
@@ -252,57 +259,94 @@ local plugins = {
                end
                pcall(vim.cmd, "bw NeogitStatus")
                pcall(vim.cmd, "bw NeogitCommitView")
-            end
+            end,
          }
       end,
    },
 
    ["nvim-telescope/telescope-frecency.nvim"] = {
       requires = "tami5/sqlite.lua",
-      module = "telescope._extensions.frecency",
+      after = "telescope.nvim",
+      config = function()
+         require("telescope").load_extension "frecency"
+      end,
    },
 
-   ["akinsho/bufferline.nvim"] = {
-      tag = "v2.*",
+   ["nanozuki/tabby.nvim"] = {
+      after = "nightfox.nvim",
+      config = function()
+         require "plugins.configs.tabby"
+      end,
+   },
+
+   ["nvim-lualine/lualine.nvim"] = {
       requires = "kyazdani42/nvim-web-devicons",
-      after = "rose-pine",
-      config = function ()
-         require('bufferline').setup {
+      after = "nightfox.nvim",
+      config = function()
+         require("lualine").setup {
             options = {
-               show_tab_indicators = false,
+               section_separators = { left = "", right = "█" },
+               component_separators = { left = "", right = "" },
+            },
+            sections = {
+               lualine_y = { "location" },
+               lualine_z = {},
             },
          }
       end,
    },
 
-   ["rose-pine/neovim"] = {
-       as = "rose-pine",
-       tag = "v1.*",
-       config = function()
-         require("rose-pine").setup {
-            dark_variant = "moon"
-         }
-         vim.cmd("colorscheme rose-pine")
-       end,
+   ["sindrets/diffview.nvim"] = {
+      requires = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" },
+      after = "plenary.nvim",
+      cmd = { "DiffviewOpen" },
+      config = function()
+         local options = require("plugins.configs.diffview")
+         require("diffview").setup(options)
+      end,
    },
 
-   ["nvim-lualine/lualine.nvim"] = {
-      requires = "kyazdani42/nvim-web-devicons",
-      after = "rose-pine",
-      config = function ()
-         require("lualine").setup {
-            options = {
-               theme = "rose-pine",
-               section_separators = { left = '', right = '█'},
-               component_separators = { left = '', right = '' }
+   ["TimUntersberger/neogit"] = {
+      requires = { "nvim-lua/plenary.nvim" },
+      after = "diffview.nvim",
+      cmd = "Neogit",
+      module = "neogit",
+      config = function()
+         require("neogit").setup {
+            disable_commit_confirmation = true,
+            disable_context_highlighting = false,
+            disable_insert_on_commit = false,
+            integrations = {
+               diffview = true,
             },
-            sections = {
-               lualine_y = {'location'},
-               lualine_z = {}
-            }
+            signs = {
+               section = { "", "" },
+               item = { "", "" },
+               hunk = { "", "" },
+            },
          }
-      end
-   }
+      end,
+   },
+
+   ["nvim-neorg/neorg"] = {
+      ft = "norg",
+      after = "nvim-treesitter", -- You may want to specify Telescope here as well
+      config = function()
+         require("neorg").setup {
+            load = {
+               ["core.defaults"] = {},
+               ["core.norg.dirman"] = {
+                  config = {
+                     workspaces = {
+                        work = "~/Notes/work",
+                        home = "~/Notes/home",
+                     },
+                  },
+               },
+            },
+         }
+      end,
+   },
 }
 
 require("core.packer").run(plugins)

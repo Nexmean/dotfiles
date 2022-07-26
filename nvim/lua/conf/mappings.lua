@@ -8,7 +8,6 @@ local M = {}
 
 M.general = {
    i = {
-
       -- go to  beginning and end
       ["<C-b>"] = { "<ESC>^i", "論 beginning of line" },
       ["<C-e>"] = { "<End>", "壟 end of line" },
@@ -23,6 +22,9 @@ M.general = {
    n = {
 
       ["<ESC>"] = { "<cmd> noh <CR>", "  no highlight" },
+
+      ["-"] = {},
+      ["="] = {},
 
       -- switch between windows
       ["<C-h>"] = { "<C-w>h", " window left" },
@@ -48,6 +50,14 @@ M.general = {
       ["k"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
       ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
       ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
+
+      -- close buffer + hide terminal buffer
+      ["<leader>x"] = {
+         function()
+            require("core.utils").close_buffer()
+         end,
+         "   close buffer",
+      },
    },
 
    t = {
@@ -62,26 +72,6 @@ M.general = {
       -- Don't copy the replaced text after pasting in visual mode
       -- https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text#Alternative_mapping_for_paste
       ["p"] = { 'p:let @+=@0<CR>:let @"=@0<CR>', opts = { silent = true } },
-   },
-}
-
-M.bufferline = {
-   n = {
-      -- new buffer
-      ["<S-b>"] = { "<cmd> enew <CR>", "烙 new buffer" },
-
-      -- cycle through buffers
-      ["<TAB>"] = { "<cmd> BufferLineCycleNext <CR>", "  goto next buffer" },
-      ["<S-Tab>"] = { "<cmd> BufferLineCyclePrev <CR> ", "  goto prev buffer" },
-      ["gB"] = { "<cmd> BufferLinePick <CR>", "   goto tab"},
-
-      -- close buffer + hide terminal buffer
-      ["<leader>x"] = {
-         function()
-            require("core.utils").close_buffer()
-         end,
-         "   close buffer",
-      },
    },
 }
 
@@ -224,10 +214,10 @@ M.nvimtree = {
 M.telescope = {
    n = {
       -- find
+      ["gb"] = { "<cmd> Telescope buffers sort_lastused=true <CR>", "  find buffers" },
       ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "  find files" },
       ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "  find all" },
       ["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "  live grep" },
-      ["<leader>fb"] = { "<cmd> Telescope buffers sort_lastused=true <CR>", "  find buffers" },
       ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "  help page" },
       ["<leader>fo"] = { "<cmd> Telescope frecency <CR>", "  find recent (old) files" },
       ["<leader>tk"] = { "<cmd> Telescope keymaps <CR>", "   show keys" },
@@ -368,6 +358,12 @@ M.blankline = {
 
 M.hop = {
    v = {
+      ["ga"] = {
+         function ()
+            require("hop").hint_anywhere {}
+         end,
+         "hop anywhere",
+      },
       ["gl"] = {
          function ()
             require("hop").hint_lines {}
@@ -382,6 +378,12 @@ M.hop = {
       },
    },
    n = {
+      ["ga"] = {
+         function ()
+            require("hop").hint_anywhere {}
+         end,
+         "hop anywhere",
+      },
       ["gl"] = {
          function ()
             require("hop").hint_lines {}
@@ -407,8 +409,9 @@ M.trouble = {
 
 M.tabs = {
    n = {
-      ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab" }
-   }
+      ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab" },
+      ["<leader>tn"] = { "<cmd> tabnew <CR>", "new tab" },
+   },
 }
 
 M.persisted = {
@@ -425,32 +428,17 @@ M.neogit = {
    }
 }
 
-local goto_parent = function ()
-   require("tree-climber").goto_parent()
-end
-
-local goto_child = function ()
-   require("tree-climber").goto_child()
-end
-
-local goto_prev = function ()
-   require("tree-climber").goto_prev()
-end
-
-local goto_next = function ()
-   require("tree-climber").goto_next()
-end
-
-M.tree_climber = {
+M.tabby = {
    n = {
-      ["<A-h>"] = {goto_parent, "go to parent"},
-      ["˙"]     = {goto_parent, "go to parent"},
-      ["<A-l>"] = {goto_child, "go to child"},
-      ["¬"]     = {goto_child, "go to child"},
-      ["<A-k>"] = {goto_prev, "go to prev"},
-      ["˚"]     = {goto_prev, "go to prev"},
-      ["<A-j>"] = {goto_next, "go to next"},
-      ["∆"]     = {goto_next, "go to next"},
+      ["g1"] = { "<cmd> 1tabnext <CR>", "tab 1" },
+      ["g2"] = { "<cmd> 2tabnext <CR>", "tab 2" },
+      ["g3"] = { "<cmd> 3tabnext <CR>", "tab 3" },
+      ["g4"] = { "<cmd> 4tabnext <CR>", "tab 4" },
+      ["g5"] = { "<cmd> 5tabnext <CR>", "tab 5" },
+      ["g6"] = { "<cmd> 6tabnext <CR>", "tab 6" },
+      ["g7"] = { "<cmd> 7tabnext <CR>", "tab 7" },
+      ["g8"] = { "<cmd> 8tabnext <CR>", "tab 8" },
+      ["g9"] = { "<cmd> 9tabnext <CR>", "tab 9" },
    }
 }
 

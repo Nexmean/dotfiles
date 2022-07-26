@@ -17,11 +17,22 @@ vim.diagnostic.config {
    update_in_insert = false,
 }
 
+local border = {
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+   { " ", "NormalFloat" },
+}
+
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-   border = "single",
+   border = border,
 })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-   border = "single",
+   border = border,
    focusable = false,
    relative = "cursor",
 })
@@ -38,12 +49,11 @@ vim.notify = function(msg, log_level)
    end
 end
 
--- Borders for LspInfo winodw
+-- Borders for LspInfo window
 local win = require "lspconfig.ui.windows"
 local _default_opts = win.default_opts
 
 win.default_opts = function(options)
    local opts = _default_opts(options)
-   opts.border = "single"
    return opts
 end
