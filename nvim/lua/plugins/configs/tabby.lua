@@ -26,8 +26,9 @@ local line = {
    },
    inactive_tab = {
       label = function(tabid)
+         local number = vim.api.nvim_tabpage_get_number(tabid)
          return {
-            "  " .. tabid .. " ",
+            "  " .. number .. " ",
             hl = "EdenTLBoldLine",
          }
       end,
