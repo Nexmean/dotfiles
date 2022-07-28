@@ -85,7 +85,6 @@ local plugins = {
    },
 
    -- load luasnips + cmp related in insert mode only
-
    ["rafamadriz/friendly-snippets"] = {
       module = "cmp_nvim_lsp",
       event = "InsertEnter",
@@ -301,7 +300,7 @@ local plugins = {
       after = "plenary.nvim",
       cmd = { "DiffviewOpen" },
       config = function()
-         local options = require("plugins.configs.diffview")
+         local options = require "plugins.configs.diffview"
          require("diffview").setup(options)
       end,
    },
@@ -345,6 +344,13 @@ local plugins = {
                },
             },
          }
+      end,
+   },
+
+   ["j-hui/fidget.nvim"] = {
+      after = "nightfox.nvim",
+      config = function()
+         require("fidget").setup {}
       end,
    },
 }

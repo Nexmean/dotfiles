@@ -8,12 +8,17 @@ vim.cmd "silent! command! NvChadSnapshotCheckout lua require('nvchad').snap_chec
 local autocmd = vim.api.nvim_create_autocmd
 local api = vim.api
 
--- dont list quickfix buffers
+-- dont list quickfix and Neogit buffers
 autocmd("FileType", {
-   pattern = "qf",
+   pattern = {"NeogitStatus", "NeogitCommitView", "qf"},
    callback = function()
       vim.opt_local.buflisted = false
    end,
+})
+
+autocmd("BufWritePost", {
+   pattern = "*.hs",
+   command = "FormatWrite"
 })
 
 -- wrap the PackerSync command to warn people before using it in NvChadSnapshots

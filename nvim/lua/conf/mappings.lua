@@ -142,7 +142,13 @@ M.lspconfig = {
          "   lsp code_action",
       },
 
-      ["<leader>f"] = {
+      ["˚"] = {
+         function()
+            vim.diagnostic.open_float()
+         end,
+         "   floating diagnostic",
+      },
+      ["<A-k>"] = {
          function()
             vim.diagnostic.open_float()
          end,
