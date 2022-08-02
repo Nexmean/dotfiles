@@ -1,0 +1,3 @@
+{
+  :from :wbthomason/packer.nvim
+}

@@ -1,0 +1,10 @@
+-- :fennel:1659294849
+local function _1_()
+  local telescope = require("telescope")
+  local telescope_sorters = require("telescope.sorters")
+  local telescope_previewers = require("telescope.previewers")
+  local telescope_actions = require("telescope.actions")
+  telescope.setup({defaults = {vimgrep_arguments = {"rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case"}, prompt_prefix = " \239\128\130  ", selection_caret = "  ", entry_prefix = "  ", initial_mode = "insert", selection_strategy = "reset", sorting_strategy = "ascending", layout_strategy = "horizontal", layout_config = {horizontal = {prompt_position = "top", preview_width = 0.55, results_width = 0.8}, vertical = {mirror = false}, width = 0.87, height = 0.8, preview_cutoff = 120}, file_sorter = telescope_sorters.get_fuzzy_file, file_ignore_patterns = {"node_modules"}, generic_sorter = telescope_sorters.get_generic_fuzzy_sorter, path_display = {"truncate"}, winblend = 0, border = {}, borderchars = {"\226\148\128", "\226\148\130", "\226\148\128", "\226\148\130", "\226\148\140", "\226\148\144", "\226\148\152", "\226\148\148"}, color_devicons = true, set_env = {COLORTERM = "truecolor"}, file_previewer = telescope_previewers.vim_buffer_cat.new, grep_previewer = telescope_previewers.vim_buffer_vimgrep.new, qflist_previewer = telescope_previewers.vim_buffer_qflist.new, buffer_previewer_maker = telescope_previewers.buffer_previewer_maker, mappings = {i = {["<C-q>"] = telescope_actions.close}, n = {["<C-q>"] = telescope_actions.close}}}, pickers = {buffers = {mappings = {n = {["<C-x>"] = telescope_actions.delete_buffer}, i = {["<C-x>"] = telescope_actions.delete_buffer}}}}})
+  return telescope.load_extension("persisted")
+end
+return {from = "nvim-telescope/telescope.nvim", cmd = "Telescope", after = "persisted", config = _1_}

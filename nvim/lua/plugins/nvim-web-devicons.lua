@@ -1,4 +1,4 @@
--- :fennel:1659206578
+-- :fennel:1659207673
 local function _1_()
   local present_3f, devicons = pcall(require, "nvim-web-devicons")
   if present_3f then
@@ -7,4 +7,4 @@ local function _1_()
     return nil
   end
 end
-return {setup = _1_}
+return {from = "kyazdani42/nvim-web-devicons", module = "nvim-web-devicons", config = _1_}

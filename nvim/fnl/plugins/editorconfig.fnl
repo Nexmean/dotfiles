@@ -1,0 +1,3 @@
+{
+  :from :gpanders/editorconfig.nvim
+}

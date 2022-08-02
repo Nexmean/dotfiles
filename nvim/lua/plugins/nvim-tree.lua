@@ -1,0 +1,8 @@
+-- :fennel:1659480881
+local function _1_()
+  local nvim_tree = require("nvim-tree")
+  nvim_tree.setup({filters = {dotfiles = false, exclude = {(vim.fn.stdpath("config") .. "/lua/custom")}}, disable_netrw = true, hijack_netrw = true, open_on_setup = false, ignore_ft_on_setup = {"alpha"}, hijack_cursor = true, hijack_unnamed_buffer_when_opening = false, update_cwd = true, update_focused_file = {enable = true, update_cwd = false}, view = {adaptive_size = true, side = "left", width = 25, hide_root_folder = true}, git = {enable = false, ignore = true}, filesystem_watchers = {enable = true}, actions = {open_file = {resize_window = true}}, renderer = {highlight_git = false, highlight_opened_files = "none", indent_markers = {enable = false}, icons = {show = {file = true, folder = true, folder_arrow = true, git = false}, glyphs = {default = "\239\146\165", symlink = "\239\146\129", folder = {default = "\239\144\147", empty = "\239\144\147", empty_open = "\239\144\148", open = "\239\144\147", symlink = "\239\146\130", symlink_open = "\238\151\190", arrow_open = "\239\145\188", arrow_closed = "\239\145\160"}, git = {unstaged = "\226\156\151", staged = "\226\156\147", unmerged = "\238\156\167", renamed = "\226\158\156", untracked = "\226\152\133", deleted = "\239\145\152", ignored = "\226\151\140"}}}}})
+  vim.g.nvimtree_side = "left"
+  return nil
+end
+return {from = "kyazdani42/nvim-tree.lua", ft = "alpha", cmd = {"NvimTreeToggle", "NvimTreeFocus"}, config = _1_}
