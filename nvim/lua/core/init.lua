@@ -21,6 +21,11 @@ autocmd("BufWritePost", {
    command = "FormatWrite"
 })
 
+autocmd("TermOpen", {
+  pattern = "*",
+  command = "setlocal nonumber norelativenumber",
+})
+
 -- wrap the PackerSync command to warn people before using it in NvChadSnapshots
 autocmd("VimEnter", {
    callback = function()

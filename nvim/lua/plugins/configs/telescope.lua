@@ -1,4 +1,5 @@
 local actions = require "telescope.actions"
+local lga_actions = require "telescope-live-grep-args.actions"
 
 local options = {
    defaults = {
@@ -47,9 +48,13 @@ local options = {
       buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
       mappings = {
          i = {
+            ["<C-v>"] = actions.select_vertical,
+            ["<C-s>"] = actions.select_horizontal,
             ["<C-q>"] = actions.close,
          },
          n = {
+            ["<C-v>"] = actions.select_vertical,
+            ["<C-s>"] = actions.select_horizontal,
             ["<C-q>"] = actions.close,
          },
       },
@@ -59,10 +64,23 @@ local options = {
       buffers = {
          mappings = {
             n = {
-               ["<C-d>"] = actions.delete_buffer
+               ["<C-x>"] = actions.delete_buffer,
             },
             i = {
-               ["<C-d>"] = actions.delete_buffer
+               ["<C-x>"] = actions.delete_buffer,
+            },
+         },
+      },
+   },
+
+   extensions = {
+      live_grep_args = {
+         auto_quoting = true,
+         mappings = {
+            i = {
+               ["<C-k>"] = lga_actions.quote_prompt(),
+               ["<C-l>g"] = lga_actions.quote_prompt { postfix = " --iglob " },
+               ["<C-l>t"] = lga_actions.quote_prompt { postfix = " -t" },
             },
          },
       },

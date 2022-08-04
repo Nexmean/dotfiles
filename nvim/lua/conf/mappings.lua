@@ -220,15 +220,18 @@ M.nvimtree = {
 M.telescope = {
    n = {
       -- find
-      ["gb"] = { "<cmd> Telescope buffers sort_lastused=true <CR>", "  find buffers" },
+      ["gj"] = { "<cmd> Telescope buffers sort_lastused=true sort_mru=true <CR>", "  find buffers" },
       ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "  find files" },
       ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "  find all" },
-      ["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "  live grep" },
+      ["<leader>fw"] = {
+         function() require("telescope").extensions.live_grep_args.live_grep_args() end,
+         "  live grep",
+      },
       ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "  help page" },
       ["<leader>fo"] = { "<cmd> Telescope frecency <CR>", "  find recent (old) files" },
       ["<leader>tk"] = { "<cmd> Telescope keymaps <CR>", "   show keys" },
-      ["<leader>fd"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>",  "  find in current document" },
-      ["<leader>fr"] = { "<cmd> Telescope resume <CR>",  "  repeat recent search" },
+      ["<leader>fd"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>", "  find in current document" },
+      ["<leader>fr"] = { "<cmd> Telescope resume <CR>", "  repeat recent search" },
       ["<leader>fp"] = { "<cmd> Telescope pickers <CR>", "  find previous searches" },
 
       -- git
@@ -251,75 +254,11 @@ M.telescope = {
    },
    v = {
       ["<leader>fw"] = {
-         function ()
+         function()
             local selected_text = require("utils.selection").get_visual_selection()
-            require("telescope.builtin").live_grep { default_text = selected_text }
+            require("telescope").extensions.live_grep_args.live_grep_args { default_text = selected_text }
          end,
-         "  live grep" ,
-      }
-   },
-}
-
-M.nvterm = {
-   t = {
-      -- toggle in terminal mode
-      ["<A-s>"] = {
-         function()
-            require("nvterm.terminal").toggle "horizontal"
-         end,
-         "   toggle horizontal term",
-      },
-
-      ["<A-v>"] = {
-         function()
-            require("nvterm.terminal").toggle "vertical"
-         end,
-         "   toggle vertical term",
-      },
-
-      ["ß"] = { -- <A-h>
-         function()
-            require("nvterm.terminal").toggle "horizontal"
-         end,
-         "   toggle horizontal term",
-      },
-
-      ["√"] = { -- <A-v>
-         function()
-            require("nvterm.terminal").toggle "vertical"
-         end,
-         "   toggle vertical term",
-      },
-   },
-
-   n = {
-      -- toggle in normal mode
-      ["<A-s>"] = {
-         function()
-            require("nvterm.terminal").toggle "horizontal"
-         end,
-         "   toggle horizontal term",
-      },
-
-      ["<A-v>"] = {
-         function()
-            require("nvterm.terminal").toggle "vertical"
-         end,
-         "   toggle vertical term",
-      },
-
-      ["ß"] = { -- <A-h>
-         function()
-            require("nvterm.terminal").toggle "horizontal"
-         end,
-         "   toggle horizontal term",
-      },
-
-      ["√"] = { -- <A-v>
-         function()
-            require("nvterm.terminal").toggle "vertical"
-         end,
-         "   toggle vertical term",
+         "  live grep",
       },
    },
 }
@@ -365,19 +304,19 @@ M.blankline = {
 M.hop = {
    v = {
       ["ga"] = {
-         function ()
+         function()
             require("hop").hint_anywhere {}
          end,
          "hop anywhere",
       },
       ["gl"] = {
-         function ()
+         function()
             require("hop").hint_lines {}
          end,
          "hop line",
       },
       ["gw"] = {
-         function ()
+         function()
             require("hop").hint_words {}
          end,
          "hop word",
@@ -385,24 +324,24 @@ M.hop = {
    },
    n = {
       ["ga"] = {
-         function ()
+         function()
             require("hop").hint_anywhere {}
          end,
          "hop anywhere",
       },
       ["gl"] = {
-         function ()
+         function()
             require("hop").hint_lines {}
          end,
          "hop line",
       },
       ["gw"] = {
-         function ()
+         function()
             require("hop").hint_words {}
          end,
          "hop word",
       },
-   }
+   },
 }
 
 M.trouble = {
@@ -410,7 +349,7 @@ M.trouble = {
       ["<leader>dd"] = { "<cmd> Trouble document_diagnostics <CR>", "Show document diagnostics" },
       ["<leader>wd"] = { "<cmd> Trouble workspace_diagnostics <CR>", "Show workspace diagnostics" },
       ["<leader>dh"] = { "<cmd> TroubleClose <CR>", "Hide diagnostics" },
-   }
+   },
 }
 
 M.tabs = {
@@ -430,8 +369,8 @@ M.persisted = {
 
 M.neogit = {
    n = {
-      ["<leader>gn"] = { "<cmd> Neogit <CR> ", "  open neogit" }
-   }
+      ["<leader>gn"] = { "<cmd> Neogit <CR> ", "  open neogit" },
+   },
 }
 
 M.tabby = {
@@ -445,7 +384,7 @@ M.tabby = {
       ["g7"] = { "<cmd> 7tabnext <CR>", "tab 7" },
       ["g8"] = { "<cmd> 8tabnext <CR>", "tab 8" },
       ["g9"] = { "<cmd> 9tabnext <CR>", "tab 9" },
-   }
+   },
 }
 
 return M
