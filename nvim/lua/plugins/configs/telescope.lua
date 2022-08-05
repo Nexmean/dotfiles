@@ -28,7 +28,7 @@ local options = {
          vertical = {
             mirror = false,
          },
-         width = 0.87,
+         width = 0.80,
          height = 0.80,
          preview_cutoff = 120,
       },

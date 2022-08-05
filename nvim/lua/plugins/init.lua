@@ -3,6 +3,7 @@ vim.cmd "packadd packer.nvim"
 local plugins = {
    ["wbthomason/packer.nvim"] = {},
    ["nvim-lua/plenary.nvim"] = {},
+   ["nvim-lua/popup.nvim"] = {},
 
    ------------------------- UI ------------------------- {{
    ["EdenEast/nightfox.nvim"] = {
@@ -13,6 +14,7 @@ local plugins = {
                   NvimTreeNormal = { fg = "fg1", bg = "bg1" },
                   TelescopeBorder = { bg = "bg0", fg = "bg0" },
                   TelescopeNormal = { bg = "bg0" },
+                  ToggleTermFloatBorder = { bg = "bg0", fg = "bg0" },
                },
             },
          }
@@ -31,7 +33,6 @@ local plugins = {
    },
 
    ["kyazdani42/nvim-tree.lua"] = {
-      ft = "alpha",
       cmd = { "NvimTreeToggle", "NvimTreeFocus" },
       config = function()
          require "plugins.configs.nvimtree"
@@ -87,6 +88,19 @@ local plugins = {
                lualine_z = {},
             },
          }
+      end,
+   },
+
+   ["folke/zen-mode.nvim"] = {
+      cmd = "ZenMode",
+      config = function()
+         require("zen-mode").setup {}
+      end,
+   },
+
+   ["akinsho/toggleterm.nvim"] = {
+      config = function()
+         require "plugins.configs.toggleterm"
       end,
    },
    ------------------------- UI ------------------------- }}
@@ -202,6 +216,7 @@ local plugins = {
    ["sindrets/diffview.nvim"] = {
       requires = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" },
       after = "plenary.nvim",
+      module = "diffview",
       cmd = { "DiffviewOpen" },
       config = function()
          local options = require "plugins.configs.diffview"
@@ -310,6 +325,38 @@ local plugins = {
       as = "editorconfig.nvim",
    },
    ----------------------- EDITOR ----------------------- }}
+
+   ---------------------- TESTING ----------------------- {{
+   ["NTBBloodbath/rest.nvim"] = {
+      after = "plenary.nvim",
+      config = function()
+         require("rest-nvim").setup {
+            -- Open request results in a horizontal split
+            result_split_horizontal = false,
+            -- Keep the http file buffer above|left when split horizontal|vertical
+            result_split_in_place = false,
+            -- Skip SSL verification, useful for unknown certificates
+            skip_ssl_verification = true,
+            -- Highlight request on run
+            highlight = {
+               enabled = true,
+               timeout = 150,
+            },
+            result = {
+               -- toggle showing URL, HTTP info, headers at top the of result window
+               show_url = true,
+               show_http_info = true,
+               show_headers = true,
+            },
+            -- Jump to request line on run
+            jump_to_request = false,
+            env_file = ".env",
+            custom_dynamic_variables = {},
+            yank_dry_run = true,
+         }
+      end,
+   },
+   ---------------------- TESTING ----------------------- }}
 
    ---------------------- HASKELL ----------------------- {{
    ["neovimhaskell/haskell-vim"] = {

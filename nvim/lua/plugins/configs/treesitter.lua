@@ -17,6 +17,7 @@ local options = {
       "c", "cpp",
       "bash",
       "haskell",
+      "http",
       "javascript", "typescript",
       "json", "toml", "yaml",
       "lua", "fennel",

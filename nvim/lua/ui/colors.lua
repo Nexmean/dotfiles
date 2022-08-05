@@ -65,7 +65,7 @@ local function get_highlight(name)
   }
 end
 
-local function generate_pallet_from_colorscheme()
+function M.generate_pallet_from_colorscheme()
   -- stylua: ignore
   local color_map = {
     black   = { index = 0, default = "#393b44" },
@@ -104,7 +104,7 @@ local function generate_pallet_from_colorscheme()
 end
 
 function M.generate_user_config_highlights()
-  local pal = generate_pallet_from_colorscheme()
+  local pal = M.generate_pallet_from_colorscheme()
 
   -- stylua: ignore
   local sl_colors = {
@@ -155,7 +155,5 @@ function M.generate_user_config_highlights()
 
   set_highlights(vim.tbl_extend("force", colors, groups))
 end
-
-M.generate_user_config_highlights()
 
 return M
