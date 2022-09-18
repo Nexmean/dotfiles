@@ -1,9 +1,11 @@
 vim.cmd "packadd packer.nvim"
+vim.cmd "let g:neo_tree_remove_legacy_commands = 1"
 
 local plugins = {
    ["wbthomason/packer.nvim"] = {},
    ["nvim-lua/plenary.nvim"] = {},
    ["nvim-lua/popup.nvim"] = {},
+   ["MunifTanjim/nui.nvim"] = {},
 
    ------------------------- UI ------------------------- {{
    ["EdenEast/nightfox.nvim"] = {
@@ -36,20 +38,6 @@ local plugins = {
       cmd = { "NvimTreeToggle", "NvimTreeFocus" },
       config = function()
          require "plugins.configs.nvimtree"
-      end,
-   },
-
-   ["folke/trouble.nvim"] = {
-      as = "trouble.nvim",
-      module = "trouble",
-      after = "nvim-web-devicons",
-      cmd = "Trouble",
-      config = function()
-         require("trouble").setup {
-            action_keys = {
-               cancel = "<C-[>",
-            },
-         }
       end,
    },
 
@@ -103,6 +91,18 @@ local plugins = {
          require "plugins.configs.toggleterm"
       end,
    },
+
+   ["https://git.sr.ht/~whynothugo/lsp_lines.nvim"] = {
+      config = function()
+         require("lsp_lines").setup()
+         vim.diagnostic.config {
+            virtual_text = true,
+            virtual_lines = false,
+         }
+      end,
+   },
+
+   ["kevinhwang91/nvim-bqf"] = { ft = "qf" },
    ------------------------- UI ------------------------- }}
 
    --------------------- TELESCOPE ---------------------- {{
@@ -111,6 +111,14 @@ local plugins = {
       requires = {
          "nvim-telescope/telescope-live-grep-args.nvim",
          "nvim-telescope/telescope-ui-select.nvim",
+         {
+            "Nexmean/telescope_hoogle",
+            branch = "cabal-hoogle",
+         },
+         {
+            "nvim-telescope/telescope-fzf-native.nvim",
+            run = "make",
+         },
       },
       module = "telescope",
       after = "persisted.nvim",
@@ -119,9 +127,12 @@ local plugins = {
          telescope.load_extension "persisted"
          telescope.load_extension "live_grep_args"
          telescope.load_extension "ui-select"
+         telescope.load_extension "hoogle"
 
          local config = require "plugins.configs.telescope"
          telescope.setup(config)
+
+         telescope.load_extension "fzf"
       end,
    },
 
@@ -217,7 +228,7 @@ local plugins = {
       requires = { "nvim-lua/plenary.nvim", "kyazdani42/nvim-web-devicons" },
       after = "plenary.nvim",
       module = "diffview",
-      cmd = { "DiffviewOpen" },
+      cmd = { "DiffviewOpen", "DiffviewFileHistory" },
       config = function()
          local options = require "plugins.configs.diffview"
          require("diffview").setup(options)
@@ -324,6 +335,12 @@ local plugins = {
    ["gpanders/editorconfig.nvim"] = {
       as = "editorconfig.nvim",
    },
+
+   ["nvim-treesitter/nvim-treesitter-context"] = {
+      config = function()
+         require("treesitter-context").setup {}
+      end,
+   },
    ----------------------- EDITOR ----------------------- }}
 
    ---------------------- TESTING ----------------------- {{
@@ -406,6 +423,9 @@ local plugins = {
          }
       end,
    },
+
+   -- repl
+   ["Olical/conjure"] = {},
 }
 
 require("core.packer").run(plugins)

@@ -44,6 +44,23 @@ M.general = {
       ["<leader>z"] = { "<cmd> ZenMode <CR>", "zen mode" },
 
       ["<leader>hr"] = { "<Plug>RestNvim <CR>", "run http request" },
+      ["<leader>td"] = {
+         function()
+            local current_config = vim.diagnostic.config()
+            if current_config.virtual_lines then
+               vim.diagnostic.config {
+                  virtual_lines = false,
+                  virtual_text = true,
+               }
+            else
+               vim.diagnostic.config {
+                  virtual_lines = true,
+                  virtual_text = false,
+               }
+            end
+         end,
+         "   toggle line diagnostics"
+      },
       -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using <cmd> :map
@@ -164,7 +181,7 @@ M.lspconfig = {
          "   goto prev",
       },
 
-      ["d]"] = {
+      ["]d"] = {
          function()
             vim.diagnostic.goto_next()
          end,
@@ -226,7 +243,9 @@ M.telescope = {
       ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "  find files" },
       ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "  find all" },
       ["<leader>fw"] = {
-         function() require("telescope").extensions.live_grep_args.live_grep_args() end,
+         function()
+            require("telescope").extensions.live_grep_args.live_grep_args()
+         end,
          "  live grep",
       },
       ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "  help page" },
@@ -343,14 +362,6 @@ M.hop = {
          end,
          "hop word",
       },
-   },
-}
-
-M.trouble = {
-   n = {
-      ["<leader>dd"] = { "<cmd> Trouble document_diagnostics <CR>", "Show document diagnostics" },
-      ["<leader>wd"] = { "<cmd> Trouble workspace_diagnostics <CR>", "Show workspace diagnostics" },
-      ["<leader>dh"] = { "<cmd> TroubleClose <CR>", "Hide diagnostics" },
    },
 }
 
