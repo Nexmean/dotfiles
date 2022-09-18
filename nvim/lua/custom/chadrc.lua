@@ -1,6 +1,9 @@
 local M = {}
 
-M.ui = {}
+M.ui = {
+  hl_add = require "custom.ui.hl_add",
+  theme = "jellybeans", -- default theme
+}
 
 M.plugins = require "custom.plugins"
 
