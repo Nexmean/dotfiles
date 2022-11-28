@@ -471,6 +471,14 @@ M.components = {
     enabled = function ()
       return vim.fn.tabpagenr('$') ~= 1
     end
+  },
+  recording = {
+    provider = function ()
+      return "recording @" .. vim.fn.reg_recording()
+    end,
+    enabled = function ()
+      return vim.fn.reg_recording() ~= ""
+    end
   }
 }
 
@@ -509,7 +517,9 @@ function M.update()
         { right_sep = " " }
       ),
       -- MIDDLE
-      [2] = {},
+      [2] = {
+        comps.recording
+      },
       -- RIGHT
       [3] = utils.vec_join(
         extend_comps(
