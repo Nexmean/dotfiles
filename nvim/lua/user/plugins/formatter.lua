@@ -23,6 +23,16 @@ return function ()
       lua = {
         require("formatter.filetypes.lua").stylua,
       },
+      json = {
+        require("formatter.filetypes.json").fixjson
+      },
+      -- xml = {
+      --   function ()
+      --     return {
+      --       exe = "xmlformat",
+      --     }
+      --   end
+      -- },
     },
   }
 end
