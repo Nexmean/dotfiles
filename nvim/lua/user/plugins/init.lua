@@ -112,10 +112,7 @@ return require("packer").startup({
       },
       config = conf("neo-tree"),
     }
-    use {
-      "mhartington/formatter.nvim",
-      config = conf("formatter"),
-    }
+    use { "mhartington/formatter.nvim", config = conf("formatter") }
     use {
       "phaazon/hop.nvim",
       branch = "v2",
@@ -159,10 +156,7 @@ return require("packer").startup({
     use { "nvim-treesitter/playground", requires = "nvim-treesitter/nvim-treesitter" }
     use_local { "sindrets/lua-dev.nvim" }
     use { "neovim/nvim-lspconfig" }
-    use {
-      "jose-elias-alvarez/null-ls.nvim",
-      config = conf("null-ls"),
-    }
+    use { "jose-elias-alvarez/null-ls.nvim", config = conf("null-ls") }
     use {
       "ray-x/lsp_signature.nvim",
       config = function()
@@ -177,10 +171,7 @@ return require("packer").startup({
           })
       end
     }
-    use {
-      "anuvyklack/pretty-fold.nvim",
-      config = conf("pretty-fold"),
-    }
+    use { "anuvyklack/pretty-fold.nvim", config = conf("pretty-fold") }
     use { "mfussenegger/nvim-jdtls" }
     use {
       "hrsh7th/nvim-cmp",
@@ -338,7 +329,7 @@ return require("packer").startup({
       requires = {
         'neovim/nvim-lspconfig',
         'nvim-lua/plenary.nvim',
-        'nvim-telescope/telescope.nvim', -- optional
+        'nvim-telescope/telescope.nvim',
       },
       config = conf("haskell-tools")
     }
