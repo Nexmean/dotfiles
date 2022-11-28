@@ -1,0 +1,12 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+    "Lua.diagnostics.disable": [
+        "cast-local-type",
+        "assign-type-mismatch"
+    ],
+    "Lua.workspace.library": [
+        "/Users/al.makarov/.local/share/nvim/site/pack/packer/start/lua-dev.nvim/types",
+        "/Users/al.makarov/.local/share/nvim/site/pack/packer/start/plenary.nvim/lua",
+        "${3rd}/luassert/library"
+    ]
+}
