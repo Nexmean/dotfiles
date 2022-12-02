@@ -122,7 +122,6 @@ return require("packer").startup({
     }
     use {
       "utilyre/barbecue.nvim",
-      commit = "f13fad8217cabea67e4d06a82bba79fdcc56344b",
       requires = {
         "neovim/nvim-lspconfig",
         "smiteshp/nvim-navic",
@@ -171,6 +170,7 @@ return require("packer").startup({
           })
       end
     }
+    use { "gpanders/editorconfig.nvim" }
     use { "anuvyklack/pretty-fold.nvim", config = conf("pretty-fold") }
     use { "mfussenegger/nvim-jdtls" }
     use {
