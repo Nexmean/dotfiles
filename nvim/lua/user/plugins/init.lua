@@ -87,6 +87,7 @@ return require("packer").startup({
     use { "fladson/vim-kitty" }
     use { "joelbeedle/pseudo-syntax" }
     use { "alisdair/vim-armasm" }
+    use { "vmchale/dhall-vim" }
 
     -- BEHAVIOUR
     use {
