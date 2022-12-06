@@ -96,6 +96,11 @@ return require("packer").startup({
       end
     }
 
+    use {
+      'Nexmean/nvim-window-picker',
+      branch = "use_cmd",
+      config = conf("window-picker"),
+    }
 
     use {
       "nvim-neo-tree/neo-tree.nvim",
@@ -104,11 +109,7 @@ return require("packer").startup({
         "nvim-lua/plenary.nvim",
         "nvim-tree/nvim-web-devicons",
         "MunifTanjim/nui.nvim",
-        {
-          's1n7ax/nvim-window-picker',
-          tag = "v1.*",
-          config = conf("window-picker"),
-        }
+        "Nexmean/nvim-window-picker",
       },
       config = conf("neo-tree"),
     }

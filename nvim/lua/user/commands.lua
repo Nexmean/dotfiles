@@ -177,3 +177,23 @@ command("NeorgExport", function(e)
     end,
   }):start()
 end, { nargs = "*", complete = "file" })
+
+command("Pick", function (e)
+  local success, picked = pcall(function ()
+    return require('window-picker').pick_window({
+      autoselect_one = true,
+      include_current_win = true,
+      current_win_hl_color = '#89b4fa',
+      other_win_hl_color = '#89b4fa',
+      fg_color = '#191926'
+    })
+  end)
+  if not success then
+    return
+  end
+
+  vim.api.nvim_set_current_win(picked)
+  if e.fargs[1] ~= nil then
+    vim.cmd('e ' .. e.fargs[1])
+  end
+end, { nargs = '?', complete = 'file' })

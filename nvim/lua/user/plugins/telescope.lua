@@ -1,9 +1,11 @@
 return function ()
+  local telescope = require('telescope')
   local actions = require('telescope.actions')
+  local action_set = require('telescope.actions.set')
   local action_state = require('telescope.actions.state')
   local lga_actions = require('telescope-live-grep-args.actions')
 
-  require('telescope').setup{
+  telescope.setup {
     defaults = {
       vimgrep_arguments = {
         'rg',
@@ -57,10 +59,16 @@ return function ()
           ["<c-b>"] = actions.preview_scrolling_up,
           ["<c-f>"] = actions.preview_scrolling_down,
           ["<c-j>"] = false,
+          ["<C-CR>"] = function (prompt_bufnr)
+            action_set.edit(prompt_bufnr, "Pick")
+          end
         },
         n = {
           ["<c-b>"] = actions.preview_scrolling_up,
           ["<c-f>"] = actions.preview_scrolling_down,
+          ["<C-CR>"] = function (prompt_bufnr)
+            action_set.edit(prompt_bufnr, "Pick")
+          end
         },
       },
     },

@@ -1,17 +1,21 @@
 return function()
-  require 'window-picker'.setup({
+  require("window-picker").setup({
     autoselect_one = true,
     include_current = false,
+    use_winbar = "never",
+    use_cmd = false,
     filter_rules = {
       -- filter using buffer options
       bo = {
         -- if the file type is one of following, the window will be ignored
-        filetype = { 'neo-tree', "neo-tree-popup", "notify" },
+        filetype = { "neo-tree", "neo-tree-popup", "notify" },
 
         -- if the buffer type is one of following, the window will be ignored
-        buftype = { 'terminal', "quickfix" },
+        buftype = { "terminal", "quickfix" },
       },
     },
-    other_win_hl_color = '#e35e4f',
+    current_win_hl_color = '#89b4fa',
+    other_win_hl_color = '#89b4fa',
+    fg_color = '#191926',
   })
 end
