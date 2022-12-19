@@ -20,17 +20,20 @@ return function()
         },
       },
     },
-    hover = {
-      border = {
-        { '┌', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '┐', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-        { '┘', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '└', 'FloatBorder' },
-        { '│', 'FloatBorder' },
+    tools = {
+      hover = {
+        border = {
+          { '┌', 'FloatBorder' },
+          { '─', 'FloatBorder' },
+          { '┐', 'FloatBorder' },
+          { '│', 'FloatBorder' },
+          { '┘', 'FloatBorder' },
+          { '─', 'FloatBorder' },
+          { '└', 'FloatBorder' },
+          { '│', 'FloatBorder' },
+        },
+        stylize_markdown = true,
       },
-    },
+    }
   }
 end
