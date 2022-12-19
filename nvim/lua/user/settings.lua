@@ -24,6 +24,7 @@ opt.showcmd = true
 opt.mouse = "a"
 opt.hidden = true
 opt.cursorline = true
+opt.guifont = 'JetbrainsMono Nerd Font:h16'
 opt.guicursor = list {
   "n-v-c-sm:block-Cursor/lCursor",
   "i-ci-ve:ver25-Cursor/lCursor",
@@ -152,4 +153,7 @@ if vim.g.neovide then
   vim.g.neovide_cursor_trail_length = 0
   vim.g.neovide_floating_blur = false
   vim.g.neovide_floating_opacity = 1.0
+  vim.g.neovide_refresh_rate = 240
+  vim.g.neovide_cursor_animation_length = 0.05
+  vim.g.neovide_scroll_animation_length = 0.05
 end
