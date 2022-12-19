@@ -98,8 +98,8 @@ return require("packer").startup({
     }
 
     use {
-      'Nexmean/nvim-window-picker',
-      branch = "use_cmd",
+      's1n7ax/nvim-window-picker',
+      tag = 'v1.*',
       config = conf("window-picker"),
     }
 
@@ -297,8 +297,8 @@ return require("packer").startup({
       requires = { "nvim-treesitter/nvim-treesitter" },
       config = conf("nvim-ts-rainbow")
     }
-    use_local {
-      "sindrets/vim-fugitive",
+    use {
+      "tpope/vim-fugitive",
       requires = { "tpope/vim-rhubarb" },
       config = conf("fugitive"),
     }

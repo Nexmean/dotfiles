@@ -3,7 +3,7 @@ return function()
     autoselect_one = true,
     include_current = false,
     use_winbar = "never",
-    use_cmd = false,
+    show_prompt = false,
     filter_rules = {
       -- filter using buffer options
       bo = {
