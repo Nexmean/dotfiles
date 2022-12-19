@@ -360,6 +360,9 @@ return require("packer").startup({
     use { "projekt0n/github-nvim-theme" }
     use { "rebelot/kanagawa.nvim" }
     use_local { "sindrets/oxocarbon-lua.nvim" }
+    use { "nyoom-engineering/oxocarbon.nvim" }
+    use { "EdenEast/nightfox.nvim" }
+    use { "kvrohit/mellow.nvim" }
   end,
 
   config = {

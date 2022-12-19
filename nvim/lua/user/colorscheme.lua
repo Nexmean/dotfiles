@@ -603,7 +603,7 @@ function M.apply_tweaks()
     hi("Whitespace", { fg = bg_normal:clone():highlight(0.18):to_css() })
     hi("BufferLineIndicatorSelected", { fg = "#7E9CD8" })
 
-  elseif colors_name == "oxocarbon-lua" then
+  elseif colors_name == "oxocarbon-lua" or colors_name == "oxocarbon" then
     if bg == "dark" then
       hi("Primary", { fg = hl.get_fg("Boolean") })
       hi("Accent", { fg = hl.get_fg("@property") })
@@ -629,9 +629,22 @@ function M.apply_tweaks()
       hi_link("@text.math", "Function")
       hi("TelescopeMatching", { fg = hl.get_fg("String"), style = "bold" })
       hi_link({ "fugitiveHash", "gitHash" }, "String")
-    end
 
+    end
     M.unstyle_telescope()
+
+  elseif colors_name == "mellow" then
+    hi("WinBar", { bg = hl.get_bg("Normal") })
+    hi({
+      "BarbecueContext",
+      "BarbecueBasename",
+      "BarbecueDirname",
+      "BarbecueSeparator",
+      "BarbecueEllipsis",
+      "BarbecueModified"
+    }, {
+      bg = hl.get_bg("WinBar")
+    })
 
   end
 
