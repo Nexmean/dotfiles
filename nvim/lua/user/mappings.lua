@@ -14,6 +14,12 @@ local function toggle_mutliline_diagnostics()
   end
 end
 
+local function cmd(str)
+  return function()
+    vim.cmd(str)
+  end
+end
+
 mappings.general = {
   i = {
     -- go to  beginning and end
@@ -25,11 +31,11 @@ mappings.general = {
     ["<C-l>"] = { "<Right>", "move right" },
     ["<C-j>"] = { "<Down>", "move down" },
     ["<C-k>"] = { "<Up>", "move up" },
-    ["<A-i>"] = { "<cmd>TermToggle<CR>", "toggle terminal" },
+    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
 
   n = {
-    ["<ESC>"] = { "<cmd> noh <CR>", "no highlight" },
+    ["<ESC>"] = { cmd "noh", "no highlight" },
 
     -- switch between windows
     ["<C-h>"] = { "<C-w>h", "window left" },
@@ -37,18 +43,9 @@ mappings.general = {
     ["<C-j>"] = { "<C-w>j", "window down" },
     ["<C-k>"] = { "<C-w>k", "window up" },
 
-    -- save
-    ["<C-s>"] = { "<cmd> w <CR>", "save file" },
-
-    -- Copy all
-    ["<C-c>"] = { "<cmd> %y+ <CR>", "copy whole file" },
-
     -- line numbers
-    ["<leader>n"] = { "<cmd> set nu! <CR>", "toggle line number" },
-    ["<leader>rn"] = { "<cmd> set rnu! <CR>", "toggle relative number" },
-
-    -- update nvchad
-    ["<leader>uu"] = { "<cmd> :NvChadUpdate <CR>", "update nvchad" },
+    ["<leader>n"] = { cmd "set nu!", "toggle line number" },
+    ["<leader>rn"] = { cmd "set rnu!", "toggle relative number" },
 
     -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
     -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
@@ -60,35 +57,35 @@ mappings.general = {
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
 
     -- new buffer
-    ["<leader>b"] = { "<cmd> enew <CR>", "new buffer" },
-    ["<leader>tx"] = { "<cmd> tabclose <CR>", "close tab" },
-    ["<leader>tn"] = { "<cmd> tabnew <CR>", "new tab" },
+    ["<leader>b"] = { cmd "enew", "new buffer" },
+    ["<leader>tx"] = { cmd "tabclose", "close tab" },
+    ["<leader>tn"] = { cmd "tabnew", "new tab" },
     ["<leader>dt"] = { toggle_mutliline_diagnostics, "toggle multiline diagnostics"},
 
-    ["g1"] = { "<cmd> 1tabnext <CR>", "tab 1" },
-    ["g2"] = { "<cmd> 2tabnext <CR>", "tab 2" },
-    ["g3"] = { "<cmd> 3tabnext <CR>", "tab 3" },
-    ["g4"] = { "<cmd> 4tabnext <CR>", "tab 4" },
-    ["g5"] = { "<cmd> 5tabnext <CR>", "tab 5" },
-    ["g6"] = { "<cmd> 6tabnext <CR>", "tab 6" },
-    ["g7"] = { "<cmd> 7tabnext <CR>", "tab 7" },
-    ["g8"] = { "<cmd> 8tabnext <CR>", "tab 8" },
-    ["g9"] = { "<cmd> 9tabnext <CR>", "tab 9" },
+    ["g1"] = { cmd "1tabnext", "tab 1" },
+    ["g2"] = { cmd "2tabnext", "tab 2" },
+    ["g3"] = { cmd "3tabnext", "tab 3" },
+    ["g4"] = { cmd "4tabnext", "tab 4" },
+    ["g5"] = { cmd "5tabnext", "tab 5" },
+    ["g6"] = { cmd "6tabnext", "tab 6" },
+    ["g7"] = { cmd "7tabnext", "tab 7" },
+    ["g8"] = { cmd "8tabnext", "tab 8" },
+    ["g9"] = { cmd "9tabnext", "tab 9" },
 
-    ["<A-i>"] = { "<cmd>TermToggle<CR>", "toggle terminal" },
+    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
 
-    ["~"] = { "<Cmd>buffer #<CR>", "recent buffer" },
+    ["~"] = { cmd "buffer #", "recent buffer" },
   },
 
   t = {
     ["<C-x>"] = { termcodes "<C-\\><C-N>", "escape terminal mode" },
-    ["<A-i>"] = { "<cmd>TermToggle<CR>", "toggle terminal" },
+    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
 
   v = {
     ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-    ["<A-i>"] = { "<cmd>TermToggle<CR>", "toggle terminal" },
+    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
 
   x = {
@@ -97,7 +94,7 @@ mappings.general = {
     -- Don't copy the replaced text after pasting in visual mode
     -- https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text#Alternative_mapping_for_paste
     ["p"] = { 'p:let @+=@0<CR>:let @"=@0<CR>', opts = { silent = true } },
-    ["<A-i>"] = { "<cmd>TermToggle<CR>", "toggle terminal" },
+    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
 }
 
@@ -211,53 +208,53 @@ mappings.lspconfig = {
       end,
       "floating diagnostic",
     },
-    ["gi"] = { "<cmd> Telescope lsp_implementations <CR>", "lsp implementation" },
-    ["gr"] = { "<cmd> Telescope lsp_references <CR>", "lsp references" },
-    ["gd"] = { "<cmd> Telescope lsp_definitions <CR>", "lsp definition" },
-    ["<leader>ds"] = { "<cmd> Telescope lsp_document_symbols <CR>", "document symbols" },
-    ["<leader>ws"] = { "<cmd> Telescope lsp_dynamic_workspace_symbols <CR>", "workspace symbols" },
-    ["<C-s>"] = { "<cmd>SymbolsOutline<CR>", "toggle outline" }
+    ["gi"] = { cmd "Telescope lsp_implementations", "lsp implementation" },
+    ["gr"] = { cmd "Telescope lsp_references", "lsp references" },
+    ["gd"] = { cmd "Telescope lsp_definitions", "lsp definition" },
+    ["<leader>ds"] = { cmd "Telescope lsp_document_symbols", "document symbols" },
+    ["<leader>ws"] = { cmd "Telescope lsp_dynamic_workspace_symbols", "workspace symbols" },
+    ["<C-s>"] = { cmd "SymbolsOutline", "toggle outline" }
   },
 }
 
 mappings.neotree = {
   n = {
     -- toggle
-    ["<C-n>"] = { "<cmd> Neotree toggle <CR>", "toggle neotree" },
+    ["<C-n>"] = { cmd "Neotree toggle", "toggle neotree" },
 
     -- focus
-    ["<leader>e"] = { "<cmd> Neotree <CR>", "focus neotree" },
+    ["<leader>e"] = { cmd "Neotree", "focus neotree" },
   },
 }
 
 mappings.telescope = {
   n = {
     -- find
-    ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "find files" },
-    ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "find all" },
-    ["<leader>fb"] = { "<cmd> Telescope buffers <CR>", "find buffers" },
-    ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "help page" },
-    ["<leader>fo"] = { "<cmd> Telescope oldfiles only_cwd=true<CR>", "find oldfiles" },
-    ["<leader>tk"] = { "<cmd> Telescope keymaps <CR>", "show keys" },
+    ["<leader>ff"] = { cmd "Telescope find_files", "find files" },
+    ["<leader>fa"] = { cmd "Telescope find_files follow=true no_ignore=true hidden=true", "find all" },
+    ["<leader>fb"] = { cmd "Telescope buffers", "find buffers" },
+    ["<leader>fh"] = { cmd "Telescope help_tags", "help page" },
+    ["<leader>fo"] = { cmd "Telescope oldfiles only_cwd=true", "find oldfiles" },
+    ["<leader>tk"] = { cmd "Telescope keymaps", "show keys" },
 
     -- git
-    ["<leader>cm"] = { "<cmd> Telescope git_commits <CR>", "git commits" },
-    ["<leader>gt"] = { "<cmd> Telescope git_status <CR>", "git status" },
+    ["<leader>cm"] = { cmd "Telescope git_commits", "git commits" },
+    ["<leader>gt"] = { cmd "Telescope git_status", "git status" },
 
     -- pick a hidden term
-    ["<leader>pt"] = { "<cmd> Telescope terms <CR>", "pick hidden term" },
-    ["gj"] = { "<cmd>Telescope buffers sort_lastused=true sort_mru=true <CR>", "find buffers" },
+    ["<leader>pt"] = { cmd "Telescope terms", "pick hidden term" },
+    ["gj"] = { cmd "Telescope buffers sort_lastused=true sort_mru=true", "find buffers" },
     ["<leader>fw"] = {
       function()
         require("telescope").extensions.live_grep_args.live_grep_args()
       end,
       "   live grep",
     },
-    ["<leader>fr"] = { "<cmd>Telescope resume<CR>", "repeat recent search" },
-    ["<leader>fp"] = { "<cmd>Telescope pickers<CR>", "recent searches" },
-    ["<leader>gb"] = { "<cmd>Telescope git_branches<CR>", "git branches" },
-    ["<A-p>"] = { "<cmd>Telescope commands<CR>", "command pallete" },
-    ["<leader>tt"] = { "<cmd>Telescope telescope-tabs list_tabs<CR>", "list tabs" }
+    ["<leader>fr"] = { cmd "Telescope resume", "repeat recent search" },
+    ["<leader>fp"] = { cmd "Telescope pickers", "recent searches" },
+    ["<leader>gb"] = { cmd "Telescope git_branches", "git branches" },
+    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
+    ["<leader>tt"] = { cmd "Telescope telescope-tabs list_tabs", "list tabs" }
   },
 
   v = {
@@ -268,11 +265,11 @@ mappings.telescope = {
       end,
       "live grep",
     },
-    ["<A-p>"] = { "<cmd>Telescope commands<CR>", "command pallete" },
+    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
   },
 
   i = {
-    ["<A-p>"] = { "<cmd>Telescope commands<CR>", "command pallete" },
+    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
   },
 }
 
@@ -342,7 +339,7 @@ mappings.hop = {
 
 mappings.git = {
   n = {
-    ["<leader>gn"] = { "<cmd>Neogit <CR> ", "neogit" },
+    ["<leader>gn"] = { cmd "Neogit", "neogit" },
   },
 }
 
