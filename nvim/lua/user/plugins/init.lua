@@ -100,6 +100,7 @@ return require("packer").startup({
     use {
       's1n7ax/nvim-window-picker',
       tag = 'v1.*',
+      module = "window-picker",
       config = conf("window-picker"),
     }
 
@@ -112,9 +113,13 @@ return require("packer").startup({
         "MunifTanjim/nui.nvim",
         "Nexmean/nvim-window-picker",
       },
+      cmd = "Neotree",
       config = conf("neo-tree"),
     }
-    use { "mhartington/formatter.nvim", config = conf("formatter") }
+    use { "mhartington/formatter.nvim",
+      cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
+      config = conf("formatter")
+    }
     use {
       "phaazon/hop.nvim",
       branch = "v2",
@@ -213,11 +218,9 @@ return require("packer").startup({
       end,
     }
     use { "hrsh7th/vim-vsnip-integ" }
-    use {
-      "scrooloose/nerdcommenter",
-      setup = function ()
-        vim.g.NERDSpaceDelims = 1
-        vim.g.NERDDefaultAlign = "left"
+    use { "numToStr/Comment.nvim",
+      config = function ()
+        require("Comment").setup()
       end
     }
     use {
@@ -245,13 +248,20 @@ return require("packer").startup({
       end,
     }
     use { "tpope/vim-abolish" }
-    use { "alvan/vim-closetag", setup = function ()
-      vim.g.closetag_filenames = "*.html,*.xhtml,*.phtml,*.xml,*.md"
-      vim.g.closetag_filetypes = "html,xhtml,phtml,xml,markdown"
-    end }
+    use { "windwp/nvim-ts-autotag",
+      config = function ()
+        require("nvim-ts-autotag").setup()
+      end
+    }
     use { "Rasukarusan/nvim-block-paste" }
     use { "godlygeek/tabular" }
-    use { "tpope/vim-surround" }
+    use {
+      "kylechui/nvim-surround",
+      tag = "*",
+      config = function()
+        require("nvim-surround").setup {}
+      end
+    }
     use { "tweekmonster/startuptime.vim", cmd = { "StartupTime" } }
     use { "RRethy/vim-illuminate", config = conf("vim-illuminate") }
     use { "troydm/zoomwintab.vim" }
@@ -278,12 +288,14 @@ return require("packer").startup({
     use_local { "lukas-reineke/indent-blankline.nvim", setup = conf("indent-blankline") }
     use {
       "folke/lsp-trouble.nvim",
+      cmd = { "Trouble", "TroubleToggle" },
       config = conf("lsp-trouble"), after = "nvim-web-devicons",
     }
     use_local { "sindrets/diffview.nvim", config = conf("diffview") }
     use_local { "sindrets/winshift.nvim", config = conf("winshift") }
     use_local {
       "TimUntersberger/neogit",
+      cmd = { "Neogit" },
       config = conf("neogit"),
       requires = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },
     }
@@ -333,6 +345,8 @@ return require("packer").startup({
         'nvim-lua/plenary.nvim',
         'nvim-telescope/telescope.nvim',
       },
+      module = "haskell-tools",
+      ft = "haskell",
       config = conf("haskell-tools")
     }
     use {
