@@ -28,12 +28,10 @@ local html_like_ft = {
   "markdown", "glimmer","handlebars","hbs"
 }
 
+local load_colorschemes = "LoadColorschemes"
+
 local plugins = {
-  { "williamboman/mason.nvim",
-    config = function ()
-      require("mason").setup()
-    end
-  },
+  { "williamboman/mason.nvim", config = true },
 
   -- SYNTAX
   { "MTDL9/vim-log-highlighting" },
@@ -181,11 +179,7 @@ local plugins = {
   { "kevinhwang91/nvim-bqf", ft = "qf", config = conf("nvim-bqf") },
   { "windwp/nvim-autopairs", config = conf("nvim-autopairs") },
   { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") },
-  { "numToStr/Comment.nvim",
-    config = function ()
-      require("Comment").setup()
-    end
-  },
+  { "numToStr/Comment.nvim", config = true },
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -220,22 +214,14 @@ local plugins = {
   },
   { "tpope/vim-abolish" },
   { "windwp/nvim-ts-autotag",
+    config = true,
     ft = html_like_ft,
-    config = function ()
-      require("nvim-ts-autotag").setup()
-    end
   },
   { "Rasukarusan/nvim-block-paste" },
   { "godlygeek/tabular",
     cmd = "Tabularize"
   },
-  {
-    "kylechui/nvim-surround",
-    version = "*",
-    config = function()
-      require("nvim-surround").setup()
-    end
-  },
+  { "kylechui/nvim-surround", version = "*", config = true },
   { "tweekmonster/startuptime.vim", cmd = { "StartupTime" } },
   { "RRethy/vim-illuminate", config = conf("vim-illuminate") },
   {
@@ -311,7 +297,6 @@ local plugins = {
       vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
     end,
   },
-  { "honza/vim-snippets" },
   {
     'MrcJkb/haskell-tools.nvim',
     dependencies = {
@@ -322,34 +307,35 @@ local plugins = {
     ft = "haskell",
     config = conf("haskell-tools")
   },
-  {
-    "j-hui/fidget.nvim",
-    config = function ()
-      require("fidget").setup()
-    end
-  },
+  { "j-hui/fidget.nvim", config = true },
 
   -- THEMES
-  { "rktjmp/lush.nvim" },
-  { "arzg/vim-colors-xcode" },
-  { "sainnhe/gruvbox-material" },
-  { "gruvbox-community/gruvbox" },
-  { "folke/tokyonight.nvim" },
-  { "sindrets/material.nvim" },
-  { "sindrets/rose-pine-neovim", name = "rose-pine" },
-  { "mcchrish/zenbones.nvim", dependencies = "rktjmp/lush.nvim" },
-  { "sainnhe/everforest" },
-  { "Cybolic/palenight.vim" },
-  { "olimorris/onedarkpro.nvim", enabled = false, branch = "main" }, -- loads too slow
-  { "NTBBloodbath/doom-one.nvim" },
-  { "catppuccin/nvim", name = "catppuccin" },
-  { "sindrets/dracula-vim", name = "dracula" },
-  { "projekt0n/github-nvim-theme" },
-  { "rebelot/kanagawa.nvim" },
-  { "sindrets/oxocarbon-lua.nvim" },
-  { "nyoom-engineering/oxocarbon.nvim" },
-  { "EdenEast/nightfox.nvim" },
-  { "kvrohit/mellow.nvim" },
+  { "rktjmp/lush.nvim", cmd = load_colorschemes },
+  { "arzg/vim-colors-xcode", cmd = load_colorschemes },
+  { "sainnhe/gruvbox-material", cmd = load_colorschemes },
+  { "gruvbox-community/gruvbox", cmd = load_colorschemes },
+  { "folke/tokyonight.nvim", cmd = load_colorschemes },
+  { "sindrets/material.nvim", cmd = load_colorschemes },
+  { "sindrets/rose-pine-neovim", name = "rose-pine", cmd = load_colorschemes },
+  { "mcchrish/zenbones.nvim", dependencies = "rktjmp/lush.nvim", cmd = load_colorschemes },
+  { "sainnhe/everforest", cmd = load_colorschemes },
+  { "Cybolic/palenight.vim", cmd = load_colorschemes },
+  { "olimorris/onedarkpro.nvim", branch = "main", cmd = load_colorschemes },
+  { "NTBBloodbath/doom-one.nvim", cmd = load_colorschemes },
+  { "catppuccin/nvim", name = "catppuccin", cmd = load_colorschemes },
+  { "sindrets/dracula-vim", name = "dracula", cmd = load_colorschemes },
+  { "projekt0n/github-nvim-theme", cmd = load_colorschemes },
+  { "rebelot/kanagawa.nvim", cmd = load_colorschemes },
+  { "sindrets/oxocarbon-lua.nvim", cmd = load_colorschemes },
+  { "nyoom-engineering/oxocarbon.nvim", cmd = load_colorschemes },
+  { "EdenEast/nightfox.nvim", cmd = load_colorschemes },
+  { "kvrohit/mellow.nvim", cmd = load_colorschemes,
+    config = function ()
+      vim.api.nvim_create_user_command(load_colorschemes, function ()
+        vim.notify "All colorschemes loaded"
+      end, {})
+    end,
+  },
 }
 local opts = {}
 
