@@ -22,9 +22,11 @@ end
 
 mappings.general = {
   i = {
-    -- go to  beginning and end
-    ["<C-b>"] = { "<ESC>^i", "beginning of line" },
+    ["<C-a>"] = { "<Home>", "beginning of line" },
     ["<C-e>"] = { "<End>", "end of line" },
+    ["<C-f>"] = { "<Right>", "move forward" },
+    ["<C-b>"] = { "<Left>", "move back" },
+    ["<C-d>"] = { "<Delete>", "delete next character" },
 
     -- navigate within insert mode
     ["<C-h>"] = { "<Left>", "move left" },
@@ -78,8 +80,21 @@ mappings.general = {
   },
 
   t = {
+    ["<C-a>"] = { "<Home>", "beginning of line" },
+    ["<C-e>"] = { "<End>", "end of line" },
+    ["<C-f>"] = { "<Right>", "move forward" },
+    ["<C-b>"] = { "<Left>", "move back" },
+    ["<C-d>"] = { "<Delete>", "delete next character" },
     ["<C-x>"] = { termcodes "<C-\\><C-N>", "escape terminal mode" },
     ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+  },
+
+  c = {
+    ["<C-a>"] = { "<Home>", "beginning of line" },
+    ["<C-e>"] = { "<End>", "end of line" },
+    ["<C-f>"] = { "<Right>", "move forward" },
+    ["<C-b>"] = { "<Left>", "move back" },
+    ["<C-d>"] = { "<Delete>", "delete next character" },
   },
 
   v = {
