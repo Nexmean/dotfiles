@@ -8,6 +8,10 @@ local function list(value, str, sep)
   return str ~= "" and table.concat({value, str}, sep) or value
 end
 
+opt.langmap =
+     "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,"
+  .. "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,"
+
 opt.cmdheight = 0
 opt.showtabline = 0
 opt.number = true
