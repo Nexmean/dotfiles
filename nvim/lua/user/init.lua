@@ -1,11 +1,12 @@
 NvimConfigDir = vim.fn.stdpath("config")
 
-require("user.settings")
 -- vim.cmd("source " .. NvimConfigDir .. "/mappings.vim")
+require("user.settings")
+require("user.plugins")
+require("user.settings_after")
 require("user.mappings").load()
 require("user.commands")
 vim.cmd("source " .. NvimConfigDir .. "/autocommands.vim")
-require("user.plugins")
 
 -- Colorscheme tweaks and settings
 require("user.colorscheme")
