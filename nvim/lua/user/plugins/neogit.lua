@@ -23,6 +23,9 @@ return function ()
       recent = {
         folded = false,
       },
+      stashes = {
+        folded = true,
+      }
     },
     -- override/add mappings
     mappings = {
