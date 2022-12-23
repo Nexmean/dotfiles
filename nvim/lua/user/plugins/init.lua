@@ -21,6 +21,13 @@ vim.g.markdown_fenced_languages = {
   "vim",
 }
 
+local html_like_ft = {
+  "html", "javascript", "typescript", "javascriptreact", "typescriptreact",
+  "svelte", "vue", "tsx", "jsx", "rescript",
+  "xml", "php",
+  "markdown", "glimmer","handlebars","hbs"
+}
+
 local plugins = {
   { "williamboman/mason.nvim",
     config = function ()
@@ -142,13 +149,19 @@ local plugins = {
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-buffer" },
-      { "L3MON4D3/LuaSnip" },
+      { "L3MON4D3/LuaSnip", version = "v1.*",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        config = function ()
+          require("luasnip.loaders.from_vscode").lazy_load()
+        end
+      },
       { "hrsh7th/cmp-cmdline" },
       { "f3fora/cmp-spell" },
       { "petertriho/cmp-git" },
       { "rafamadriz/friendly-snippets" },
       { "windwp/nvim-autopairs" }
     },
+    event = { "InsertEnter", "CmdlineEnter" },
     config = conf("nvim-cmp"),
   },
   {
@@ -168,12 +181,6 @@ local plugins = {
   { "kevinhwang91/nvim-bqf", ft = "qf", config = conf("nvim-bqf") },
   { "windwp/nvim-autopairs", config = conf("nvim-autopairs") },
   { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") },
-  { "L3MON4D3/LuaSnip", tag = "v1.*",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    config = function ()
-      require("luasnip.loaders.from_vscode").lazy_load()
-    end
-  },
   { "numToStr/Comment.nvim",
     config = function ()
       require("Comment").setup()
@@ -181,7 +188,6 @@ local plugins = {
   },
   {
     "nvim-telescope/telescope.nvim",
-    config = conf("telescope"),
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       { "nvim-telescope/telescope-media-files.nvim" },
@@ -189,10 +195,14 @@ local plugins = {
       { "nvim-telescope/telescope-live-grep-args.nvim" },
       { "nvim-tree/nvim-web-devicons" }
     },
+    cmd = { "Telescope" },
+    event = { "LspAttach" },
+    config = conf("telescope"),
   },
 
   {
     "LukasPietzschmann/telescope-tabs",
+    lazy = true,
     dependencies = "nvim-telescope/telescope.nvim",
     config = function ()
       require("telescope-tabs").setup {
@@ -203,27 +213,25 @@ local plugins = {
 
   {
     "mattn/emmet-vim",
+    ft = html_like_ft,
     init = function ()
       vim.g.user_emmet_leader_key = "<C-Z>"
     end,
   },
   { "tpope/vim-abolish" },
   { "windwp/nvim-ts-autotag",
-    ft = {
-      'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-      'svelte', 'vue', 'tsx', 'jsx', 'rescript',
-      'xml', 'php',
-      'markdown', 'glimmer','handlebars','hbs'
-    },
+    ft = html_like_ft,
     config = function ()
       require("nvim-ts-autotag").setup()
     end
   },
   { "Rasukarusan/nvim-block-paste" },
-  { "godlygeek/tabular" },
+  { "godlygeek/tabular",
+    cmd = "Tabularize"
+  },
   {
     "kylechui/nvim-surround",
-    tag = "*",
+    version = "*",
     config = function()
       require("nvim-surround").setup()
     end
@@ -282,7 +290,6 @@ local plugins = {
     config = conf("fugitive"),
   },
   { "goolord/alpha-nvim", config = conf("alpha") },
-  { "ryanoasis/vim-devicons" },
   {
     "iamcco/markdown-preview.nvim",
     build = "cd app && yarn install",
@@ -333,7 +340,7 @@ local plugins = {
   { "mcchrish/zenbones.nvim", dependencies = "rktjmp/lush.nvim" },
   { "sainnhe/everforest" },
   { "Cybolic/palenight.vim" },
-  { "olimorris/onedarkpro.nvim", branch = "main" },
+  { "olimorris/onedarkpro.nvim", enabled = false, branch = "main" }, -- loads too slow
   { "NTBBloodbath/doom-one.nvim" },
   { "catppuccin/nvim", name = "catppuccin" },
   { "sindrets/dracula-vim", name = "dracula" },
