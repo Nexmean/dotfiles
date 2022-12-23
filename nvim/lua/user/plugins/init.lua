@@ -81,13 +81,20 @@ return require("packer").startup({
 
     -- SYNTAX
     use { "MTDL9/vim-log-highlighting" }
-    use { "kevinoid/vim-jsonc" }
-    use { "teal-language/vim-teal" }
-    use { "chrisbra/csv.vim" }
-    use { "fladson/vim-kitty" }
+    use { "teal-language/vim-teal",
+      ft = "teal"
+    }
+    use { "chrisbra/csv.vim",
+      ft = "csv"
+    }
+    use { "fladson/vim-kitty",
+      ft = "kitty",
+    }
     use { "joelbeedle/pseudo-syntax" }
     use { "alisdair/vim-armasm" }
-    use { "vmchale/dhall-vim" }
+    use { "vmchale/dhall-vim",
+      ft = "dhall",
+    }
 
     -- BEHAVIOUR
     use {
@@ -208,7 +215,7 @@ return require("packer").startup({
         })
       end,
     }
-    use { "kevinhwang91/nvim-bqf", config = conf("nvim-bqf") }
+    use { "kevinhwang91/nvim-bqf", ft = "qf", config = conf("nvim-bqf") }
     use { "windwp/nvim-autopairs", config = conf("nvim-autopairs") }
     use { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") }
     use {
@@ -241,6 +248,7 @@ return require("packer").startup({
         }
       end
     }
+
     use {
       "mattn/emmet-vim",
       setup = function ()
@@ -249,6 +257,12 @@ return require("packer").startup({
     }
     use { "tpope/vim-abolish" }
     use { "windwp/nvim-ts-autotag",
+      ft = {
+        'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+        'svelte', 'vue', 'tsx', 'jsx', 'rescript',
+        'xml', 'php',
+        'markdown', 'glimmer','handlebars','hbs'
+      },
       config = function ()
         require("nvim-ts-autotag").setup()
       end
@@ -264,7 +278,6 @@ return require("packer").startup({
     }
     use { "tweekmonster/startuptime.vim", cmd = { "StartupTime" } }
     use { "RRethy/vim-illuminate", config = conf("vim-illuminate") }
-    use { "troydm/zoomwintab.vim" }
     use {
       "rcarriga/nvim-notify",
       config = function()
