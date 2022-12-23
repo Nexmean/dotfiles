@@ -1,5 +1,6 @@
 return function()
   local cmp = require("cmp")
+  local luasnip = require("luasnip")
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
   local api = vim.api
   local utils = Config.common.utils
@@ -38,7 +39,7 @@ return function()
   cmp.setup({
     snippet = {
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
+        require("luasnip").lsp_expand(args.body)
       end,
     },
     mapping = cmp.mapping.preset.insert({
@@ -47,6 +48,20 @@ return function()
       ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-e>"] = cmp.mapping.close(),
       ["<CR>"] = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
+      ["<S-Tab>"] = cmp.mapping(function(fallback)
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
     }),
     formatting = {
       deprecated = true,
@@ -79,8 +94,7 @@ return function()
     sources = {
       { name = "nvim_lua" },
       { name = "nvim_lsp" },
-      { name = "vsnip" },
-      { name = "neorg" },
+      { name = "luasnip" },
       { name = "git" },
       { name = "spell" },
       { name = "path" },
@@ -112,16 +126,24 @@ return function()
 
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-  -- cmp.setup.cmdline(":", {
-  --   mapping = cmp.mapping.preset.cmdline({}),
-  --   sources = cmp.config.sources(
-  --     {
-  --       { name = "path" },
-  --     }, {
-  --       { name = "cmdline" },
-  --     }
-  --   ),
-  -- })
+  cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+
+  cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources(
+      {
+        { name = "path" },
+      }, {
+        { name = "cmdline" },
+      }
+    ),
+  })
 
   require("cmp_git").setup({
     filetypes = { "gitcommit", "NeogitCommitMessage", "markdown", "octo" },

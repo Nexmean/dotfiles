@@ -193,17 +193,18 @@ return require("packer").startup({
         { "hrsh7th/cmp-nvim-lsp" },
         { "hrsh7th/cmp-path" },
         { "hrsh7th/cmp-buffer" },
-        { "hrsh7th/cmp-vsnip", wants = "friendly-snippets" },
+        { "L3MON4D3/LuaSnip", wants = "friendly-snippets" },
         { "hrsh7th/cmp-cmdline" },
         { "f3fora/cmp-spell" },
-        { "rafamadriz/friendly-snippets" },
         { "petertriho/cmp-git" },
+        { "rafamadriz/friendly-snippets" },
       },
       after = { "nvim-autopairs", "friendly-snippets" },
       config = conf("nvim-cmp"),
     }
     use {
       "https://gitlab.com/yorickpeterse/nvim-pqf.git",
+      ft = "qf",
       config = function()
         require("pqf").setup({
           signs = {
@@ -218,13 +219,12 @@ return require("packer").startup({
     use { "kevinhwang91/nvim-bqf", ft = "qf", config = conf("nvim-bqf") }
     use { "windwp/nvim-autopairs", config = conf("nvim-autopairs") }
     use { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") }
-    use {
-      "hrsh7th/vim-vsnip",
-      setup = function()
-        vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/snippets"
-      end,
+    use { "L3MON4D3/LuaSnip", tag = "v1.*",
+      after = "friendly-snippets",
+      config = function ()
+        require("luasnip.loaders.from_vscode").lazy_load()
+      end
     }
-    use { "hrsh7th/vim-vsnip-integ" }
     use { "numToStr/Comment.nvim",
       config = function ()
         require("Comment").setup()
