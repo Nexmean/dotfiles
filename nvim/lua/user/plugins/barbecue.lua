@@ -1,5 +1,3 @@
 return function ()
-  require("barbecue").setup {
-    -- exclude_filetypes = {"cabal", "NeogitStatus", "NeogitHelpPopup", "NeogitCommitView"}
-  }
+  require("barbecue").setup ()
 end
