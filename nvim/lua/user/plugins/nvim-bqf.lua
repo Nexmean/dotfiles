@@ -4,7 +4,7 @@ return function()
 
   require("bqf").setup({
     preview = {
-      auto_preview = false,
+      auto_preview = true,
       border_chars = { '│', '│', '─', '─', '┌', '┐', '└', '┘', '█' },
       delay_syntax = 50,
       win_height = 15,

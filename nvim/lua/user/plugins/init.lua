@@ -167,19 +167,18 @@ local plugins = {
   },
   {
     url = "https://gitlab.com/yorickpeterse/nvim-pqf.git",
-    ft = "qf",
     config = function()
-      require("pqf").setup({
+      require("pqf").setup {
         signs = {
           error = "",
           warning = "",
           info = "",
           hint = "",
         }
-      })
+      }
     end,
   },
-  { "kevinhwang91/nvim-bqf", ft = "qf", config = conf("nvim-bqf") },
+  { "kevinhwang91/nvim-bqf", config = conf("nvim-bqf") },
   { "windwp/nvim-autopairs", config = conf("nvim-autopairs") },
   { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") },
   { "numToStr/Comment.nvim", config = true },

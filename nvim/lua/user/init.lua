@@ -5,6 +5,7 @@ require("user.plugins")
 require("user.settings_after")
 require("user.mappings").load()
 require("user.commands")
+require("user.autocommands")
 vim.cmd("source " .. NvimConfigDir .. "/autocommands.vim")
 
 -- Colorscheme tweaks and settings
