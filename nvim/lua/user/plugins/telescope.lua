@@ -148,8 +148,10 @@ return function ()
   }
 
   -- Load extensions
-  require('telescope').load_extension('notify')
-  require('telescope').load_extension('fzf')
-  require('telescope').load_extension('media_files')
-  require('telescope').load_extension('ui-select')
+  require("telescope").load_extension("notify")
+  require("telescope").load_extension("fzf")
+  require("telescope").load_extension("media_files")
+  require("telescope").load_extension("ui-select")
+  require("telescope").load_extension("projects")
+  require("telescope").load_extension("persisted")
 end

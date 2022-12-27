@@ -52,8 +52,11 @@ local plugins = {
 
 
   -- BEHAVIOUR
-  {
-    "antoinemadec/FixCursorHold.nvim",
+  { "goolord/alpha-nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = conf("alpha")
+  },
+  { "antoinemadec/FixCursorHold.nvim",
     init = function()
       vim.g.cursorhold_updatetime = 250
     end
@@ -77,10 +80,15 @@ local plugins = {
     cmd = "Neotree",
     config = conf("neo-tree"),
   },
+
+  { "ahmedkhalf/project.nvim", config = conf("project") },
+  { "olimorris/persisted.nvim", config = conf("persisted") },
+
   { "mhartington/formatter.nvim",
     cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
     config = conf("formatter")
   },
+
   {
     "phaazon/hop.nvim",
     branch = "v2",
@@ -188,6 +196,8 @@ local plugins = {
       { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-telescope/telescope-live-grep-args.nvim" },
       { "nvim-tree/nvim-web-devicons" }
+      { "ahmedkhalf/project.nvim" },
+      { "olimorris/persisted.nvim" },
     },
     cmd = { "Telescope" },
     event = { "LspAttach" },

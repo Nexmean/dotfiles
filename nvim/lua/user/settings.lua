@@ -60,7 +60,7 @@ opt.sessionoptions = list {
   "folds",
   "help",
   "tabpages",
-  "winsize"
+  "winpos",
 }
 opt.diffopt = list {
   "algorithm:histogram",

@@ -197,3 +197,10 @@ command("Pick", function (e)
     vim.cmd('e ' .. e.fargs[1])
   end
 end, { nargs = '?', complete = 'file' })
+command("Projects", function ()
+  vim.cmd[[Telescope projects]]
+end, {})
+
+command("Sessions", function ()
+  vim.cmd[[Telescope persisted]]
+end, {})
