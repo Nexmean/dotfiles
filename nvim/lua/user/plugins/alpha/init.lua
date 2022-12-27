@@ -5,7 +5,6 @@ return function()
   local api = vim.api
   local au = Config.common.au
   local hl = Config.common.hl
-  local lib = Config.lib
   local utils = Config.common.utils
 
   local elements = {
@@ -222,7 +221,7 @@ return function()
     end
 
     local project_nvim = require("project_nvim.utils.history")
-    local projects = project_nvim.get_recent_projects()
+    local projects = utils.vec_slice(project_nvim.get_recent_projects(), 1, 5)
     elements.projects = {recent_projects_button}
     for i, project in ipairs(projects) do
       table.insert(elements.projects, project_button((#sessions + i) % 10, project))
