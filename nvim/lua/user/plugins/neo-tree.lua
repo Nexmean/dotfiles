@@ -1,6 +1,11 @@
 return function ()
-  vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+  local utils = require("user.common.utils")
+
+  vim.g.neo_tree_remove_legacy_commands = 1
   require("neo-tree").setup {
+    source_selector = {
+      winbar = false,
+    },
     window = {
       mappings = {
         ["<tab>"] = {
@@ -8,6 +13,12 @@ return function ()
           nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use 
         },
         ["o"] = "open_with_window_picker",
+        ["f"] = utils.cmdfn[[Neotree focus filesystem left]],
+        ["b"] = utils.cmdfn[[Neotree focus buffers left]],
+        ["t"] = utils.cmdfn[[Neotree focus git_status left]],
+      },
+      filesystem = {
+        use_libuv_file_watcher = true,
       }
     },
   }

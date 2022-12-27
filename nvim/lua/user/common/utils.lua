@@ -1186,4 +1186,10 @@ function M.detect_win_pos(winid)
   return "unknown"
 end
 
+function M.cmdfn(command)
+  return function()
+    vim.cmd(command)
+  end
+end
+
 return M
