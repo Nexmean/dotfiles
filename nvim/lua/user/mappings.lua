@@ -1,3 +1,4 @@
+local utils = require("user.common.utils")
 -- n, v, i, t = mode names
 local mappings = {}
 
@@ -14,12 +15,6 @@ local function toggle_mutliline_diagnostics()
   end
 end
 
-local function cmd(str)
-  return function()
-    vim.cmd(str)
-  end
-end
-
 mappings.general = {
   i = {
     ["<C-a>"] = { "<Home>", "beginning of line" },
@@ -28,11 +23,11 @@ mappings.general = {
     ["<C-b>"] = { "<Left>", "move back" },
     ["<C-d>"] = { "<Delete>", "delete next character" },
 
-    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+    ["<A-i>"] = { utils.cmdfn "TermToggle", "toggle terminal" },
   },
 
   n = {
-    ["<ESC>"] = { cmd "noh", "no highlight" },
+    ["<ESC>"] = { utils.cmdfn "noh", "no highlight" },
 
     -- switch between windows
     ["<C-h>"] = { "<C-w>h", "window left" },
@@ -41,8 +36,8 @@ mappings.general = {
     ["<C-k>"] = { "<C-w>k", "window up" },
 
     -- line numbers
-    ["<leader>n"] = { cmd "set nu!", "toggle line number" },
-    ["<leader>rn"] = { cmd "set rnu!", "toggle relative number" },
+    ["<leader>n"] = { utils.cmdfn "set nu!", "toggle line number" },
+    ["<leader>rn"] = { utils.cmdfn "set rnu!", "toggle relative number" },
 
     -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
     -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
@@ -54,25 +49,25 @@ mappings.general = {
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
 
     -- new buffer
-    ["<leader>b"] = { cmd "enew", "new buffer" },
-    ["<leader>tx"] = { cmd "tabclose", "close tab" },
-    ["<leader>tn"] = { cmd "tabnew", "new tab" },
+    ["<leader>b"] = { utils.cmdfn "enew", "new buffer" },
+    ["<leader>tx"] = { utils.cmdfn "tabclose", "close tab" },
+    ["<leader>tn"] = { utils.cmdfn "tabnew", "new tab" },
     ["<leader>dt"] = { toggle_mutliline_diagnostics, "toggle multiline diagnostics"},
 
-    ["g1"] = { cmd "1tabnext", "tab 1" },
-    ["g2"] = { cmd "2tabnext", "tab 2" },
-    ["g3"] = { cmd "3tabnext", "tab 3" },
-    ["g4"] = { cmd "4tabnext", "tab 4" },
-    ["g5"] = { cmd "5tabnext", "tab 5" },
-    ["g6"] = { cmd "6tabnext", "tab 6" },
-    ["g7"] = { cmd "7tabnext", "tab 7" },
-    ["g8"] = { cmd "8tabnext", "tab 8" },
-    ["g9"] = { cmd "9tabnext", "tab 9" },
+    ["g1"] = { utils.cmdfn "1tabnext", "tab 1" },
+    ["g2"] = { utils.cmdfn "2tabnext", "tab 2" },
+    ["g3"] = { utils.cmdfn "3tabnext", "tab 3" },
+    ["g4"] = { utils.cmdfn "4tabnext", "tab 4" },
+    ["g5"] = { utils.cmdfn "5tabnext", "tab 5" },
+    ["g6"] = { utils.cmdfn "6tabnext", "tab 6" },
+    ["g7"] = { utils.cmdfn "7tabnext", "tab 7" },
+    ["g8"] = { utils.cmdfn "8tabnext", "tab 8" },
+    ["g9"] = { utils.cmdfn "9tabnext", "tab 9" },
 
-    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+    ["<A-i>"] = { utils.cmdfn "TermToggle", "toggle terminal" },
 
-    ["~"] = { cmd "buffer #", "recent buffer" },
-    ["<C-w><C-w>"] = { cmd "PickAny", "pick buffer" }
+    ["~"] = { utils.cmdfn "buffer #", "recent buffer" },
+    ["<C-w><C-w>"] = { utils.cmdfn "PickAny", "pick buffer" }
   },
 
   t = {
@@ -81,7 +76,7 @@ mappings.general = {
     ["<C-f>"] = { "<Right>", "move forward" },
     ["<C-b>"] = { "<Left>", "move back" },
     ["<C-x>"] = { termcodes "<C-\\><C-N>", "escape terminal mode" },
-    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+    ["<A-i>"] = { utils.cmdfn "TermToggle", "toggle terminal" },
   },
 
   c = {
@@ -95,8 +90,8 @@ mappings.general = {
   v = {
     ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
-    ["<C-w><C-w>"] = { cmd "PickAny", "pick buffer" }
+    ["<A-i>"] = { utils.cmdfn "TermToggle", "toggle terminal" },
+    ["<C-w><C-w>"] = { utils.cmdfn "PickAny", "pick buffer" }
   },
 
   x = {
@@ -105,7 +100,7 @@ mappings.general = {
     -- Don't copy the replaced text after pasting in visual mode
     -- https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text#Alternative_mapping_for_paste
     ["p"] = { 'p:let @+=@0<CR>:let @"=@0<CR>', opts = { silent = true } },
-    ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+    ["<A-i>"] = { utils.cmdfn "TermToggle", "toggle terminal" },
   },
 }
 
@@ -218,53 +213,53 @@ mappings.lspconfig = {
       end,
       "floating diagnostic",
     },
-    ["gi"] = { cmd "Telescope lsp_implementations", "lsp implementation" },
-    ["gr"] = { cmd "Telescope lsp_references", "lsp references" },
-    ["gd"] = { cmd "Telescope lsp_definitions", "lsp definition" },
-    ["<leader>ds"] = { cmd "Telescope lsp_document_symbols", "document symbols" },
-    ["<leader>ws"] = { cmd "Telescope lsp_dynamic_workspace_symbols", "workspace symbols" },
-    ["<C-s>"] = { cmd "SymbolsOutline", "toggle outline" }
+    ["gi"] = { utils.cmdfn "Telescope lsp_implementations", "lsp implementation" },
+    ["gr"] = { utils.cmdfn "Telescope lsp_references", "lsp references" },
+    ["gd"] = { utils.cmdfn "Telescope lsp_definitions", "lsp definition" },
+    ["<leader>ds"] = { utils.cmdfn "Telescope lsp_document_symbols", "document symbols" },
+    ["<leader>ws"] = { utils.cmdfn "Telescope lsp_dynamic_workspace_symbols", "workspace symbols" },
+    ["<C-s>"] = { utils.cmdfn "SymbolsOutline", "toggle outline" }
   },
 }
 
 mappings.neotree = {
   n = {
     -- toggle
-    ["<C-n>"] = { cmd "Neotree toggle", "toggle neotree" },
+    ["<C-n>"] = { utils.cmdfn "Neotree toggle", "toggle neotree" },
 
     -- focus
-    ["<leader>e"] = { cmd "Neotree", "focus neotree" },
+    ["<leader>e"] = { utils.cmdfn "Neotree", "focus neotree" },
   },
 }
 
 mappings.telescope = {
   n = {
     -- find
-    ["<leader>ff"] = { cmd "Telescope find_files", "find files" },
-    ["<leader>fa"] = { cmd "Telescope find_files follow=true no_ignore=true hidden=true", "find all" },
-    ["<leader>fb"] = { cmd "Telescope buffers", "find buffers" },
-    ["<leader>fh"] = { cmd "Telescope help_tags", "help page" },
-    ["<leader>fo"] = { cmd "Telescope oldfiles only_cwd=true", "find oldfiles" },
-    ["<leader>tk"] = { cmd "Telescope keymaps", "show keys" },
+    ["<leader>ff"] = { utils.cmdfn "Telescope find_files", "find files" },
+    ["<leader>fa"] = { utils.cmdfn "Telescope find_files follow=true no_ignore=true hidden=true", "find all" },
+    ["<leader>fb"] = { utils.cmdfn "Telescope buffers", "find buffers" },
+    ["<leader>fh"] = { utils.cmdfn "Telescope help_tags", "help page" },
+    ["<leader>fo"] = { utils.cmdfn "Telescope oldfiles only_cwd=true", "find oldfiles" },
+    ["<leader>tk"] = { utils.cmdfn "Telescope keymaps", "show keys" },
 
     -- git
-    ["<leader>cm"] = { cmd "Telescope git_commits", "git commits" },
-    ["<leader>gt"] = { cmd "Telescope git_status", "git status" },
+    ["<leader>cm"] = { utils.cmdfn "Telescope git_commits", "git commits" },
+    ["<leader>gt"] = { utils.cmdfn "Telescope git_status", "git status" },
 
     -- pick a hidden term
-    ["<leader>pt"] = { cmd "Telescope terms", "pick hidden term" },
-    ["gj"] = { cmd "Telescope buffers sort_lastused=true sort_mru=true", "find buffers" },
+    ["<leader>pt"] = { utils.cmdfn "Telescope terms", "pick hidden term" },
+    ["gj"] = { utils.cmdfn "Telescope buffers sort_lastused=true sort_mru=true", "find buffers" },
     ["<leader>fw"] = {
       function()
         require("telescope").extensions.live_grep_args.live_grep_args()
       end,
       "   live grep",
     },
-    ["<leader>fr"] = { cmd "Telescope resume", "repeat recent search" },
-    ["<leader>fp"] = { cmd "Telescope pickers", "recent searches" },
-    ["<leader>gb"] = { cmd "Telescope git_branches", "git branches" },
-    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
-    ["<leader>tt"] = { cmd "Telescope telescope-tabs list_tabs", "list tabs" }
+    ["<leader>fr"] = { utils.cmdfn "Telescope resume", "repeat recent search" },
+    ["<leader>fp"] = { utils.cmdfn "Telescope pickers", "recent searches" },
+    ["<leader>gb"] = { utils.cmdfn "Telescope git_branches", "git branches" },
+    ["<A-p>"] = { utils.cmdfn "Telescope commands", "command pallete" },
+    ["<leader>tt"] = { utils.cmdfn "Telescope telescope-tabs list_tabs", "list tabs" }
   },
 
   v = {
@@ -275,20 +270,18 @@ mappings.telescope = {
       end,
       "live grep",
     },
-    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
+    ["<A-p>"] = { utils.cmdfn "Telescope commands", "command pallete" },
   },
 
   i = {
-    ["<A-p>"] = { cmd "Telescope commands", "command pallete" },
+    ["<A-p>"] = { utils.cmdfn "Telescope commands", "command pallete" },
   },
 }
 
 mappings.whichkey = {
   n = {
     ["<leader>wK"] = {
-      function()
-        vim.cmd "WhichKey"
-      end,
+      utils.cmdfn "WhichKey",
       "which-key all keymaps",
     },
     ["<leader>wk"] = {
@@ -349,7 +342,7 @@ mappings.hop = {
 
 mappings.git = {
   n = {
-    ["<leader>gn"] = { cmd "Neogit", "neogit" },
+    ["<leader>gn"] = { utils.cmdfn "Neogit", "neogit" },
   },
 }
 
