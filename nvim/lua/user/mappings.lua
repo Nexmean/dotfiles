@@ -28,11 +28,6 @@ mappings.general = {
     ["<C-b>"] = { "<Left>", "move back" },
     ["<C-d>"] = { "<Delete>", "delete next character" },
 
-    -- navigate within insert mode
-    ["<C-h>"] = { "<Left>", "move left" },
-    ["<C-l>"] = { "<Right>", "move right" },
-    ["<C-j>"] = { "<Down>", "move down" },
-    ["<C-k>"] = { "<Up>", "move up" },
     ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
 
@@ -77,6 +72,7 @@ mappings.general = {
     ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
 
     ["~"] = { cmd "buffer #", "recent buffer" },
+    ["<C-w><C-w>"] = { cmd "PickAny", "pick buffer" }
   },
 
   t = {
@@ -84,7 +80,6 @@ mappings.general = {
     ["<C-e>"] = { "<End>", "end of line" },
     ["<C-f>"] = { "<Right>", "move forward" },
     ["<C-b>"] = { "<Left>", "move back" },
-    ["<C-d>"] = { "<Delete>", "delete next character" },
     ["<C-x>"] = { termcodes "<C-\\><C-N>", "escape terminal mode" },
     ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
   },
@@ -101,6 +96,7 @@ mappings.general = {
     ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
     ["<A-i>"] = { cmd "TermToggle", "toggle terminal" },
+    ["<C-w><C-w>"] = { cmd "PickAny", "pick buffer" }
   },
 
   x = {
@@ -125,7 +121,6 @@ mappings.lspconfig = {
       end,
       "lsp declaration",
     },
-
     ["K"] = {
       function()
         vim.lsp.buf.hover()

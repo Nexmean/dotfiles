@@ -263,6 +263,7 @@ local plugins = {
   },
   { "sindrets/diffview.nvim", config = conf("diffview") },
   { "sindrets/winshift.nvim", config = conf("winshift") },
+  { "beauwilliams/focus.nvim", config = conf("focus") },
   {
     "TimUntersberger/neogit",
     dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },

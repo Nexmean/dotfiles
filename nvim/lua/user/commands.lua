@@ -180,13 +180,13 @@ end, { nargs = "*", complete = "file" })
 
 command("Pick", function (e)
   local success, picked = pcall(function ()
-    return require('window-picker').pick_window({
+    return require('window-picker').pick_window {
       autoselect_one = true,
       include_current_win = true,
       current_win_hl_color = '#89b4fa',
       other_win_hl_color = '#89b4fa',
       fg_color = '#191926'
-    })
+    }
   end)
   if not success then
     return
@@ -197,6 +197,29 @@ command("Pick", function (e)
     vim.cmd('e ' .. e.fargs[1])
   end
 end, { nargs = '?', complete = 'file' })
+
+command("PickAny", function()
+  local success, picked = pcall(function ()
+    return require('window-picker').pick_window {
+      current_win_hl_color = '#89b4fa',
+      other_win_hl_color = '#89b4fa',
+      fg_color = '#191926',
+      filter_func = function (window_ids)
+        local current_bufnr = vim.api.nvim_get_current_win()
+        return vim.tbl_filter(function (bufnr)
+          return bufnr ~= current_bufnr
+        end, window_ids)
+      end
+    }
+  end)
+
+  if not success then
+    return
+  end
+
+  vim.api.nvim_set_current_win(picked)
+end, {})
+
 command("Projects", function ()
   vim.cmd[[Telescope projects]]
 end, {})
