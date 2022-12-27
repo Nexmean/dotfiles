@@ -49,11 +49,32 @@ TermSplit.winopts = {
 }
 
 function TermSplit:init(position)
-  self.config = {
-    position = position or "bottom",
-    width = 100,
-    height = 16,
-  }
+  local function setup_config()
+    self.config = {
+      position = position or "bottom",
+      width = 100,
+      height = math.floor(vim.o.lines * 0.6),
+    }
+  end
+  local function setup_vim_size()
+    self.vim_size = {
+      columns = vim.o.columns,
+      lines = vim.o.lines,
+    }
+  end
+  setup_config()
+  setup_vim_size()
+
+  vim.api.nvim_create_autocmd("VimResized", {
+    callback = function ()
+      setup_config()
+      if not self.last_height == nil then
+        local height_share = self.last_height / self.vim_size.lines
+        setup_vim_size()
+        self.last_height = math.floor(self.vim_size.lines * height_share)
+      end
+    end
+  })
 end
 
 ---@private
@@ -148,7 +169,7 @@ function TermSplit:open(focus)
       vim.cmd("wincmd " .. dir)
 
       local w = self.last_width or math.min(self.config.width, vim.o.columns / 2)
-      local h = self.last_height or math.min(self.config.height, vim.o.lines / 2)
+      local h = self.last_height or self.config.height
 
       if form == "row" then
         vim.cmd("resize " .. h)

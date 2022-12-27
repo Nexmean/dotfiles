@@ -7,6 +7,7 @@ return function ()
       winbar = false,
     },
     window = {
+      width = 35,
       mappings = {
         ["<tab>"] = {
           "toggle_node",
