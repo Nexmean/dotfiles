@@ -42,8 +42,6 @@ augroup NvimConfig
                 \       vim.cmd("startinsert")
                 \ end
 
-    au BufWinEnter,FileType fugitiveblame setl nolist
-
     " Run PackerCompile when changes are made to plugin configs.
     " au BufWritePost */lua/user/plugins/*.lua
     "             \ exe "so " . stdpath("config") . "/lua/user/plugins/init.lua"
