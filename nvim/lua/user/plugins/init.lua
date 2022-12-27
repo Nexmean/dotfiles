@@ -62,14 +62,12 @@ local plugins = {
     end
   },
 
-  {
-    's1n7ax/nvim-window-picker',
+  { "s1n7ax/nvim-window-picker",
     version = 'v1.*',
     config = conf("window-picker"),
   },
 
-  {
-    "nvim-neo-tree/neo-tree.nvim",
+  { "nvim-neo-tree/neo-tree.nvim",
     branch = "v2.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -106,8 +104,7 @@ local plugins = {
     config = conf("barbecue"),
   },
 
-  {
-    "Darazaki/indent-o-matic",
+  { "Darazaki/indent-o-matic",
     commit = "bf37c6e",
     config = function()
       require("indent-o-matic").setup({
@@ -132,8 +129,7 @@ local plugins = {
   { "sindrets/lua-dev.nvim" },
   { "neovim/nvim-lspconfig" },
   { "jose-elias-alvarez/null-ls.nvim", config = conf("null-ls") },
-  {
-    "ray-x/lsp_signature.nvim",
+  { "ray-x/lsp_signature.nvim",
     config = function()
       require("lsp_signature").setup({
           hint_enable = false,
@@ -149,8 +145,7 @@ local plugins = {
   { "gpanders/editorconfig.nvim" },
   { "anuvyklack/pretty-fold.nvim", config = conf("pretty-fold") },
   { "mfussenegger/nvim-jdtls" },
-  {
-    "hrsh7th/nvim-cmp",
+  { "hrsh7th/nvim-cmp",
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-path" },
@@ -188,26 +183,28 @@ local plugins = {
   { "windwp/nvim-autopairs", config = conf("nvim-autopairs") },
   { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") },
   { "numToStr/Comment.nvim", config = true },
-  {
-    "nvim-telescope/telescope.nvim",
+  { "nvim-telescope/telescope.nvim",
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       { "nvim-telescope/telescope-media-files.nvim" },
-      { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-telescope/telescope-live-grep-args.nvim" },
-      { "nvim-tree/nvim-web-devicons" }
+      { "nvim-tree/nvim-web-devicons" },
       { "ahmedkhalf/project.nvim" },
       { "olimorris/persisted.nvim" },
     },
     cmd = { "Telescope" },
-    event = { "LspAttach" },
     config = conf("telescope"),
   },
-
-  {
-    "LukasPietzschmann/telescope-tabs",
-    lazy = true,
+  { "nvim-telescope/telescope-ui-select.nvim",
     dependencies = "nvim-telescope/telescope.nvim",
+    event = { "LspAttach" },
+    config = function ()
+      require("telescope").load_extension("ui-select")
+    end
+  },
+  { "LukasPietzschmann/telescope-tabs",
+    lazy = true,
+    dependencies = { "nvim-telescope/telescope.nvim" },
     config = function ()
       require("telescope-tabs").setup {
         show_preview = false
@@ -215,8 +212,7 @@ local plugins = {
     end
   },
 
-  {
-    "mattn/emmet-vim",
+  { "mattn/emmet-vim",
     ft = html_like_ft,
     init = function ()
       vim.g.user_emmet_leader_key = "<C-Z>"
@@ -234,8 +230,7 @@ local plugins = {
   { "kylechui/nvim-surround", version = "*", config = true },
   { "tweekmonster/startuptime.vim", cmd = { "StartupTime" } },
   { "RRethy/vim-illuminate", config = conf("vim-illuminate") },
-  {
-    "rcarriga/nvim-notify",
+  { "rcarriga/nvim-notify",
     config = function()
       vim.notify = require("notify")
       vim.notify.setup({
@@ -243,8 +238,7 @@ local plugins = {
       })
     end,
   },
-  {
-    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+  { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function ()
       require("lsp_lines").setup()
       vim.diagnostic.config({virtual_lines = false})
@@ -270,46 +264,15 @@ local plugins = {
     cmd = { "Neogit" },
     config = conf("neogit"),
   },
-  {
-    "simrat39/symbols-outline.nvim",
+  { "simrat39/symbols-outline.nvim",
     init = conf("symbols-outline"),
     cmd = { "SymbolsOutline", "SymbolsOutlineClose", "SymbolsOutlineOpen" },
   },
-  {
-    "p00f/nvim-ts-rainbow",
+  { "p00f/nvim-ts-rainbow",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = conf("nvim-ts-rainbow")
   },
-  {
-    "tpope/vim-fugitive",
-    lazy = false,
-    dependencies = { "tpope/vim-rhubarb" },
-    config = conf("fugitive"),
-  },
-  { "goolord/alpha-nvim", config = conf("alpha") },
-  {
-    "iamcco/markdown-preview.nvim",
-    build = "cd app && yarn install",
-    ft = { "markdown" },
-    init = function ()
-      vim.api.nvim_exec([[
-        function! MkdpOpenInNewWindow(url)
-          if executable("qutebrowser")
-            call jobstart([ "qutebrowser", "--target", "window", a:url ])
-          elseif executable("chromium")
-            call jobstart([ "chromium", "--app=" . a:url ])
-          elseif executable("firefox")
-            call jobstart([ "firefox", "--new-window", a:url ])
-          else
-            echoerr '[MKDP] No suitable browser!'
-          endif
-        endfunction
-        ]], false)
-      vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
-    end,
-  },
-  {
-    'MrcJkb/haskell-tools.nvim',
+  { "MrcJkb/haskell-tools.nvim",
     dependencies = {
       'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
