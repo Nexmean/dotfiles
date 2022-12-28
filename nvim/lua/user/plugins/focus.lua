@@ -7,4 +7,5 @@ return function ()
     width = 100,
     minwidth = 30,
   }
+  vim.cmd[[FocusEnable]]
 end
