@@ -243,6 +243,7 @@ local plugins = {
       vim.diagnostic.config({virtual_lines = false})
     end
   },
+  { "folke/which-key.nvim", config = conf("which-key") },
 
   -- MISC
   { "feline-nvim/feline.nvim", config = conf("feline") },

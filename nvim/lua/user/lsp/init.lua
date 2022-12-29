@@ -20,8 +20,8 @@ function M.common_on_attach(client, bufnr)
       border = "single",
     },
   }, bufnr)
-  local mappings = require("user.mappings")
-  mappings.load("lspconfig", { buffer = bufnr })
+  -- local mappings = require("user.mappings")
+  -- mappings.load("lspconfig", { buffer = bufnr })
 end
 
 M.base_config = {
