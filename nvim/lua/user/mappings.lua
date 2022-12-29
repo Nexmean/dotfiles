@@ -56,7 +56,7 @@ return {
     ["<C-k>"]= {act = "<C-w>k", desc = "window up"},
   },
 
-  ["<C-w><C-w>"] = {act = utils.cmd "PickAny", desc = "pick window", mode = {"n", "v"}},
+  ["<C-w><C-w>"] = {act = utils.cmd "PickAny", desc = "pick window"},
 
   -- BUFFERS
   ["<leader>b"] = {
@@ -173,8 +173,6 @@ return {
   ["<leader>g"] = {
     name = "git",
 
-    mode = {"n", "v"},
-
     b = {act = utils.cmd "Telescope git_branches", desc = "git branches"},
     c = {act = utils.cmd "Telescope git_commits", desc = "git commits"},
     n = {act = utils.cmd "Neogit", desc = "neogit"},
@@ -186,8 +184,6 @@ return {
 
   ["<leader>f"] = {
     name = "find",
-
-    mode = {"n", "v"},
 
     a = {
       act = utils.cmd "Telescope find_files follow=true no_ignore=true hidden=true",
@@ -216,7 +212,6 @@ return {
   {
     name = "haskell",
 
-    mode = {"n", "v"},
     buf_local = {
       {event = "FileType", pattern = {"haskell", "cabal"}},
     },
