@@ -1,4 +1,4 @@
-local utils = require("user.common.utils")
+local caskey = require("caskey")
 
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -10,20 +10,22 @@ local function hop(method)
   end
 end
 
+local M = {}
 
-return {
+M.general = {
   mode = {"n", "v"}, -- default modes
 
+  ["<Esc>"] = {act = caskey.cmd "noh", desc = "no highlight", mode = "n"},
   -- MOVEMENTS
   {
     mode = {"i", "t", "c"},
 
     {
-      ["<C-a>"]= {act = "<Home>", desc = "beginning of line"},
-      ["<C-e>"]= {act = "<End>", desc = "end of line"},
-      ["<C-f>"]= {act = "<Right>", desc = "move forward"},
-      ["<C-b>"]= {act = "<Left>", desc = "move back"},
-      ["<C-d>"]= {act = "<Delete>", desc = "delete next character", mode = {"i", "c"}},
+      ["<C-a>"] = {act = "<Home>"  , desc = "Beginning of line"},
+      ["<C-e>"] = {act = "<End>"   , desc = "End of line"},
+      ["<C-f>"] = {act = "<Right>" , desc = "Move forward"},
+      ["<C-b>"] = {act = "<Left>"  , desc = "Move back"},
+      ["<C-d>"] = {act = "<Delete>", desc = "Delete next character", mode = {"i", "c"}},
     },
   },
   {
@@ -33,52 +35,45 @@ return {
       expr = true,
       noremap = true,
 
-      j = {act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], desc = "move down"},
-      k = {act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "move up"},
-      ["<Down>"] = {
-        act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]],
-        desc = "move up"
-      },
-      ["<Up>"] = {act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "move up"},
+      j          = {act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], desc = "Move down"},
+      k          = {act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "Move up"},
+      ["<Down>"] = {act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], desc = "move down"},
+      ["<Up>"]   = {act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "Move up"},
     },
-    ["ga"] = { act = hop "hint_char1", desc = "hop anywhere" },
-    ["gl"] = { act = hop "hint_lines", desc = "hop line" },
-    ["gw"] = { act = hop "hint_words", desc = "hop word" },
+    ["ga"] = { act = hop "hint_char1", desc = "Hop anywhere" },
+    ["gl"] = { act = hop "hint_lines", desc = "Hop line" },
+    ["gw"] = { act = hop "hint_words", desc = "Hop word" },
   },
 
   -- WINDOWS
   {
-    mode = {"n", "v", "t"},
+    mode = {"n", "v"},
 
-    ["<C-h>"]= {act = "<C-w>h", desc = "window left"},
-    ["<C-l>"]= {act = "<C-w>l", desc = "window right"},
-    ["<C-j>"]= {act = "<C-w>j", desc = "window down"},
-    ["<C-k>"]= {act = "<C-w>k", desc = "window up"},
+    ["<C-h>"]= {act = "<C-w>h", desc = "Window left"},
+    ["<C-l>"]= {act = "<C-w>l", desc = "Window right"},
+    ["<C-j>"]= {act = "<C-w>j", desc = "Window down"},
+    ["<C-k>"]= {act = "<C-w>k", desc = "Window up"},
   },
 
-  ["<C-w><C-w>"] = {act = utils.cmd "PickAny", desc = "pick window"},
+  ["<C-w><C-w>"] = {act = caskey.cmd "PickAny", desc = "pick window"},
 
   -- BUFFERS
   ["<leader>b"] = {
     name = "buffers",
 
-    l = {act = utils.cmd "Telescope buffers", desc = "list buffers"},
-    n = {act = utils.cmd "enew", desc = "new buffer"},
-    x = {act = utils.cmd "BRemove", desc = "close buffer"},
+    l = {act = caskey.cmd "Telescope buffers", desc = "list buffers"},
+    n = {act = caskey.cmd "enew"             , desc = "new buffer"},
+    x = {act = caskey.cmd "BRemove"          , desc = "close buffer"},
   },
 
-  ["~"] = {act = utils.cmd "buffer #", desc = "recent buffer"},
-  ["gj"] = {act = utils.cmd "Telescope buffers", desc = "list buffers"},
+  ["~"] = {act = caskey.cmd "buffer #", desc = "recent buffer"},
+  ["gj"] = {act = caskey.cmd "Telescope buffers", desc = "list buffers"},
   ["q"] = {
-    act = utils.cmd "close",
+    act = caskey.cmd "close",
     desc = "close window",
     buf_local = {
-      {
-        event = {"BufEnter", "BufWinEnter"},
-        condition = function ()
-          return vim.o.buftype == "quickfix" or vim.o.buftype == "help"
-        end,
-      },
+      caskey.ft "Outline",
+      caskey.bt {"quickfix", "help"},
     },
   },
 
@@ -86,26 +81,26 @@ return {
   ["<leader>t"] = {
     name = "tabs",
 
-    n = {act = utils.cmd "tabnew", desc = "new tab"},
-    x = {act = utils.cmd "tabclose", desc = "close tab"},
-    t = {act = utils.cmd "Telescope telescope-tabs list_tabs", desc = "list tabs"},
+    n = {act = caskey.cmd "tabnew"                            , desc = "new tab"},
+    x = {act = caskey.cmd "tabclose"                          , desc = "close tab"},
+    t = {act = caskey.cmd "Telescope telescope-tabs list_tabs", desc = "list tabs"},
   },
 
   {
-    ["g1"] = {act = utils.cmd "1tabnext", desc = "tab 1"},
-    ["g2"] = {act = utils.cmd "2tabnext", desc = "tab 2"},
-    ["g3"] = {act = utils.cmd "3tabnext", desc = "tab 3"},
-    ["g4"] = {act = utils.cmd "4tabnext", desc = "tab 4"},
-    ["g5"] = {act = utils.cmd "5tabnext", desc = "tab 5"},
-    ["g6"] = {act = utils.cmd "6tabnext", desc = "tab 6"},
-    ["g7"] = {act = utils.cmd "7tabnext", desc = "tab 7"},
-    ["g8"] = {act = utils.cmd "8tabnext", desc = "tab 8"},
-    ["g9"] = {act = utils.cmd "9tabnext", desc = "tab 9"},
+    ["g1"] = {act = caskey.cmd "1tabnext", desc = "tab 1"},
+    ["g2"] = {act = caskey.cmd "2tabnext", desc = "tab 2"},
+    ["g3"] = {act = caskey.cmd "3tabnext", desc = "tab 3"},
+    ["g4"] = {act = caskey.cmd "4tabnext", desc = "tab 4"},
+    ["g5"] = {act = caskey.cmd "5tabnext", desc = "tab 5"},
+    ["g6"] = {act = caskey.cmd "6tabnext", desc = "tab 6"},
+    ["g7"] = {act = caskey.cmd "7tabnext", desc = "tab 7"},
+    ["g8"] = {act = caskey.cmd "8tabnext", desc = "tab 8"},
+    ["g9"] = {act = caskey.cmd "9tabnext", desc = "tab 9"},
   },
 
   -- TERMINAL
   ["<A-i>"] = {
-    act = utils.cmd "TermToggle",
+    act = caskey.cmd "TermToggle",
     desc = "toggle terminal",
     mode = {"i", "n", "v", "t", "x", "c"}
   },
@@ -115,27 +110,25 @@ return {
   {
     mode = "n",
 
-    buf_local = {
-      {event = "LspAttach"}
-    },
+    buf_local = {{event = "LspAttach"}},
 
-    ["gD"] = {act = vim.lsp.buf.declaration, desc = "lsp declaration"},
-    ["gd"] = {act = utils.cmd "Telescope lsp_definitions", desc = "lsp definition"},
+    ["gD"] = {act = vim.lsp.buf.declaration               , desc = "lsp declaration"},
+    ["gd"] = {act = caskey.cmd "Telescope lsp_definitions", desc = "lsp definition"},
     ["gi"] = {
-      act = utils.cmd "Telescope lsp_implementations",
+      act = caskey.cmd "Telescope lsp_implementations",
       desc = "lsp implementations"
     },
-    ["gr"] = {act = utils.cmd "Telescope lsp_references", desc = "lsp references"},
-    ["<A-k>"] = {act = vim.diagnostic.open_float, desc = "hover diagnostic"},
+    ["gr"] = {act = caskey.cmd "Telescope lsp_references", desc = "lsp references"},
+    ["<A-k>"] = {act = vim.diagnostic.open_float         , desc = "hover diagnostic"},
     ["<leader>D"] = {
-      act = utils.cmd "Telescope lsp_type_definitions",
+      act = caskey.cmd "Telescope lsp_type_definitions",
       desc = "lsp definition type"
     },
     ["<leader>c"] = {
       name = "code",
 
-      a = {act = vim.lsp.buf.code_action, desc = "lsp code action"},
-      r = {act = vim.lsp.buf.rename, desc = "lsp rename"},
+      a = {act = vim.lsp.buf.code_action   , desc = "lsp code action"},
+      r = {act = vim.lsp.buf.rename        , desc = "lsp rename"},
       s = {act = vim.lsp.buf.signature_help, desc = "lsp signature help"},
     },
 
@@ -143,29 +136,38 @@ return {
       name = "diagnostics",
 
       b = {act = vim.diagnostic.setloclist, desc = "buffer diagnostics"},
-      w = {act = vim.diagnostic.setqflist, desc = "workspace diagnostics"},
+      w = {act = vim.diagnostic.setqflist , desc = "workspace diagnostics"},
+      t = {
+        act = function ()
+          local current = vim.diagnostic.config()
+          if current.virtual_lines == true then
+            vim.diagnostic.config {virtual_lines = false, virtual_text = true}
+          else
+            vim.diagnostic.config {virtual_lines = true, virtual_text = false}
+          end
+        end,
+        desc = "toggle mutliline diagnostics"
+      }
     },
 
     ["<leader>s"] = {
       name = "lsp symbols",
 
       w = {
-        act = utils.cmd "Telescope lsp_dynamic_workspace_symbols",
+        act = caskey.cmd "Telescope lsp_dynamic_workspace_symbols",
         desc = "lsp workspace symbols"
       },
       d = {
-        act = utils.cmd "Telescope lsp_document_symbols",
+        act = caskey.cmd "Telescope lsp_document_symbols",
         desc = "lsp document symbols"
       },
     },
 
     ["<C-s>"] = {
-      act = utils.cmd "SymbolsOutline",
+      act = caskey.cmd "SymbolsOutline",
       desc = "toggle outline",
 
-      buf_local_extend = {
-        {event = "FileType", pattern = "Outline"},
-      },
+      buf_local_extend = {caskey.ft "Outline"},
     },
   },
 
@@ -173,26 +175,31 @@ return {
   ["<leader>g"] = {
     name = "git",
 
-    b = {act = utils.cmd "Telescope git_branches", desc = "git branches"},
-    c = {act = utils.cmd "Telescope git_commits", desc = "git commits"},
-    n = {act = utils.cmd "Neogit", desc = "neogit"},
-    s = {act = utils.cmd "Telescope git_status", desc = "git status"},
+    b = {act = caskey.cmd "Telescope git_branches", desc = "git branches"},
+    c = {act = caskey.cmd "Telescope git_commits" , desc = "git commits"},
+    n = {act = caskey.cmd "Neogit"                , desc = "neogit"},
+    s = {act = caskey.cmd "Telescope git_status"  , desc = "git status"},
+  },
+
+  ["ih"] = {
+    mode = {"o", "x"},
+    act = ":<C-U>Gitsigns select_hunk<CR>"
   },
 
   -- FIND
-  ["<C-n>"] = {act = utils.cmd "Neotree toggle", desc = "toggle neotree", mode = "n"},
+  ["<C-n>"] = {act = caskey.cmd "Neotree toggle", desc = "toggle neotree", mode = "n"},
 
   ["<leader>f"] = {
     name = "find",
 
     a = {
-      act = utils.cmd "Telescope find_files follow=true no_ignore=true hidden=true",
+      act = caskey.cmd "Telescope find_files follow=true no_ignore=true hidden=true",
       desc = "find all files"
     },
-    f = {act = utils.cmd "Telescope find_files", desc = "find files"},
-    h = {act = utils.cmd "Telescope help_tags", desc = "find help"},
-    o = {act = utils.cmd "Telescope oldfiles only_cwd=true", desc = "find oldfiles"},
-    r = {act = utils.cmd "Telescope resume", desc = "resume last search"},
+    f = {act = caskey.cmd "Telescope find_files"            , desc = "find files"},
+    h = {act = caskey.cmd "Telescope help_tags"             , desc = "find help"},
+    o = {act = caskey.cmd "Telescope oldfiles only_cwd=true", desc = "find oldfiles"},
+    r = {act = caskey.cmd "Telescope resume"                , desc = "resume last search"},
     w = {
       act = {
         n = function ()
@@ -210,11 +217,7 @@ return {
 
   -- HASKELL
   {
-    name = "haskell",
-
-    buf_local = {
-      {event = "FileType", pattern = {"haskell", "cabal"}},
-    },
+    buf_local = {caskey.ft {"haskell", "cabal"}},
 
     ["<A-r>"] = {
       act = function ()
@@ -242,3 +245,49 @@ return {
     },
   },
 }
+
+M.gitsigns = {
+  mode = {"n", "v"},
+
+  ["<leader>h"] = function ()
+    local gs = require("gitsigns")
+
+    return {
+      name = "hunk",
+
+      s = {
+        act = {
+          n = gs.stage_hunk,
+          v = function ()
+            gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+          end
+        },
+        desc = "stage hunk",
+      },
+      r = {
+        act = {
+          n = gs.reset_hunk,
+          v = function ()
+            gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+          end
+        },
+        desc = "rest hunk",
+      },
+      {
+        mode = "n",
+
+        S = {act = gs.stage_buffer, desc = "stage buffer"},
+        u = {act = gs.undo_stage_hunk, desc = "unstage hunk"},
+        d = {act = gs.preview_hunk, desc = "preview hunk"},
+        b = {
+          act = function ()
+            gs.blame_line {full = true}
+          end,
+          desc = "blame line"
+        },
+      },
+    }
+  end,
+}
+
+return M

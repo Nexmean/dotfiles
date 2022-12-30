@@ -4,8 +4,6 @@ require("user.settings")
 require("user.plugins")
 require("user.settings_after")
 
-require("caskey").register(require("user.mappings"))
-
 require("user.commands")
 require("user.autocommands")
 vim.cmd("source " .. NvimConfigDir .. "/autocommands.vim")

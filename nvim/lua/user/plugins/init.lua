@@ -244,6 +244,14 @@ local plugins = {
     end
   },
   { "folke/which-key.nvim", config = conf("which-key") },
+  {
+    -- "Nexmean/caskey.nvim",
+    dir = "~/Programming/GitHub/caskey.nvim",
+    dependencies = { "folke/which-key.nvim" },
+    config = function ()
+      require("caskey.wk").setup(require("user.mappings").general)
+    end
+  },
 
   -- MISC
   { "feline-nvim/feline.nvim", config = conf("feline") },

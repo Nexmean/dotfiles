@@ -180,35 +180,6 @@ function M.diff_saved()
   vim.cmd("wincmd l")
 end
 
-function M.workspace_files(opt)
-  opt = opt or {}
-  local builtin = require("telescope.builtin")
-
-  if opt.all then
-    builtin.find_files({
-      hidden = true,
-      find_command = { "fd", "--type", "f", "-uu", "--strip-cwd-prefix" },
-    })
-  elseif vim.env.GIT_DIR or pl:readable("./.git") then
-    builtin.git_files({
-      git_command = {
-        "git",
-        "ls-files",
-        "--exclude-standard",
-        "--others",
-        "--cached",
-        "--",
-        uv.cwd()
-      },
-    })
-  else
-    builtin.find_files({
-      hidden = true,
-      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
-    })
-  end
-end
-
 ---Delete a buffer while also preserving the window layout. Changes the current
 ---buffer to the alt buffer if available, and then deletes it.
 ---@param force boolean Ignore unsaved changes.

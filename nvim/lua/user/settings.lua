@@ -7,6 +7,8 @@ local function list(value, str, sep)
   return str ~= "" and table.concat({value, str}, sep) or value
 end
 
+vim.g.mapleader = " "
+
 opt.langmap =
      "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,"
   .. "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,"
@@ -129,7 +131,6 @@ vim.env.MANWIDTH = 80 -- Text width in man pages.
 
 -- vim.cmd("syntax on")
 vim.cmd("filetype plugin indent on")
-vim.g.mapleader = " "
 
 if vim.g.neovide then
   vim.g.neovide_cursor_trail_size = 0
