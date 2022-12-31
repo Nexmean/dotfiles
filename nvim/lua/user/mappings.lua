@@ -1,4 +1,5 @@
-local caskey = require("caskey")
+local caskey = require "caskey"
+local utils = require "user.common.utils"
 
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -14,6 +15,8 @@ local M = {}
 
 M.general = {
   mode = {"n", "v"}, -- default modes
+  silent = true,
+  nowait = true,
 
   ["<Esc>"] = {act = caskey.cmd "noh", desc = "no highlight", mode = "n"},
   -- MOVEMENTS
@@ -100,7 +103,7 @@ M.general = {
 
   -- TERMINAL
   ["<A-i>"] = {
-    act = caskey.cmd "TermToggle",
+    act = utils.cmdfn "TermToggle",
     desc = "toggle terminal",
     mode = {"i", "n", "v", "t", "x", "c"}
   },
@@ -120,6 +123,7 @@ M.general = {
     },
     ["gr"] = {act = caskey.cmd "Telescope lsp_references", desc = "lsp references"},
     ["<A-k>"] = {act = vim.diagnostic.open_float         , desc = "hover diagnostic"},
+    ["K"] = {act = vim.lsp.buf.hover                     , desc = "hover"},
     ["<leader>D"] = {
       act = caskey.cmd "Telescope lsp_type_definitions",
       desc = "lsp definition type"
@@ -187,7 +191,7 @@ M.general = {
   },
 
   -- FIND
-  ["<C-n>"] = {act = caskey.cmd "Neotree toggle", desc = "toggle neotree", mode = "n"},
+  ["<C-n>"] = {act = utils.cmdfn "Neotree toggle", desc = "toggle neotree", mode = "n"},
 
   ["<leader>f"] = {
     name = "find",

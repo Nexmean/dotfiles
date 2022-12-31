@@ -4,7 +4,7 @@ return function ()
     excluded_filetypes = {"", "neo-tree"},
     excluded_buftypes = {"neo-tree", "nofile", "prompt", "popup", "terminal"},
     quickfixheight = 15,
-    width = 100,
+    width = 115,
     minwidth = 30,
   }
   vim.cmd[[FocusEnable]]
