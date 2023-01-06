@@ -1,5 +1,6 @@
-local cmp_lsp = require("cmp_nvim_lsp")
-local lspconfig = require("lspconfig")
+local cmp_lsp = require "cmp_nvim_lsp"
+local lspconfig = require "lspconfig"
+local codelens = require "user.lsp.codelens"
 
 local utils = Config.common.utils
 local notify = Config.common.notify
@@ -48,7 +49,7 @@ function M.create_local_config(config)
   if not local_config then
     if type(project_config) == "table" and project_config.lsp_config then
       local_config = project_config.lsp_config
-      notify.config("Using LSP config from project config.")
+      notify.config "Using LSP config from project config."
     else
       for _, path in ipairs(M.local_config_paths) do
         if pl:readable(path) then
@@ -89,7 +90,7 @@ function M.create_config(...)
 end
 
 -- Java
-require("user.lsp.java")
+require "user.lsp.java"
 
 -- Typescript
 lspconfig.tsserver.setup(M.create_config())
@@ -98,7 +99,7 @@ lspconfig.tsserver.setup(M.create_config())
 lspconfig.pyright.setup(M.create_config())
 
 -- Lua
-require("user.lsp.lua")
+require "user.lsp.lua"
 
 -- Teal
 -- require("user.lsp.teal")
@@ -107,13 +108,13 @@ require("user.lsp.lua")
 lspconfig.bashls.setup(M.create_config())
 
 -- C#
-lspconfig.omnisharp.setup(M.create_config({
-  cmd = { "/usr/bin/omnisharp", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) },
+lspconfig.omnisharp.setup(M.create_config {
+  cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
   filetypes = { "cs", "vb" },
   init_options = {},
   -- root_dir = lspconfig.util.root_pattern(".csproj", ".sln"),
   -- root_dir = vim.fn.getcwd
-}))
+})
 
 -- C, C++
 lspconfig.clangd.setup(M.create_config())
@@ -133,19 +134,18 @@ lspconfig.dhall_lsp_server.setup(M.create_config())
 -- markdown
 lspconfig.marksman.setup(M.create_config())
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
+vim.lsp.handlers["textDocument/publishDiagnostics"] =
+  vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
     underline = true,
     signs = true,
-    update_in_insert = true
-  }
-)
+    update_in_insert = true,
+  })
 
 -- DIAGNOSTICS: Only show the sign with the highest priority per line
 -- From: `:h diagnostic-handlers-example`
 
-local ns = vim.api.nvim_create_namespace("user_lsp")
+local ns = vim.api.nvim_create_namespace "user_lsp"
 local orig_signs_handler = vim.diagnostic.handlers.signs
 
 -- Override the built-in signs handler
@@ -175,56 +175,55 @@ vim.diagnostic.handlers.signs = {
 
 local pop_opts = { border = "single", max_width = 80 }
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-  vim.lsp.handlers.signature_help, pop_opts
-)
+vim.lsp.handlers["textDocument/signatureHelp"] =
+  vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
+vim.lsp.codelens.display = codelens.display
 
 function M.define_diagnostic_signs(opts)
   local group = {
     -- version 0.5
     {
-      highlight = 'LspDiagnosticsSignError',
-      sign = opts.error
+      highlight = "LspDiagnosticsSignError",
+      sign = opts.error,
     },
     {
-      highlight = 'LspDiagnosticsSignWarning',
-      sign = opts.warn
+      highlight = "LspDiagnosticsSignWarning",
+      sign = opts.warn,
     },
     {
-      highlight = 'LspDiagnosticsSignHint',
-      sign = opts.hint
+      highlight = "LspDiagnosticsSignHint",
+      sign = opts.hint,
     },
     {
-      highlight = 'LspDiagnosticsSignInformation',
-      sign = opts.info
+      highlight = "LspDiagnosticsSignInformation",
+      sign = opts.info,
     },
     -- version >=0.6
     {
-      highlight = 'DiagnosticSignError',
-      sign = opts.error
+      highlight = "DiagnosticSignError",
+      sign = opts.error,
     },
     {
-      highlight = 'DiagnosticSignWarn',
-      sign = opts.warn
+      highlight = "DiagnosticSignWarn",
+      sign = opts.warn,
     },
     {
-      highlight = 'DiagnosticSignHint',
-      sign = opts.hint
+      highlight = "DiagnosticSignHint",
+      sign = opts.hint,
     },
     {
-      highlight = 'DiagnosticSignInfo',
-      sign = opts.info
+      highlight = "DiagnosticSignInfo",
+      sign = opts.info,
     },
   }
 
   for _, g in ipairs(group) do
     vim.fn.sign_define(g.highlight, {
-        text = g.sign,
-        texthl = g.highlight,
-        linehl = '',
-        numhl = '',
-      }
-    )
+      text = g.sign,
+      texthl = g.highlight,
+      linehl = "",
+      numhl = "",
+    })
   end
 end
 
@@ -248,31 +247,33 @@ end
 -- Only show diagnostics if current word + line is not the same as last call.
 local last_diagnostics_word = nil
 function M.show_position_diagnostics()
-  local cword = vim.fn.expand("<cword>")
+  local cword = vim.fn.expand "<cword>"
   local cline = vim.api.nvim_win_get_cursor(0)[1]
   local bufnr = vim.api.nvim_get_current_buf()
 
-  if last_diagnostics_word
+  if
+    last_diagnostics_word
     and last_diagnostics_word[1] == cline
     and last_diagnostics_word[2] == cword
-    and last_diagnostics_word[3] == bufnr then
+    and last_diagnostics_word[3] == bufnr
+  then
     return
   end
   last_diagnostics_word = { cline, cword, bufnr }
 
-  vim.diagnostic.open_float({ scope = "cursor", border = "single" })
+  vim.diagnostic.open_float { scope = "cursor", border = "single" }
 end
 
-M.define_diagnostic_signs({
+M.define_diagnostic_signs {
   error = "",
   warn = "",
   hint = "",
-  info = ""
-})
+  info = "",
+}
 
 -- LSP auto commands
 Config.common.au.declare_group("lsp_init", {}, {
-  { "CursorHold", callback = M.show_position_diagnostics, },
+  { "CursorHold", callback = M.show_position_diagnostics },
 })
 
 return M

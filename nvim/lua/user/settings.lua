@@ -4,13 +4,12 @@ local function list(value, str, sep)
   sep = sep or ","
   str = str or ""
   value = type(value) == "table" and table.concat(value, sep) or value
-  return str ~= "" and table.concat({value, str}, sep) or value
+  return str ~= "" and table.concat({ value, str }, sep) or value
 end
 
 vim.g.mapleader = " "
 
-opt.langmap =
-     "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,"
+opt.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,"
   .. "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,"
 
 opt.cmdheight = 0
@@ -29,7 +28,7 @@ opt.showcmd = true
 opt.mouse = "a"
 opt.hidden = true
 opt.cursorline = true
-opt.guifont = 'JetbrainsMono Nerd Font:h16'
+opt.guifont = "JetbrainsMono Nerd Font:h16"
 opt.guicursor = list {
   "n-v-c-sm:block-Cursor/lCursor",
   "i-ci-ve:ver25-Cursor/lCursor",
@@ -71,7 +70,7 @@ opt.diffopt = list {
   "filler",
   "closeoff",
   "iwhite",
-  "vertical"
+  "vertical",
 }
 opt.pyxversion = 3
 opt.shada = list {
@@ -83,7 +82,7 @@ opt.shada = list {
   "@1",
   "f1",
   "h",
-  "s1"
+  "s1",
 }
 opt.list = true
 opt.listchars = list {
@@ -93,7 +92,7 @@ opt.listchars = list {
   "nbsp:␣",
   -- "eol:↵",
   "precedes:«",
-  "extends:»"
+  "extends:»",
 }
 opt.fillchars = list {
   -- "vert:▏",
@@ -103,24 +102,25 @@ opt.fillchars = list {
   "foldopen:",
   "fold: ",
   "msgsep:─",
+  "eob: ",
 }
 opt.showbreak = "⤷ "
 opt.concealcursor = "nc"
 opt.writebackup = true
 opt.undofile = true
-opt.isfname:append(":")
+opt.isfname:append ":"
 opt.laststatus = 3
 -- TODO: Lazyredraw is causing cursor flickering at the moment. Hopefully
 -- re-enable soon when this is fixed.
 -- @see [Neovim issue](https://github.com/neovim/neovim/issues/17765)
 opt.lazyredraw = false
 
-if vim.fn.executable("ag") == 1 then
+if vim.fn.executable "ag" == 1 then
   opt.grepprg = "ag --vimgrep $*"
   opt.grepformat = "%f:%l:%c:%m"
 end
 
-if vim.fn.executable("nvr") == 1 then
+if vim.fn.executable "nvr" == 1 then
   vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
   vim.env.GIT_EDITOR = "nvr -cc split +'setl bh=delete' --remote-wait"
   vim.env.EDITOR = "nvr -l --remote"
@@ -130,7 +130,7 @@ end
 vim.env.MANWIDTH = 80 -- Text width in man pages.
 
 -- vim.cmd("syntax on")
-vim.cmd("filetype plugin indent on")
+vim.cmd "filetype plugin indent on"
 
 if vim.g.neovide then
   vim.g.neovide_cursor_trail_size = 0

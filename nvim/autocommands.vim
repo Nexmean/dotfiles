@@ -42,14 +42,6 @@ augroup NvimConfig
                 \       vim.cmd("startinsert")
                 \ end
 
-    " Run PackerCompile when changes are made to plugin configs.
-    " au BufWritePost */lua/user/plugins/*.lua
-    "             \ exe "so " . stdpath("config") . "/lua/user/plugins/init.lua"
-    "             \ | PackerCompile
-
-    " au User PackerCompileDone exe 'lua Config.common.notify.config("Packer compiled!")'
-    "             \ | do <nomodeline> ColorScheme
-
     " Enable 'onemore' in visual mode.
     au ModeChanged *:[v]* setl virtualedit+=onemore
     au ModeChanged [v]*:* setl virtualedit<
@@ -74,4 +66,5 @@ augroup NvimConfig
 
     au BufWritePost *.hs FormatWrite
     au BufWritePost *.cabal FormatWrite
+    au BufWritePost *.lua FormatWrite
 augroup END

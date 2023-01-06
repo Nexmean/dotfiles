@@ -34,10 +34,7 @@ return function ()
     update_debounce = 100,
     status_formatter = nil, -- Use default
     on_attach = function(bufnr)
-      require("caskey.wk").setup {
-        buffer = bufnr,
-        require("user.mappings").gitsigns,
-      }
+      require("caskey").emit("Gitsigns", bufnr)
     end
   }
 

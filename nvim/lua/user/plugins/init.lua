@@ -22,10 +22,22 @@ vim.g.markdown_fenced_languages = {
 }
 
 local html_like_ft = {
-  "html", "javascript", "typescript", "javascriptreact", "typescriptreact",
-  "svelte", "vue", "tsx", "jsx", "rescript",
-  "xml", "php",
-  "markdown", "glimmer","handlebars","hbs"
+  "html",
+  "javascript",
+  "typescript",
+  "javascriptreact",
+  "typescriptreact",
+  "svelte",
+  "vue",
+  "tsx",
+  "jsx",
+  "rescript",
+  "xml",
+  "php",
+  "markdown",
+  "glimmer",
+  "handlebars",
+  "hbs",
 }
 
 local load_colorschemes = "LoadColorschemes"
@@ -35,39 +47,62 @@ local plugins = {
 
   -- SYNTAX
   { "MTDL9/vim-log-highlighting" },
-  { "teal-language/vim-teal",
-    ft = "teal"
-  },
-  { "chrisbra/csv.vim",
-    ft = "csv"
-  },
-  { "fladson/vim-kitty",
-    ft = "kitty",
-  },
+  { "teal-language/vim-teal", ft = "teal" },
+  { "chrisbra/csv.vim", ft = "csv" },
+  { "fladson/vim-kitty", ft = "kitty" },
   { "joelbeedle/pseudo-syntax" },
   { "alisdair/vim-armasm" },
-  { "vmchale/dhall-vim",
-    ft = "dhall",
-  },
-
+  { "vmchale/dhall-vim", ft = "dhall" },
 
   -- BEHAVIOUR
-  { "goolord/alpha-nvim",
+  {
+    "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = conf("alpha")
+    config = conf "alpha",
   },
-  { "antoinemadec/FixCursorHold.nvim",
+
+  {
+    "ghillb/cybu.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim" },
+    config = function()
+      local cybu = require "cybu"
+      cybu.setup {
+        display_time = 1500,
+        position = {
+          relative_to = "win",
+          anchor = "topright",
+          vertical_offset = 0,
+          horizontal_offset = 1,
+        },
+        style = {
+          border = "single",
+          highlights = {
+            background = "CybuBackground",
+          },
+        },
+        behavior = {
+          mode = {
+            last_used = {
+              switch = "immediate",
+              view = "paging",
+            },
+          },
+        },
+      }
+    end,
+  },
+
+  {
+    "antoinemadec/FixCursorHold.nvim",
     init = function()
       vim.g.cursorhold_updatetime = 250
-    end
+    end,
   },
 
-  { "s1n7ax/nvim-window-picker",
-    version = 'v1.*',
-    config = conf("window-picker"),
-  },
+  { "s1n7ax/nvim-window-picker", version = "v1.*", config = conf "window-picker" },
 
-  { "nvim-neo-tree/neo-tree.nvim",
+  {
+    "nvim-neo-tree/neo-tree.nvim",
     branch = "v2.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -76,15 +111,16 @@ local plugins = {
       "s1n7ax/nvim-window-picker",
     },
     cmd = "Neotree",
-    config = conf("neo-tree"),
+    config = conf "neo-tree",
   },
 
-  { "ahmedkhalf/project.nvim", config = conf("project") },
-  { "olimorris/persisted.nvim", config = conf("persisted") },
+  { "ahmedkhalf/project.nvim", config = conf "project" },
+  { "olimorris/persisted.nvim", config = conf "persisted" },
 
-  { "mhartington/formatter.nvim",
+  {
+    "mhartington/formatter.nvim",
     cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
-    config = conf("formatter")
+    config = conf "formatter",
   },
 
   {
@@ -101,69 +137,79 @@ local plugins = {
       { "smiteshp/nvim-navic" },
       { "nvim-tree/nvim-web-devicons" },
     },
-    config = conf("barbecue"),
+    config = conf "barbecue",
   },
 
-  { "Darazaki/indent-o-matic",
+  {
+    "Darazaki/indent-o-matic",
     commit = "bf37c6e",
     config = function()
-      require("indent-o-matic").setup({
+      require("indent-o-matic").setup {
         -- Number of lines without indentation before giving up (use -1 for infinite)
         max_lines = 2048,
         -- Space indentations that should be detected
         standard_widths = { 2, 3, 4, 8 },
         -- Skip multi-line comments and strings (more accurate detection but less performant)
         skip_multiline = true,
-      })
+      }
     end,
   },
   { "nvim-lua/popup.nvim" },
   { "nvim-lua/plenary.nvim" },
-  { "nvim-tree/nvim-web-devicons", config = conf("nvim-web-devicons") },
+  { "nvim-tree/nvim-web-devicons", config = conf "nvim-web-devicons" },
   {
     "nvim-treesitter/nvim-treesitter",
+    enabled = true,
     build = ":TSUpdate",
-    config = conf("treesitter"),
+    config = conf "treesitter",
   },
-  { "nvim-treesitter/playground", dependencies = "nvim-treesitter/nvim-treesitter" },
+  {
+    "nvim-treesitter/playground",
+    enabled = false,
+    dependencies = "nvim-treesitter/nvim-treesitter",
+  },
   { "sindrets/lua-dev.nvim" },
   { "neovim/nvim-lspconfig" },
-  { "jose-elias-alvarez/null-ls.nvim", config = conf("null-ls") },
-  { "ray-x/lsp_signature.nvim",
+  { "jose-elias-alvarez/null-ls.nvim", config = conf "null-ls" },
+  {
+    "ray-x/lsp_signature.nvim",
     config = function()
-      require("lsp_signature").setup({
-          hint_enable = false,
-          hint_prefix = "● ",
-          max_width = 80,
-          max_height = 12,
-          handler_opts = {
-            border = "single"
-          }
-        })
-    end
+      require("lsp_signature").setup {
+        hint_enable = false,
+        hint_prefix = "● ",
+        max_width = 80,
+        max_height = 12,
+        handler_opts = {
+          border = "single",
+        },
+      }
+    end,
   },
   { "gpanders/editorconfig.nvim" },
-  { "anuvyklack/pretty-fold.nvim", config = conf("pretty-fold") },
+  { "anuvyklack/pretty-fold.nvim", config = conf "pretty-fold" },
   { "mfussenegger/nvim-jdtls" },
-  { "hrsh7th/nvim-cmp",
+  {
+    "hrsh7th/nvim-cmp",
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-buffer" },
-      { "L3MON4D3/LuaSnip", version = "v1.*",
+      {
+        "L3MON4D3/LuaSnip",
+        version = "v1.*",
         dependencies = { "rafamadriz/friendly-snippets" },
-        config = function ()
+        config = function()
           require("luasnip.loaders.from_vscode").lazy_load()
-        end
+        end,
       },
       { "hrsh7th/cmp-cmdline" },
       { "f3fora/cmp-spell" },
       { "petertriho/cmp-git" },
       { "rafamadriz/friendly-snippets" },
-      { "windwp/nvim-autopairs" }
+      { "windwp/nvim-autopairs" },
     },
     event = { "InsertEnter", "CmdlineEnter" },
-    config = conf("nvim-cmp"),
+    config = conf "nvim-cmp",
   },
   {
     url = "https://gitlab.com/yorickpeterse/nvim-pqf.git",
@@ -174,15 +220,16 @@ local plugins = {
           warning = "",
           info = "",
           hint = "",
-        }
+        },
       }
     end,
   },
-  { "kevinhwang91/nvim-bqf", config = conf("nvim-bqf") },
-  { "windwp/nvim-autopairs", config = conf("nvim-autopairs") },
-  { "sindrets/nvim-colorizer.lua", config = conf("nvim-colorizer") },
+  { "kevinhwang91/nvim-bqf", config = conf "nvim-bqf" },
+  { "windwp/nvim-autopairs", config = conf "nvim-autopairs" },
+  { "sindrets/nvim-colorizer.lua", config = conf "nvim-colorizer" },
   { "numToStr/Comment.nvim", config = true },
-  { "nvim-telescope/telescope.nvim",
+  {
+    "nvim-telescope/telescope.nvim",
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       { "nvim-telescope/telescope-media-files.nvim" },
@@ -192,102 +239,106 @@ local plugins = {
       { "olimorris/persisted.nvim" },
     },
     cmd = { "Telescope" },
-    config = conf("telescope"),
+    config = conf "telescope",
   },
-  { "nvim-telescope/telescope-ui-select.nvim",
+  {
+    "nvim-telescope/telescope-ui-select.nvim",
     dependencies = "nvim-telescope/telescope.nvim",
     event = { "LspAttach" },
-    config = function ()
-      require("telescope").load_extension("ui-select")
-    end
+    config = function()
+      require("telescope").load_extension "ui-select"
+    end,
   },
-  { "LukasPietzschmann/telescope-tabs",
+  {
+    "LukasPietzschmann/telescope-tabs",
     lazy = true,
     dependencies = { "nvim-telescope/telescope.nvim" },
-    config = function ()
+    config = function()
       require("telescope-tabs").setup {
-        show_preview = false
+        show_preview = false,
       }
-    end
+    end,
   },
 
-  { "mattn/emmet-vim",
+  {
+    "mattn/emmet-vim",
     ft = html_like_ft,
-    init = function ()
+    init = function()
       vim.g.user_emmet_leader_key = "<C-Z>"
     end,
   },
   { "tpope/vim-abolish" },
-  { "windwp/nvim-ts-autotag",
-    config = true,
-    ft = html_like_ft,
-  },
+  { "windwp/nvim-ts-autotag", config = true, ft = html_like_ft },
   { "Rasukarusan/nvim-block-paste" },
-  { "godlygeek/tabular",
-    cmd = "Tabularize"
-  },
+  { "godlygeek/tabular", cmd = "Tabularize" },
   { "kylechui/nvim-surround", version = "*", config = true },
   { "tweekmonster/startuptime.vim", cmd = { "StartupTime" } },
-  { "RRethy/vim-illuminate", config = conf("vim-illuminate") },
-  { "rcarriga/nvim-notify",
+  { "RRethy/vim-illuminate", config = conf "vim-illuminate" },
+  {
+    "rcarriga/nvim-notify",
     config = function()
-      vim.notify = require("notify")
-      vim.notify.setup({
+      vim.notify = require "notify"
+      vim.notify.setup {
         top_down = false,
-      })
+      }
     end,
   },
-  { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    config = function ()
+  {
+    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function()
       require("lsp_lines").setup()
-      vim.diagnostic.config({virtual_lines = false})
-    end
+      vim.diagnostic.config { virtual_lines = false }
+    end,
   },
-  { "folke/which-key.nvim", config = conf("which-key") },
+  { "folke/which-key.nvim", config = conf "which-key" },
   {
     -- "Nexmean/caskey.nvim",
-    dir = "~/Programming/GitHub/caskey.nvim",
+    dir = "~/programming/neovim/caskey.nvim",
     dependencies = { "folke/which-key.nvim" },
-    config = function ()
+    config = function()
       require("caskey.wk").setup(require("user.mappings").general)
-    end
+    end,
   },
 
   -- MISC
-  { "feline-nvim/feline.nvim", config = conf("feline") },
-  { "lewis6991/gitsigns.nvim", config = conf("gitsigns") },
-  { "lukas-reineke/indent-blankline.nvim", init = conf("indent-blankline") },
+  { "feline-nvim/feline.nvim", config = conf "feline" },
+  { "lewis6991/gitsigns.nvim", config = conf "gitsigns" },
+  { "lukas-reineke/indent-blankline.nvim", init = conf "indent-blankline" },
   {
     "folke/lsp-trouble.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     cmd = { "Trouble", "TroubleToggle" },
-    config = conf("lsp-trouble"),
+    config = conf "lsp-trouble",
   },
-  { "sindrets/diffview.nvim", config = conf("diffview") },
-  { "sindrets/winshift.nvim", config = conf("winshift") },
-  { "beauwilliams/focus.nvim", config = conf("focus") },
+  { "sindrets/diffview.nvim", config = conf "diffview" },
+  { "sindrets/winshift.nvim", config = conf "winshift" },
+  { "beauwilliams/focus.nvim", config = conf "focus" },
   {
     "TimUntersberger/neogit",
     dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },
     cmd = { "Neogit" },
-    config = conf("neogit"),
+    config = conf "neogit",
   },
-  { "simrat39/symbols-outline.nvim",
-    init = conf("symbols-outline"),
+  {
+    "simrat39/symbols-outline.nvim",
+    init = conf "symbols-outline",
     cmd = { "SymbolsOutline", "SymbolsOutlineClose", "SymbolsOutlineOpen" },
   },
-  { "p00f/nvim-ts-rainbow",
+  {
+    "p00f/nvim-ts-rainbow",
+    enabled = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = conf("nvim-ts-rainbow")
+    config = conf "nvim-ts-rainbow",
   },
-  { "MrcJkb/haskell-tools.nvim",
+  {
+    "MrcJkb/haskell-tools.nvim",
     dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
+      "neovim/nvim-lspconfig",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
     },
     ft = "haskell",
-    config = conf("haskell-tools")
+    config = conf "haskell-tools",
   },
   { "j-hui/fidget.nvim", config = true },
 
@@ -311,9 +362,11 @@ local plugins = {
   { "sindrets/oxocarbon-lua.nvim", cmd = load_colorschemes },
   { "nyoom-engineering/oxocarbon.nvim", cmd = load_colorschemes },
   { "EdenEast/nightfox.nvim", cmd = load_colorschemes },
-  { "kvrohit/mellow.nvim", cmd = load_colorschemes,
-    config = function ()
-      vim.api.nvim_create_user_command(load_colorschemes, function ()
+  {
+    "kvrohit/mellow.nvim",
+    cmd = load_colorschemes,
+    config = function()
+      vim.api.nvim_create_user_command(load_colorschemes, function()
         vim.notify "All colorschemes loaded"
       end, {})
     end,
