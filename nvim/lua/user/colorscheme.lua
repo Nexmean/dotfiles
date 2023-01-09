@@ -772,7 +772,6 @@ function M.apply_tweaks()
   hi_link("CybuFocus", "CursorLine")
   hi_link("CybuBackground", "Normal")
   hi_link("CybuBorder", "Normal")
-  hi_link("CybuInfobar", "Normal")
 
   if Config.plugin.feline then
     Config.plugin.feline.reload()

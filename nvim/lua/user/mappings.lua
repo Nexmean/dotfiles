@@ -8,7 +8,7 @@ end
 local M = {}
 
 M.general = {
-  mode = { "n", "v" }, -- default modes
+  mode = "n", -- default modes
   silent = true,
   nowait = true,
 
@@ -193,7 +193,55 @@ M.general = {
     b = { act = ck.cmd "Telescope git_branches", desc = "git branches" },
     c = { act = ck.cmd "Telescope git_commits", desc = "git commits" },
     n = { act = ck.cmd "Neogit", desc = "neogit" },
-    s = { act = ck.cmd "Telescope git_status", desc = "git status" },
+    s = { act = ck.cmd "Neotree git_status", desc = "git status" },
+  },
+  {
+    when = ck.emitted "Gitsigns",
+
+    function()
+      local gs = require "gitsigns"
+
+      return {
+        ["<leader>h"] = {
+          name = "hunk",
+
+          s = {
+            act = {
+              n = gs.stage_hunk,
+              v = function()
+                gs.stage_hunk { vim.fn.line ".", vim.fn.line "v" }
+              end,
+            },
+            desc = "stage hunk",
+          },
+          r = {
+            act = {
+              n = gs.reset_hunk,
+              v = function()
+                gs.reset_hunk { vim.fn.line ".", vim.fn.line "v" }
+              end,
+            },
+            desc = "rest hunk",
+          },
+          S = { act = gs.stage_buffer, desc = "stage buffer" },
+          u = { act = gs.undo_stage_hunk, desc = "unstage hunk" },
+          p = { act = gs.preview_hunk, desc = "preview hunk" },
+          b = {
+            act = function()
+              gs.blame_line { full = true }
+            end,
+            desc = "blame line",
+          },
+          d = { act = gs.diffthis, desc = "diff this" },
+          D = {
+            act = function()
+              gs.diffthis "~"
+            end,
+            desc = "diff this",
+          },
+        },
+      }
+    end,
   },
 
   ["ih"] = {
@@ -229,50 +277,6 @@ M.general = {
       },
       desc = "live grep",
     },
-  },
-  {
-    mode = { "n", "v" },
-    when = ck.emitted "Gitsigns",
-
-    ["<leader>h"] = function()
-      local gs = require "gitsigns"
-
-      return {
-        name = "hunk",
-
-        s = {
-          act = {
-            n = gs.stage_hunk,
-            v = function()
-              gs.stage_hunk { vim.fn.line ".", vim.fn.line "v" }
-            end,
-          },
-          desc = "stage hunk",
-        },
-        r = {
-          act = {
-            n = gs.reset_hunk,
-            v = function()
-              gs.reset_hunk { vim.fn.line ".", vim.fn.line "v" }
-            end,
-          },
-          desc = "rest hunk",
-        },
-        {
-          mode = "n",
-
-          S = { act = gs.stage_buffer, desc = "stage buffer" },
-          u = { act = gs.undo_stage_hunk, desc = "unstage hunk" },
-          d = { act = gs.preview_hunk, desc = "preview hunk" },
-          b = {
-            act = function()
-              gs.blame_line { full = true }
-            end,
-            desc = "blame line",
-          },
-        },
-      }
-    end,
   },
 
   -- HASKELL

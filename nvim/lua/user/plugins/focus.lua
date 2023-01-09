@@ -1,11 +1,11 @@
-return function ()
+return function()
   require("focus").setup {
     signcolumn = false,
-    excluded_filetypes = {"", "neo-tree"},
-    excluded_buftypes = {"neo-tree", "nofile", "prompt", "popup", "terminal"},
+    excluded_filetypes = { "", "neo-tree" },
+    excluded_buftypes = { "neo-tree", "nofile", "prompt", "popup", "terminal" },
     quickfixheight = 15,
     width = 115,
     minwidth = 30,
   }
-  vim.cmd[[FocusEnable]]
+  vim.cmd [[FocusEnable]]
 end
