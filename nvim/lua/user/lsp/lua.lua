@@ -39,7 +39,7 @@ require("lspconfig").sumneko_lua.setup(Config.lsp.create_config {
   settings = {
     Lua = {
       completion = {
-        callSnippet = "Replace",
+        callSnippet = "Disable",
       },
       runtime = {
         version = "LuaJIT",

@@ -1,6 +1,6 @@
 return function()
-  local alpha = require("alpha")
-  local banners = require("user.plugins.alpha.banners")
+  local alpha = require "alpha"
+  local banners = require "user.plugins.ui.alpha.banners"
 
   local api = vim.api
   local au = Config.common.au
@@ -65,16 +65,16 @@ return function()
       cursor = 1,
       align_shortcut = "left",
       hl = {
-        {"@character", 1 - #sc, 50 - #sc},
-        {"@character.special", 52, 80}
+        { "@character", 1 - #sc, 50 - #sc },
+        { "@character.special", 52, 80 },
       },
       hl_shortcut = {
-        {"@punctuation.bracket", 0, 1},
-        {"@number", 1, 2},
-        {"@punctuation.bracket", 2, 3}
+        { "@punctuation.bracket", 0, 1 },
+        { "@number", 1, 2 },
+        { "@punctuation.bracket", 2, 3 },
       },
       width = 80,
-      keymap = {"n", i_string, cmdtext, keybind_opts},
+      keymap = { "n", i_string, cmdtext, keybind_opts },
     }
 
     return {
@@ -95,12 +95,12 @@ return function()
       cursor = 1,
       align_shortcut = "left",
       hl = {
-        {"@label", -3, 76},
+        { "@label", -3, 76 },
       },
       hl_shortcut = {
-        {"@punctuation.bracket", 0, 1},
-        {"@number", 1, 2},
-        {"@punctuation.bracket", 2, 3}
+        { "@punctuation.bracket", 0, 1 },
+        { "@number", 1, 2 },
+        { "@punctuation.bracket", 2, 3 },
       },
       width = 80,
       keymap = { "n", "s", cmd "Telescope persisted", keybind_opts },
@@ -111,10 +111,8 @@ return function()
     local i_string = tostring(i)
     local sc = "[" .. i_string .. "] "
 
-    local cmdv = cmd(string.format(
-      [[lua require("project_nvim.project").set_pwd("%s", "alpha")]],
-      project
-    ))
+    local cmdv =
+      cmd(string.format([[lua require("project_nvim.project").set_pwd("%s", "alpha")]], project))
 
     local opts = {
       position = "center",
@@ -122,15 +120,15 @@ return function()
       cursor = 1,
       align_shortcut = "left",
       hl = {
-        {"@character", 1 - #sc, 80 - #sc}
+        { "@character", 1 - #sc, 80 - #sc },
       },
       hl_shortcut = {
-        {"@punctuation.bracket", 0, 1},
-        {"@number", 1, 2},
-        {"@punctuation.bracket", 2, 3}
+        { "@punctuation.bracket", 0, 1 },
+        { "@number", 1, 2 },
+        { "@punctuation.bracket", 2, 3 },
       },
       width = 80 - #sc,
-      keymap = {"n", i_string, cmdv, keybind_opts}
+      keymap = { "n", i_string, cmdv, keybind_opts },
     }
 
     local path_separator
@@ -142,9 +140,12 @@ return function()
 
     return {
       type = "button",
-      val = utils.str_right_pad(project:gsub(vim.fn.getenv("HOME") .. path_separator, ""), 80 - (#sc / 2)),
+      val = utils.str_right_pad(
+        project:gsub(vim.fn.getenv "HOME" .. path_separator, ""),
+        80 - (#sc / 2)
+      ),
       on_press = on_press(i_string),
-      opts = opts
+      opts = opts,
     }
   end
 
@@ -158,16 +159,16 @@ return function()
       position = "center",
       shortcut = "[p] ",
       hl = {
-        {"@label", -3, 76}
+        { "@label", -3, 76 },
       },
       hl_shortcut = {
-        {"@punctuation.bracket", 0, 1},
-        {"@number", 1, 2},
-        {"@punctuation.bracket", 2, 3}
+        { "@punctuation.bracket", 0, 1 },
+        { "@number", 1, 2 },
+        { "@punctuation.bracket", 2, 3 },
       },
       width = 80,
       keymap = { "n", "p", cmd "Telescope projects", keybind_opts },
-    }
+    },
   }
 
   local function setup_buffer()
@@ -180,11 +181,14 @@ return function()
 
   local function setup_highlights()
     hl.hi_link("DashboardNormal", "Normal", { default = true })
-    hl.hi("DashboardEndOfBuffer", { fg = hl.get_bg("Normal"), bg = hl.get_bg("Normal"), default = true })
+    hl.hi(
+      "DashboardEndOfBuffer",
+      { fg = hl.get_bg "Normal", bg = hl.get_bg "Normal", default = true }
+    )
     hl.hi_link("DashboardHeader", "Type", { default = true })
     hl.hi_link("DashboardCenter", "Keyword", { default = true })
     -- hl.hi_link("DashboardShortCut", "String", { default = true })
-    hl.hi("DashboardShortCut", { fg = hl.get_fg("String"), gui = "bold,reverse", default = true })
+    hl.hi("DashboardShortCut", { fg = hl.get_fg "String", gui = "bold,reverse", default = true })
     hl.hi_link("DashboardFooter", "Number", { default = true })
   end
 
@@ -202,27 +206,27 @@ return function()
 
     elements.footer = {
       type = "text",
-      val = { " " ..  version_lines[2] },
+      val = { " " .. version_lines[2] },
       opts = {
         position = "center",
         hl = "DashboardFooter",
       },
     }
 
-    local persisted = require("persisted")
+    local persisted = require "persisted"
     local sessions = persisted.list()
-    table.sort(sessions, function (a, b)
+    table.sort(sessions, function(a, b)
       return vim.loop.fs_stat(a.file_path).mtime.sec > vim.loop.fs_stat(b.file_path).mtime.sec
     end)
     sessions = utils.vec_slice(sessions, 1, 5)
-    elements.sessions = {recent_sessions_button}
+    elements.sessions = { recent_sessions_button }
     for i, session in ipairs(sessions) do
       table.insert(elements.sessions, session_button(i, session))
     end
 
-    local project_nvim = require("project_nvim.utils.history")
+    local project_nvim = require "project_nvim.utils.history"
     local projects = utils.vec_slice(project_nvim.get_recent_projects(), 1, 5)
-    elements.projects = {recent_projects_button}
+    elements.projects = { recent_projects_button }
     for i, project in ipairs(projects) do
       table.insert(elements.projects, project_button((#sessions + i) % 10, project))
     end
@@ -242,23 +246,23 @@ return function()
       callback = function(_)
         setup_highlights()
       end,
-    }
+    },
   })
 
-  local project_sync = require("user.plugins.project.sync")
+  local project_sync = require "user.plugins.project.sync"
   project_sync.read_projects_from_history()
 
   init_elements()
   setup_highlights()
 
-  alpha.setup({
+  alpha.setup {
     opts = {
       margin = 5,
     },
     layout = {
-      { type = "padding", val = 1, },
+      { type = "padding", val = 1 },
       elements.header,
-      { type = "padding", val = 2, },
+      { type = "padding", val = 2 },
       {
         type = "group",
         opts = {
@@ -266,7 +270,7 @@ return function()
         },
         val = elements.sessions,
       },
-      { type = "padding", val = 1, },
+      { type = "padding", val = 1 },
       {
         type = "group",
         opts = {
@@ -276,5 +280,5 @@ return function()
       },
       elements.footer,
     },
-  })
+  }
 end
