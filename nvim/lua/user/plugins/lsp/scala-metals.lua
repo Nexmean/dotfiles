@@ -14,9 +14,12 @@ return {
       showInferredType = true,
     }
 
-    metals_config.on_attach = Config.lsp.sequence_on_attach(metals.on_attach, function(_, bufnr)
-      require("caskey.utils").emit(metals_group, bufnr)
-    end)
+    metals_config.on_attach = Config.lsp.sequence_on_attach(
+      metals_config.on_attach,
+      function(_, bufnr)
+        require("caskey.utils").emit(metals_group, bufnr)
+      end
+    )
 
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "scala", "sbt" },
