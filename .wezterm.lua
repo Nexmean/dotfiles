@@ -1,10 +1,10 @@
-local wezterm = require 'wezterm'
+local wezterm = require "wezterm"
 
 return {
-  font = wezterm.font 'JetbrainsMono Nerd Font',
+  font = wezterm.font "JetbrainsMono Nerd Font",
   font_size = 16,
-  color_scheme = 'Catppuccin Mocha',
-  default_cursor_style = 'SteadyBar',
+  color_scheme = "Catppuccin Mocha",
+  default_cursor_style = "SteadyBar",
   window_padding = {
     left = 0,
     right = 0,

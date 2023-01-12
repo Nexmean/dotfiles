@@ -17,3 +17,10 @@ autocmd({ "WinLeave" }, {
     end
   end,
 })
+
+autocmd({ "BufRead" }, {
+  pattern = "justfile",
+  callback = function(e)
+    vim.api.nvim_buf_set_option(e.buf, "filetype", "make")
+  end,
+})

@@ -1,29 +1,68 @@
 local ck = require "caskey"
-local utils = require "user.common.utils"
+
+local cmd, cmdfn, ft, bt = ck.cmd, ck.cmdfn, ck.ft, ck.bt
+
+local lazy = require "user.lazy"
+local defer_call = lazy.defer_call
+
+local lsp = lazy.require "user.lsp"
+local hop = lazy.require "hop"
+local gs = lazy.require "gitsigns"
 
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-local M = {}
+local function map(args)
+  if type(args) == "string" or type(args) == "function" then
+    return { act = args }
+  else
+    local res = vim.tbl_extend("keep", args, {}) -- copy
 
-M.general = {
+    res.act = res[1] or res.act
+    res.desc = res[2] or res.desc
+
+    res[1] = nil
+    res[2] = nil
+
+    return res
+  end
+end
+
+return {
   mode = "n", -- default modes
   silent = true,
   nowait = true,
 
-  ["<Esc>"] = { act = ck.cmd "noh", desc = "no highlight", mode = "n" },
-  ["gd"] = { act = "<C-]>", desc = "go to", when = ck.ft "help" },
+  ["<Esc>"] = map { cmd "noh", "no highlight", mode = "n" },
+  ["gd"] = map { "<C-]>", "go to", when = ft "help", noremap = true },
 
   -- MOVEMENTS
   {
+    mode = "n",
+    noremap = true,
+
+    ["n"] = map(function()
+      vim.cmd [[execute('normal! ' . v:count1 . 'n')]]
+      require("hlslens").start()
+    end),
+    ["N"] = map(function()
+      vim.cmd [[execute('normal! ' . v:count1 . 'N')]]
+      require("hlslens").start()
+    end),
+    ["*"] = map [[*<Cmd>lua require('hlslens').start()<CR>]],
+    ["#"] = map [[#<Cmd>lua require('hlslens').start()<CR>]],
+    ["g*"] = map [[g*<Cmd>lua require('hlslens').start()<CR>]],
+    ["g#"] = map [[g#<Cmd>lua require('hlslens').start()<CR>]],
+  },
+  {
     mode = { "i", "t", "c" },
 
-    ["<C-a>"] = { act = "<Home>", desc = "Beginning of line" },
-    ["<C-e>"] = { act = "<End>", desc = "End of line" },
-    ["<C-f>"] = { act = "<Right>", desc = "Move forward" },
-    ["<C-b>"] = { act = "<Left>", desc = "Move back" },
-    ["<C-d>"] = { act = "<Delete>", desc = "Delete next character", mode = { "i", "c" } },
+    ["<C-a>"] = map { "<Home>", "Beginning of line" },
+    ["<C-e>"] = map { "<End>", "End of line" },
+    ["<C-f>"] = map { "<Right>", "Move forward" },
+    ["<C-b>"] = map { "<Left>", "Move back" },
+    ["<C-d>"] = map { "<Delete>", "Delete next character", mode = { "i", "c" } },
   },
   {
     mode = { "n", "v", "x" },
@@ -31,62 +70,52 @@ M.general = {
     {
       expr = true,
 
-      j = { act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], desc = "Move down" },
-      k = { act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "Move up" },
-      ["<Down>"] = { act = [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], desc = "move down" },
-      ["<Up>"] = { act = [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], desc = "Move up" },
+      j = map { [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], "Move down" },
+      k = map { [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], "Move up" },
+      ["<Down>"] = map { [[v:count || mode(1)[0:1] == "no" ? "j" : "gj"]], "move down" },
+      ["<Up>"] = map { [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], "Move up" },
     },
 
-    function()
-      local function hop(method)
-        return function()
-          require("hop")[method]()
-        end
-      end
-
-      return {
-        ["ga"] = { act = hop "hint_char1", desc = "Hop anywhere" },
-        ["gl"] = { act = hop "hint_lines", desc = "Hop line" },
-        ["gw"] = { act = hop "hint_words", desc = "Hop word" },
-      }
-    end,
+    ["ga"] = map { hop.hint_char1, "Hop anywhere" },
+    ["gl"] = map { hop.hint_lines, "Hop anywhere" },
+    ["gw"] = map { hop.hint_words, "Hop anywhere" },
   },
 
   -- WINDOWS
   {
     mode = { "n", "v" },
 
-    ["<C-h>"] = { act = "<C-w>h", desc = "Window left" },
-    ["<C-l>"] = { act = "<C-w>l", desc = "Window right" },
-    ["<C-j>"] = { act = "<C-w>j", desc = "Window down" },
-    ["<C-k>"] = { act = "<C-w>k", desc = "Window up" },
+    ["<C-h>"] = map { "<C-w>h", "Window left" },
+    ["<C-l>"] = map { "<C-w>l", "Window right" },
+    ["<C-j>"] = map { "<C-w>j", "Window down" },
+    ["<C-k>"] = map { "<C-w>k", "Window up" },
   },
 
-  ["<C-w><C-w>"] = { act = ck.cmd "PickAny", desc = "pick window" },
+  ["<C-w><C-w>"] = map { cmd "PickAny", "pick window" },
 
   -- BUFFERS
   ["<leader>b"] = {
     name = "buffers",
 
-    l = { act = ck.cmd "Telescope buffers", desc = "list buffers" },
-    n = { act = ck.cmd "enew", desc = "new buffer" },
-    x = { act = ck.cmd "BRemove", desc = "close buffer" },
+    l = map { cmd "Telescope buffers", "list buffers" },
+    n = map { cmd "enew", "new buffer" },
+    x = map { cmd "BRemove", "close buffer" },
   },
   {
     mode = { "n", "v", "i" },
 
-    ["<C-,>"] = { act = ck.cmdfn "CybuLastusedNext", desc = "prev buffer" },
-    ["<C-.>"] = { act = ck.cmdfn "CybuLastusedPrev", desc = "next buffer" },
+    ["<C-,>"] = map { cmdfn "CybuLastusedNext", "prev buffer" },
+    ["<C-.>"] = map { cmdfn "CybuLastusedPrev", "next buffer" },
   },
 
-  ["~"] = { act = ck.cmd "buffer #", desc = "recent buffer" },
-  ["gj"] = { act = ck.cmd "Telescope buffers", desc = "list buffers" },
+  ["~"] = map { cmd "buffer #", "recent buffer" },
+  ["gj"] = map { cmd "Telescope buffers", "list buffers" },
   ["q"] = {
-    act = ck.cmd "close",
+    act = cmd "close",
     desc = "close window",
     when = {
-      ck.ft "Outline",
-      ck.bt { "quickfix", "help" },
+      ft "Outline",
+      bt { "quickfix", "help" },
     },
   },
 
@@ -94,30 +123,28 @@ M.general = {
   ["<leader>t"] = {
     name = "tabs",
 
-    n = { act = ck.cmd "tabnew", desc = "new tab" },
-    x = { act = ck.cmd "tabclose", desc = "close tab" },
-    t = { act = ck.cmd "Telescope telescope-tabs list_tabs", desc = "list tabs" },
+    n = map { cmd "tabnew", "new tab" },
+    x = map { cmd "tabclose", "close tab" },
+    t = map { cmd "Telescope telescope-tabs list_tabs", "list tabs" },
   },
 
-  {
-    ["g1"] = { act = ck.cmd "1tabnext", desc = "tab 1" },
-    ["g2"] = { act = ck.cmd "2tabnext", desc = "tab 2" },
-    ["g3"] = { act = ck.cmd "3tabnext", desc = "tab 3" },
-    ["g4"] = { act = ck.cmd "4tabnext", desc = "tab 4" },
-    ["g5"] = { act = ck.cmd "5tabnext", desc = "tab 5" },
-    ["g6"] = { act = ck.cmd "6tabnext", desc = "tab 6" },
-    ["g7"] = { act = ck.cmd "7tabnext", desc = "tab 7" },
-    ["g8"] = { act = ck.cmd "8tabnext", desc = "tab 8" },
-    ["g9"] = { act = ck.cmd "9tabnext", desc = "tab 9" },
-  },
+  ["g1"] = map { cmd "1tabnext", "tab 1" },
+  ["g2"] = map { cmd "2tabnext", "tab 2" },
+  ["g3"] = map { cmd "3tabnext", "tab 3" },
+  ["g4"] = map { cmd "4tabnext", "tab 4" },
+  ["g5"] = map { cmd "5tabnext", "tab 5" },
+  ["g6"] = map { cmd "6tabnext", "tab 6" },
+  ["g7"] = map { cmd "7tabnext", "tab 7" },
+  ["g8"] = map { cmd "8tabnext", "tab 8" },
+  ["g9"] = map { cmd "9tabnext", "tab 9" },
 
   -- TERMINAL
   ["<A-i>"] = {
-    act = utils.cmdfn "TermToggle",
+    act = cmdfn "TermToggle",
     desc = "toggle terminal",
     mode = { "i", "n", "v", "t", "x", "c" },
   },
-  ["<C-x>"] = { act = termcodes "<C-\\><C-N>", desc = "escape terminal mode", mode = "t" },
+  ["<C-x>"] = map { termcodes "<C-\\><C-N>", "escape terminal mode", mode = "t" },
 
   -- LSP
   {
@@ -125,33 +152,27 @@ M.general = {
 
     when = "LspAttach",
 
-    ["gD"] = { act = vim.lsp.buf.declaration, desc = "lsp declaration" },
-    ["gd"] = { act = ck.cmd "Telescope lsp_definitions", desc = "lsp definition" },
-    ["gi"] = {
-      act = ck.cmd "Telescope lsp_implementations",
-      desc = "lsp implementations",
-    },
-    ["gr"] = { act = ck.cmd "Telescope lsp_references", desc = "lsp references" },
-    ["<A-k>"] = { act = vim.diagnostic.open_float, desc = "hover diagnostic" },
-    ["K"] = { act = vim.lsp.buf.hover, desc = "hover" },
-    ["<leader>D"] = {
-      act = ck.cmd "Telescope lsp_type_definitions",
-      desc = "lsp definition type",
-    },
+    ["gD"] = map { vim.lsp.buf.declaration, "lsp declaration" },
+    ["gd"] = map { cmd "Telescope lsp_definitions", "lsp definition" },
+    ["gi"] = map { cmd "Telescope lsp_implementations", "lsp implementations" },
+    ["gr"] = map { cmd "Telescope lsp_references", "lsp references" },
+    ["<A-k>"] = map { lsp.show_position_diagnostics, "hover diagnostic" },
+    ["K"] = map { vim.lsp.buf.hover, "hover" },
+    ["<leader>D"] = map { cmd "Telescope lsp_type_definitions", "lsp definition type" },
     ["<leader>c"] = {
       name = "code",
 
-      a = { act = vim.lsp.buf.code_action, desc = "lsp code action" },
-      l = { act = vim.lsp.codelens.run, desc = "lsp run codelens" },
-      r = { act = vim.lsp.buf.rename, desc = "lsp rename" },
-      s = { act = vim.lsp.buf.signature_help, desc = "lsp signature help" },
+      a = map { vim.lsp.buf.code_action, "lsp code action" },
+      l = map { vim.lsp.codelens.run, "lsp run codelens" },
+      r = map { vim.lsp.buf.rename, "lsp rename" },
+      s = map { vim.lsp.buf.signature_help, "lsp signature help" },
     },
 
     ["<leader>d"] = {
       name = "diagnostics",
 
-      b = { act = vim.diagnostic.setloclist, desc = "buffer diagnostics" },
-      w = { act = vim.diagnostic.setqflist, desc = "workspace diagnostics" },
+      b = map { vim.diagnostic.setloclist, "buffer diagnostics" },
+      w = map { vim.diagnostic.setqflist, "workspace diagnostics" },
       t = {
         act = function()
           local current = vim.diagnostic.config()
@@ -168,21 +189,15 @@ M.general = {
     ["<leader>s"] = {
       name = "lsp symbols",
 
-      w = {
-        act = ck.cmd "Telescope lsp_dynamic_workspace_symbols",
-        desc = "lsp workspace symbols",
-      },
-      d = {
-        act = ck.cmd "Telescope lsp_document_symbols",
-        desc = "lsp document symbols",
-      },
+      w = map { cmd "Telescope lsp_dynamic_workspace_symbols", "lsp workspace symbols" },
+      d = map { cmd "Telescope lsp_document_symbols", "lsp document symbols" },
     },
 
     ["<C-s>"] = {
-      act = ck.cmd "SymbolsOutline",
+      act = cmd "SymbolsOutline",
       desc = "toggle outline",
 
-      when_extend = ck.ft "Outline",
+      when_extend = ft "Outline",
     },
   },
 
@@ -190,79 +205,54 @@ M.general = {
   ["<leader>g"] = {
     name = "git",
 
-    b = { act = ck.cmd "Telescope git_branches", desc = "git branches" },
-    c = { act = ck.cmd "Telescope git_commits", desc = "git commits" },
-    n = { act = ck.cmd "Neogit", desc = "neogit" },
-    s = { act = ck.cmd "Neotree git_status", desc = "git status" },
+    b = map { cmd "Telescope git_branches", "git branches" },
+    c = map { cmd "Telescope git_commits", "git commits" },
+    n = map { cmd "Neogit", "neogit" },
+    s = map { cmd "Neotree git_status", "git status" },
   },
+
   {
     when = ck.emitted "Gitsigns",
 
-    function()
-      local gs = require "gitsigns"
+    ["<leader>h"] = {
+      name = "hunk",
 
-      return {
-        ["<leader>h"] = {
-          name = "hunk",
-
-          s = {
-            act = {
-              n = gs.stage_hunk,
-              v = function()
-                gs.stage_hunk { vim.fn.line ".", vim.fn.line "v" }
-              end,
-            },
-            desc = "stage hunk",
-          },
-          r = {
-            act = {
-              n = gs.reset_hunk,
-              v = function()
-                gs.reset_hunk { vim.fn.line ".", vim.fn.line "v" }
-              end,
-            },
-            desc = "rest hunk",
-          },
-          S = { act = gs.stage_buffer, desc = "stage buffer" },
-          u = { act = gs.undo_stage_hunk, desc = "unstage hunk" },
-          p = { act = gs.preview_hunk, desc = "preview hunk" },
-          b = {
-            act = function()
-              gs.blame_line { full = true }
-            end,
-            desc = "blame line",
-          },
-          d = { act = gs.diffthis, desc = "diff this" },
-          D = {
-            act = function()
-              gs.diffthis "~"
-            end,
-            desc = "diff this",
-          },
+      s = {
+        act = {
+          n = gs.stage_hunk,
+          v = defer_call(gs.stage_hunk, { vim.fn.line ".", vim.fn.line "v" }),
         },
-      }
-    end,
+        desc = "stage hunk",
+      },
+      r = {
+        act = {
+          n = gs.reset_hunk,
+          v = defer_call(gs.reset_hunk, { vim.fn.line ".", vim.fn.line "v" }),
+        },
+        desc = "reset hunk",
+      },
+      S = map { gs.stage_buffer, "stage buffer" },
+      u = map { gs.undo_stage_hunk, "unstage hunk" },
+      p = map { gs.preview_hunk, "preview hunk" },
+      b = map { defer_call(gs.blame_line, { full = true }), "blame line" },
+      d = map { gs.diffthis, "diff this" },
+      D = map { defer_call(gs.diffthis, "~"), "diff this" },
+    },
   },
 
-  ["ih"] = {
-    mode = { "o", "x" },
-    act = ":<C-U>Gitsigns select_hunk<CR>",
-  },
+  ["ih"] = map { ":<C-U>Gitsigns select_hunk<CR>", desc = "Hunk text object", mode = { "o", "x" } },
 
   -- FIND
-  ["<C-n>"] = { act = utils.cmdfn "Neotree toggle", desc = "toggle neotree", mode = "n" },
+  ["<C-n>"] = map { cmdfn "Neotree toggle", "toggle neotree", mode = "n" },
 
   ["<leader>f"] = {
     name = "find",
 
-    a = {
-      act = ck.cmd "Telescope find_files follow=true no_ignore=true hidden=true",
-      desc = "find all files",
-    },
-    f = { act = ck.cmd "Telescope find_files", desc = "find files" },
-    h = { act = ck.cmd "Telescope help_tags", desc = "find help" },
-    o = { act = ck.cmd "Telescope oldfiles only_cwd=true", desc = "find oldfiles" },
-    r = { act = ck.cmd "Telescope resume", desc = "resume last search" },
+    a = map { cmd "Telescope find_files follow=true no_ignore=true hidden=true", "find all files" },
+    f = map { cmd "Telescope find_files", "find files" },
+    h = map { cmd "Telescope help_tags", "find help" },
+    o = map { cmd "Telescope oldfiles only_cwd=true", "find oldfiles" },
+    r = map { cmd "Telescope resume", "resume last search" },
     w = {
       act = {
         n = function()
@@ -281,7 +271,7 @@ M.general = {
 
   -- HASKELL
   {
-    when = ck.ft { "haskell", "cabal" },
+    when = ft { "haskell", "cabal" },
 
     ["<A-r>"] = {
       act = function()
@@ -290,24 +280,18 @@ M.general = {
       desc = "package GHCi",
     },
 
-    ["<leader>r"] = {
-      name = "repl",
-
-      f = {
-        act = function()
-          require("haskell-tools").repl.toggle(vim.api.nvim_buf_get_name(0))
-        end,
-        desc = "file GHCi",
-      },
-
-      q = {
-        act = function()
-          require("haskell-tools").repl.quit()
-        end,
-        desc = "quit GHCi",
-      },
+    ["<leader>r"] = { name = "repl" },
+    ["<leader>rf"] = {
+      act = function()
+        require("haskell-tools").repl.toggle(vim.api.nvim_buf_get_name(0))
+      end,
+      desc = "file GHCi",
+    },
+    ["<leader>rq"] = {
+      act = function()
+        require("haskell-tools").repl.quit()
+      end,
+      desc = "quit GHCi",
     },
   },
 }
-
-return M

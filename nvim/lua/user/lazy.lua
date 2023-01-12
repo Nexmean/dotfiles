@@ -95,7 +95,7 @@ end
 ---
 ---Example:
 ---
----```lua 
+---```lua
 --- -- With table:
 --- local foo = bar.baz.qux.quux
 --- local foo = lazy.access(bar, "baz.qux.quux")
@@ -122,6 +122,14 @@ function lazy.access(x, access_path)
     return lazy.require(x, handler)
   else
     return lazy.wrap(x, handler)
+  end
+end
+
+function lazy.defer_call(fn, ...)
+  local args = ...
+  return function()
+    vim.notify(vim.inspect(args))
+    fn(unpack(args))
   end
 end
 

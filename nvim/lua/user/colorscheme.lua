@@ -61,12 +61,10 @@ function M.apply_sp_underline()
     end
   end
 
-  -- Normalize diagnostic underlines
   local diagnostic_names = { "Error", "Warn", "Info", "Hint" }
   for _, name in ipairs(diagnostic_names) do
-    hi_clear("DiagnosticUnderline" .. name)
     hi("DiagnosticUnderline" .. name, {
-      style = "underline",
+      style = "undercurl",
       sp = hl.get_fg("Diagnostic" .. name),
       fg = "NONE",
     })
@@ -645,6 +643,24 @@ function M.apply_tweaks()
 
   hi("MatchParen", { style = "underline", sp = fg_normal:to_css() })
 
+  -- scrollbar
+  local scrollbar_bg = bg_normal:clone():highlight(0.35):to_css()
+  hi("ScrollbarHandle", { bg = scrollbar_bg })
+  hi("ScrollbarCursor", { bg = scrollbar_bg })
+  hi("ScrollbarCursorHandle", { bg = scrollbar_bg })
+  hi("ScrollbarIncSearch", { style = "bold", fg = hl.get_bg "IncSearch" })
+  hi("ScrollbarIncSearchHandle", { style = "bold", fg = hl.get_bg "IncSearch", bg = scrollbar_bg })
+  hi_link("ScrollbarSearch", "ScrollbarIncSearch")
+  hi_link("ScrollbarSearchHandle", "ScrollbarIncSearchHandle")
+  hi("ScrollbarHintHandle", { bg = scrollbar_bg })
+  hi("ScrollbarInfoHandle", { bg = scrollbar_bg })
+  hi("ScrollbarWarnHandle", { bg = scrollbar_bg })
+  hi("ScrollbarErrorHandle", { bg = scrollbar_bg })
+  hi("ScrollbarMiscHandle", { bg = scrollbar_bg })
+  hi("ScrollbarGitAddHandle", { bg = scrollbar_bg })
+  hi("ScrollbarGitChangeHandle", { bg = scrollbar_bg })
+  hi("ScrollbarGitDeleteHandle", { bg = scrollbar_bg })
+
   -- Use special underlines if supported
   if M.supports_sp_underline() then
     M.apply_sp_underline()
@@ -709,6 +725,15 @@ function M.apply_tweaks()
   hi_link("GitSignsAdd", "diffAdded")
   hi_link("GitSignsDelete", "diffRemoved")
   hi_link("GitSignsChange", "diffChanged")
+
+  hi_link("NeoTreeDotFile", "NormalDim600")
+  hi_link("NeoTreeDimText", "NormalDim700")
+  hi_link("NeoTreeExpader", "NormalDim700")
+  hi_link("NeoTreeFadeText1", "NormalDim600")
+  hi_link("NeoTreeFadeText2", "NormalDim700")
+  hi("NeoTreeMessage", { fg = hl.get_fg "NormalDim700", style = "italic" })
+  hi("NeoTreeGitConflict", { fg = hl.get_fg "Constant", style = "bold,italic" })
+  hi("NeoTreeGitUntracked", { fg = hl.get_fg "Constant", style = "" })
 
   hi_link("NeogitCommitViewHeader", "Title")
   hi_link("NeogitDiffAddHighlight", "DiffInlineAdd")

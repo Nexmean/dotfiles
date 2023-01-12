@@ -26,22 +26,18 @@ function M.display(lenses, bufnr, client_id)
   for i = 0, num_lines do
     local line_lenses = lenses_by_lnum[i] or {}
     api.nvim_buf_clear_namespace(bufnr, ns, i, i + 1)
-    local chunks = {}
-    local num_line_lenses = #line_lenses
+    local lines = {}
     table.sort(line_lenses, function(a, b)
       return a.range.start.character < b.range.start.character
     end)
-    for j, lens in ipairs(line_lenses) do
+    for _, lens in ipairs(line_lenses) do
       local text = lens.command and lens.command.title or "Unresolved lens ..."
       text = text:gsub("%s+", " ")
-      table.insert(chunks, { text, "LspCodeLens" })
-      if j < num_line_lenses then
-        table.insert(chunks, { " | ", "LspCodeLensSeparator" })
-      end
+      table.insert(lines, { { "* ", "LspCodeLens" }, { text, "LspCodeLens" } })
     end
-    if #chunks > 0 then
+    if #lines > 0 then
       api.nvim_buf_set_extmark(bufnr, ns, i, 0, {
-        virt_lines = { chunks },
+        virt_lines = lines,
         virt_lines_above = true,
         hl_mode = "combine",
       })

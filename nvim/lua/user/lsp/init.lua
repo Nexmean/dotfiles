@@ -138,7 +138,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
     underline = true,
-    signs = true,
+    signs = false,
     update_in_insert = true,
   })
 
@@ -244,23 +244,7 @@ function M.highlight_cursor_clear()
 end
 ---------------------------------
 
--- Only show diagnostics if current word + line is not the same as last call.
-local last_diagnostics_word = nil
 function M.show_position_diagnostics()
-  local cword = vim.fn.expand "<cword>"
-  local cline = vim.api.nvim_win_get_cursor(0)[1]
-  local bufnr = vim.api.nvim_get_current_buf()
-
-  if
-    last_diagnostics_word
-    and last_diagnostics_word[1] == cline
-    and last_diagnostics_word[2] == cword
-    and last_diagnostics_word[3] == bufnr
-  then
-    return
-  end
-  last_diagnostics_word = { cline, cword, bufnr }
-
   vim.diagnostic.open_float { scope = "cursor", border = "single" }
 end
 
@@ -270,10 +254,5 @@ M.define_diagnostic_signs {
   hint = "",
   info = "",
 }
-
--- LSP auto commands
-Config.common.au.declare_group("lsp_init", {}, {
-  { "CursorHold", callback = M.show_position_diagnostics },
-})
 
 return M

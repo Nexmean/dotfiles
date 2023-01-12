@@ -8,8 +8,27 @@ local function list(value, str, sep)
 end
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+vim.g.netrw_liststyle = 1
+vim.g.netrw_sort_by = "exten"
+vim.g.netrw_bufsettings = "noma nomod nonu nowrap ro nornu"
 
-if vim.fn.has "wsl" then
+vim.g.markdown_fenced_languages = {
+  "html",
+  "python",
+  "sh",
+  "bash=sh",
+  "dosini",
+  "ini=dosini",
+  "lua",
+  "cpp",
+  "c++=cpp",
+  "javascript",
+  "java",
+  "vim",
+}
+
+if vim.fn.has "wsl" == 1 then
   vim.g.clipboard = {
     name = "win32yank-wsl",
     copy = {
@@ -69,7 +88,8 @@ opt.foldlevel = 99 -- 'foldlevelstart' isn't working correctly?
 opt.scrolloff = 3
 opt.completeopt = list { "menuone", "noselect" }
 opt.virtualedit = list { "block" }
-opt.signcolumn = "yes:2"
+opt.signcolumn = "yes:1"
+-- opt.statuscolumn = [[ %=%{v:wrap?"":&rnu?v:relnum:&nu?v:lnum:""} %s]]
 opt.colorcolumn = list { "100" }
 opt.sessionoptions = list {
   "blank",
@@ -158,3 +178,5 @@ if vim.g.neovide then
   vim.g.neovide_cursor_animation_length = 0.05
   vim.g.neovide_scroll_animation_length = 0.05
 end
+
+vim.diagnostic.config { signs = false }
