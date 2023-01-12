@@ -59,6 +59,7 @@
   "nvim-hlslens": { "branch": "main", "commit": "9234f0fd7ec6042e8b4c70d41d25478a6cbf3a8e" },
   "nvim-jdtls": { "branch": "master", "commit": "e64f05e950e748824bb8b67e89fa4398807a81b4" },
   "nvim-lspconfig": { "branch": "master", "commit": "f0221821d8ceed70f0525a2c35380ba56672e107" },
+  "nvim-metals": { "branch": "main", "commit": "11da0d84c7b6b2c170b84aca17f54b74413b72a7" },
   "nvim-navic": { "branch": "master", "commit": "7a2b823152fe4de65ee7925b0e32d26ed73bc57c" },
   "nvim-notify": { "branch": "master", "commit": "b005821516f1f37801a73067afd1cef2dbc4dfe8" },
   "nvim-pqf": { "branch": "main", "commit": "d15582d3d0c09280f371fa5f21537cf4530ed330" },

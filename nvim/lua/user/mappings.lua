@@ -193,7 +193,7 @@ return {
       d = map { cmd "Telescope lsp_document_symbols", "lsp document symbols" },
     },
 
-    ["<C-s>"] = {
+    ["<A-s>"] = {
       act = cmd "SymbolsOutline",
       desc = "toggle outline",
 

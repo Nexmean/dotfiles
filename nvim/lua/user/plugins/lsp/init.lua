@@ -3,6 +3,8 @@ return {
 
   "haskell-tools",
 
+  "scala-metals",
+
   { "folke/neodev.nvim" },
 
   { "mfussenegger/nvim-jdtls" },

@@ -1,7 +1,3 @@
-local cmp_lsp = require "cmp_nvim_lsp"
-local lspconfig = require "lspconfig"
-local codelens = require "user.lsp.codelens"
-
 local utils = Config.common.utils
 local notify = Config.common.notify
 local pl = utils.pl
@@ -9,8 +5,6 @@ local config_store = {}
 
 local M = {}
 _G.Config.lsp = M
-
-require("lspconfig.ui.windows").default_options.border = "single"
 
 ---@diagnostic disable-next-line: unused-local
 function M.common_on_attach(client, bufnr)
@@ -21,17 +15,27 @@ function M.common_on_attach(client, bufnr)
       border = "single",
     },
   }, bufnr)
-  -- local mappings = require("user.mappings")
-  -- mappings.load("lspconfig", { buffer = bufnr })
 end
 
-M.base_config = {
-  on_attach = M.common_on_attach,
-  capabilities = utils.tbl_union_extend(
-    vim.lsp.protocol.make_client_capabilities(),
-    cmp_lsp.default_capabilities()
-  ),
-}
+function M.sequence_on_attach(...)
+  local args = ...
+
+  return function(client, bufnr)
+    for _, on_attach in ipairs(args) do
+      on_attach(client, bufnr)
+    end
+  end
+end
+
+function M.create_base_config()
+  return {
+    on_attach = M.common_on_attach,
+    capabilities = utils.tbl_union_extend(
+      vim.lsp.protocol.make_client_capabilities(),
+      require("cmp_nvim_lsp").default_capabilities()
+    ),
+  }
+end
 
 M.local_config_paths = {
   ".vim/lsp_init.lua",
@@ -84,100 +88,10 @@ end
 ---configs will overwrite earlier configs.
 ---@return table
 function M.create_config(...)
-  local config = utils.tbl_union_extend(M.base_config, {}, ...)
+  local config = utils.tbl_union_extend(M.create_base_config(), {}, ...)
 
   return M.create_local_config(config)
 end
-
--- Java
-require "user.lsp.java"
-
--- Typescript
-lspconfig.tsserver.setup(M.create_config())
-
--- Python
-lspconfig.pyright.setup(M.create_config())
-
--- Lua
-require "user.lsp.lua"
-
--- Teal
--- require("user.lsp.teal")
-
--- Bash
-lspconfig.bashls.setup(M.create_config())
-
--- C#
-lspconfig.omnisharp.setup(M.create_config {
-  cmd = { "/usr/bin/omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-  filetypes = { "cs", "vb" },
-  init_options = {},
-  -- root_dir = lspconfig.util.root_pattern(".csproj", ".sln"),
-  -- root_dir = vim.fn.getcwd
-})
-
--- C, C++
-lspconfig.clangd.setup(M.create_config())
-
--- Vim
-lspconfig.vimls.setup(M.create_config())
-
--- Go
-lspconfig.gopls.setup(M.create_config())
-
--- Scheme, Racket
-lspconfig.racket_langserver.setup(M.create_config())
-
--- Dhall
-lspconfig.dhall_lsp_server.setup(M.create_config())
-
--- markdown
-lspconfig.marksman.setup(M.create_config())
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] =
-  vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    underline = true,
-    signs = false,
-    update_in_insert = true,
-  })
-
--- DIAGNOSTICS: Only show the sign with the highest priority per line
--- From: `:h diagnostic-handlers-example`
-
-local ns = vim.api.nvim_create_namespace "user_lsp"
-local orig_signs_handler = vim.diagnostic.handlers.signs
-
--- Override the built-in signs handler
-vim.diagnostic.handlers.signs = {
-  show = function(_, bufnr, _, opts)
-    -- Get all diagnostics from the whole buffer rather than just the
-    -- diagnostics passed to the handler
-    local diagnostics = vim.diagnostic.get(bufnr)
-
-    -- Find the "worst" diagnostic per line
-    local max_severity_per_line = {}
-    for _, d in pairs(diagnostics) do
-      local m = max_severity_per_line[d.lnum]
-      if not m or d.severity < m.severity then
-        max_severity_per_line[d.lnum] = d
-      end
-    end
-
-    -- Pass the filtered diagnostics (with our custom namespace) to
-    -- the original handler
-    orig_signs_handler.show(ns, bufnr, vim.tbl_values(max_severity_per_line), opts)
-  end,
-  hide = function(_, bufnr)
-    orig_signs_handler.hide(ns, bufnr)
-  end,
-}
-
-local pop_opts = { border = "single", max_width = 80 }
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
-vim.lsp.handlers["textDocument/signatureHelp"] =
-  vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
-vim.lsp.codelens.display = codelens.display
 
 function M.define_diagnostic_signs(opts)
   local group = {
@@ -247,12 +161,5 @@ end
 function M.show_position_diagnostics()
   vim.diagnostic.open_float { scope = "cursor", border = "single" }
 end
-
-M.define_diagnostic_signs {
-  error = "",
-  warn = "",
-  hint = "",
-  info = "",
-}
 
 return M

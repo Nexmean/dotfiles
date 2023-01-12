@@ -22,10 +22,14 @@ local function get_lib()
   return vim.tbl_keys(lua_lib)
 end
 
-lua_add_lib "$VIMRUNTIME"
+-- lua_add_lib "$VIMRUNTIME"
 -- lua_add_lib(vim.fn.stdpath("data") .. "/site/pack/packer/start/diffview.nvim")
 
-require("neodev").setup {}
+require("neodev").setup {
+  library = {
+    plugins = { "plenary.nvim", "caskey.nvim" },
+  },
+}
 
 require("lspconfig").sumneko_lua.setup(Config.lsp.create_config {
   cmd = {
@@ -47,7 +51,6 @@ require("lspconfig").sumneko_lua.setup(Config.lsp.create_config {
         globals = { "vim", "jit", "bit", "Config" },
       },
       workspace = {
-        -- library = get_lib(),
         maxPreload = 2000,
         preloadFileSize = 50000,
       },
