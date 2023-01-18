@@ -13,6 +13,7 @@ return {
       showImplicitArguments = true,
       showInferredType = true,
     }
+    metals_config.init_options.statusBarProvider = "off"
 
     metals_config.on_attach = Config.lsp.sequence_on_attach(
       metals_config.on_attach,
@@ -22,7 +23,7 @@ return {
     )
 
     vim.api.nvim_create_autocmd("FileType", {
-      pattern = { "scala", "sbt" },
+      pattern = { "scala", "sbt", "java" },
       group = metals_group,
       callback = function()
         metals.initialize_or_attach(metals_config)

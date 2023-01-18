@@ -30,10 +30,10 @@ return {
             renamed = "",
             -- Status type
             untracked = "",
-            ignored = " ",
-            unstaged = " ",
-            staged = " ",
-            conflict = " ",
+            ignored = " N",
+            unstaged = " U",
+            staged = " S",
+            conflict = " C",
           },
         },
         diagnostics = {

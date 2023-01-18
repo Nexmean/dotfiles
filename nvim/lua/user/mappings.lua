@@ -76,7 +76,7 @@ return {
       ["<Up>"] = map { [[v:count || mode(1)[0:1] == "no" ? "k" : "gk"]], "Move up" },
     },
 
-    ["ga"] = map { hop.hint_char1, "Hop anywhere" },
+    ["s"] = map { hop.hint_char2, "Hop 2 chars" },
     ["gl"] = map { hop.hint_lines, "Hop anywhere" },
     ["gw"] = map { hop.hint_words, "Hop anywhere" },
   },
@@ -244,6 +244,7 @@ return {
 
   -- FIND
   ["<C-n>"] = map { cmdfn "Neotree toggle", "toggle neotree", mode = "n" },
+  ["<leader>e"] = map { cmdfn "Neotree focus", "focus neotree", mode = "n" },
 
   ["<leader>f"] = {
     name = "find",
