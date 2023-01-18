@@ -34,7 +34,7 @@ return {
   silent = true,
   nowait = true,
 
-  ["<Esc>"] = map { cmd "noh", "no highlight", mode = "n" },
+  ["<Esc>"] = map { cmd "noh", "stop hlsearch", mode = "n" },
   ["gd"] = map { "<C-]>", "go to", when = ft "help", noremap = true },
 
   -- MOVEMENTS

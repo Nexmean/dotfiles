@@ -27,6 +27,7 @@ return {
         "DiffviewFileHistory",
         "Outline",
         "lir",
+        "neo-tree",
       },
       -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
       filetypes_allowlist = {},
