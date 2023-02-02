@@ -48,6 +48,7 @@ opt.langmap = list {
   "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,",
 }
 
+opt.swapfile = false
 opt.cmdheight = 0
 opt.showtabline = 0
 opt.number = true

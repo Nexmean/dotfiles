@@ -1,7 +1,7 @@
-local lazy = require("user.lazy")
+local lazy = require "user.lazy"
 
 ---@module "diffview.arg_parser"
-local arg_parser = lazy.require("diffview.arg_parser")
+local arg_parser = lazy.require "diffview.arg_parser"
 
 local utils = Config.common.utils
 
@@ -16,13 +16,20 @@ function M.expand(alias)
   local expanded = store[alias]
   local cmd_type = vim.fn.getcmdtype()
 
-  if not expanded or cmd_type ~= ":" then return alias end
+  if not expanded or cmd_type ~= ":" then
+    return alias
+  end
 
   local cmd_line = vim.fn.getcmdline()
 
-  if cmd_line:match("%s*%S+") then
+  if cmd_line:match "^%s*%S+" then
     local cur_pos = vim.fn.getcmdpos()
-    local ctx = arg_parser.scan_ex_args(cmd_line, cur_pos)
+    local ctx
+    if arg_parser.scan then
+      ctx = arg_parser.scan(cmd_line, { allow_quoted = false, cur_pos = cur_pos })
+    elseif arg_parser.scan_ex_args then
+      ctx = arg_parser.scan_ex_args(cmd_line, cur_pos)
+    end
 
     if ctx.argidx == 1 then
       return expanded
@@ -37,14 +44,18 @@ end
 ---@param alias string|string[]
 ---@param substitute string
 function M.alias(alias, substitute)
-  if type(alias) ~= "table" then alias = { alias } end
+  if type(alias) ~= "table" then
+    alias = { alias }
+  end
 
   for _, name in ipairs(alias) do
     store[name] = substitute
 
     vim.cmd(
-      ("cnoreabbrev <expr> %s v:lua.require('user.modules.cmd_alias').expand('%s')")
-      :format(name, utils.pick(1, name:gsub("'", "\\'")))
+      ("cnoreabbrev <expr> %s v:lua.require('user.modules.cmd_alias').expand('%s')"):format(
+        name,
+        utils.pick(1, name:gsub("'", "\\'"))
+      )
     )
   end
 end

@@ -163,6 +163,7 @@ return {
       name = "code",
 
       a = map { vim.lsp.buf.code_action, "lsp code action" },
+      f = map { vim.lsp.buf.format, "lsp format" },
       l = map { vim.lsp.codelens.run, "lsp run codelens" },
       r = map { vim.lsp.buf.rename, "lsp rename" },
       s = map { vim.lsp.buf.signature_help, "lsp signature help" },
