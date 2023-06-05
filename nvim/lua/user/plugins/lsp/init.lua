@@ -47,5 +47,5 @@ return {
     end,
   },
 
-  { "j-hui/fidget.nvim", config = true },
+  { "j-hui/fidget.nvim", enabled = false, config = true },
 }

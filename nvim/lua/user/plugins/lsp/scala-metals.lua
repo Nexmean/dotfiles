@@ -16,6 +16,7 @@ return {
     metals_config.init_options.statusBarProvider = "off"
 
     metals_config.on_attach = Config.lsp.sequence_on_attach(
+      Config.lsp.common_on_attach,
       metals_config.on_attach,
       function(_, bufnr)
         require("caskey.utils").emit(metals_group, bufnr)

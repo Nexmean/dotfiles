@@ -6,14 +6,6 @@ return {
       logging = true,
       log_level = vim.log.levels.WARN,
       filetype = {
-        haskell = {
-          function()
-            return {
-              exe = "stylish-haskell",
-              stdin = true,
-            }
-          end,
-        },
         cabal = {
           function()
             return {

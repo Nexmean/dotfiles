@@ -128,7 +128,6 @@ end
 function lazy.defer_call(fn, ...)
   local args = ...
   return function()
-    vim.notify(vim.inspect(args))
     fn(unpack(args))
   end
 end

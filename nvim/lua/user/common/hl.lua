@@ -79,7 +79,7 @@ local style_attrs = {
 }
 
 -- NOTE: Some atrtibutes have been renamed in v0.8.0
-if vim.fn.has("nvim-0.8") == 1 then
+if vim.fn.has "nvim-0.8" == 1 then
   M.HlAttribute.underdashed = M.HlAttribute.underdash
   M.HlAttribute.underdash = nil
 
@@ -114,7 +114,7 @@ function M.get_hl(name, no_trans)
   local hl
 
   if no_trans then
-    hl = api.nvim__get_hl_defs(0)[name]
+    hl = api.nvim_get_hl(0, {})[name]
   else
     local id = api.nvim_get_hl_id_by_name(name)
 
@@ -124,9 +124,15 @@ function M.get_hl(name, no_trans)
   end
 
   if hl then
-    if hl.foreground then hl.fg = string.format("#%06x", hl.foreground) end
-    if hl.background then hl.bg = string.format("#%06x", hl.background) end
-    if hl.special then hl.sp = string.format("#%06x", hl.special) end
+    if hl.foreground then
+      hl.fg = string.format("#%06x", hl.foreground)
+    end
+    if hl.background then
+      hl.bg = string.format("#%06x", hl.background)
+    end
+    if hl.special then
+      hl.sp = string.format("#%06x", hl.special)
+    end
 
     return hl
   end
@@ -139,9 +145,13 @@ end
 function M.get_hl_attr(name, attr, no_trans)
   local hl = M.get_hl(name, no_trans)
 
-  if type(attr) == "string" then attr = hlattr[attr] end
+  if type(attr) == "string" then
+    attr = hlattr[attr]
+  end
 
-  if not (hl and attr) then return end
+  if not (hl and attr) then
+    return
+  end
 
   return hl[hlattr[attr]]
 end
@@ -153,12 +163,16 @@ end
 function M.get_fg(groups, no_trans)
   no_trans = not not no_trans
 
-  if type(groups) ~= "table" then groups = { groups } end
+  if type(groups) ~= "table" then
+    groups = { groups }
+  end
 
   for _, group in ipairs(groups) do
     local v = M.get_hl_attr(group, hlattr.fg, no_trans) --[[@as string? ]]
 
-    if v then return v end
+    if v then
+      return v
+    end
   end
 end
 
@@ -169,12 +183,16 @@ end
 function M.get_bg(groups, no_trans)
   no_trans = not not no_trans
 
-  if type(groups) ~= "table" then groups = { groups } end
+  if type(groups) ~= "table" then
+    groups = { groups }
+  end
 
   for _, group in ipairs(groups) do
     local v = M.get_hl_attr(group, hlattr.bg, no_trans) --[[@as string? ]]
 
-    if v then return v end
+    if v then
+      return v
+    end
   end
 end
 
@@ -184,7 +202,9 @@ end
 ---@return string?
 function M.get_style(groups, no_trans)
   no_trans = not not no_trans
-  if type(groups) ~= "table" then groups = { groups } end
+  if type(groups) ~= "table" then
+    groups = { groups }
+  end
 
   for _, group in ipairs(groups) do
     local hl = M.get_hl(group, no_trans)
@@ -193,7 +213,8 @@ function M.get_style(groups, no_trans)
       local res = {}
 
       for _, attr in ipairs(style_attrs) do
-        if hl[attr] then table.insert(res, attr)
+        if hl[attr] then
+          table.insert(res, attr)
         end
 
         if #res > 0 then
@@ -229,7 +250,9 @@ end
 ---@param groups string|string[] Syntax group name or a list of group names.
 ---@param opt hl.HiSpec
 function M.hi(groups, opt)
-  if type(groups) ~= "table" then groups = { groups } end
+  if type(groups) ~= "table" then
+    groups = { groups }
+  end
 
   for _, group in ipairs(groups) do
     local def_spec = M.hi_spec_to_data(opt)
@@ -271,7 +294,9 @@ function M.hi_link(from, to, opt)
     force = true,
   }) --[[@as hl.HiLinkSpec ]]
 
-  if type(from) ~= "table" then from = { from } end
+  if type(from) ~= "table" then
+    from = { from }
+  end
 
   for _, f in ipairs(from) do
     if opt.clear then
@@ -290,7 +315,7 @@ end
 ---@param groups? string|string[]
 function M.hi_clear(groups)
   if not groups then
-    vim.cmd("hi clear")
+    vim.cmd "hi clear"
     return
   end
 

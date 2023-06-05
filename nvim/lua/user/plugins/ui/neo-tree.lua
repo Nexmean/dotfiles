@@ -13,8 +13,19 @@ return {
 
     vim.g.neo_tree_remove_legacy_commands = 1
     require("neo-tree").setup {
+      sources = {
+        "filesystem",
+        "buffers",
+        "git_status",
+        "document_symbols",
+      },
       filesystem = {
         follow_current_file = true,
+        group_empty_dirs = true,
+      },
+      git_status = {
+        follow_current_file = true,
+        group_empty_dirs = true,
       },
       default_component_configs = {
         modified = {
@@ -45,11 +56,40 @@ return {
           },
         },
       },
+      document_symbols = {
+        follow_cursor = true,
+        kinds = {
+          File = { icon = "󰈙", hl = "Tag" },
+          Namespace = { icon = "󰌗", hl = "Include" },
+          Package = { icon = "󰏖", hl = "Label" },
+          Class = { icon = "󰌗", hl = "Include" },
+          Property = { icon = "󰆧", hl = "@property" },
+          Enum = { icon = "󰒻", hl = "@number" },
+          Function = { icon = "󰊕", hl = "Function" },
+          String = { icon = "󰀬", hl = "String" },
+          Number = { icon = "󰎠", hl = "Number" },
+          Array = { icon = "󰅪", hl = "Type" },
+          Object = { icon = "󰅩", hl = "Type" },
+          Key = { icon = "󰌋", hl = "" },
+          Struct = { icon = "󰌗", hl = "Type" },
+          Operator = { icon = "󰆕", hl = "Operator" },
+          TypeParameter = { icon = "󰊄", hl = "Type" },
+          StaticMethod = { icon = "󰠄 ", hl = "Function" },
+        },
+      },
       source_selector = {
-        winbar = false,
+        winbar = true,
+        sources = {
+          { source = "filesystem", display_name = " 󰉓  " },
+          { source = "buffers", display_name = "   " },
+          { source = "git_status", display_name = "  " },
+          { source = "document_symbols", display_name = " 󰊕 " },
+        },
+        content_layout = "center",
       },
       window = {
-        width = 35,
+        position = "left",
+        width = 40,
         mappings = {
           ["<tab>"] = {
             "toggle_node",

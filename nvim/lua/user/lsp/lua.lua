@@ -31,7 +31,7 @@ require("neodev").setup {
   },
 }
 
-require("lspconfig").sumneko_lua.setup(Config.lsp.create_config {
+require("lspconfig").lua_ls.setup(Config.lsp.create_config {
   cmd = {
     "lua-language-server",
   },

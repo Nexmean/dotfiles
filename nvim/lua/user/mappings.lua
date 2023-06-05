@@ -8,6 +8,7 @@ local defer_call = lazy.defer_call
 local lsp = lazy.require "user.lsp"
 local hop = lazy.require "hop"
 local gs = lazy.require "gitsigns"
+local neotest = lazy.require "neotest"
 
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -33,11 +34,9 @@ return {
   mode = "n", -- default modes
   silent = true,
   nowait = true,
-
   ["<Esc>"] = map { cmd "noh", "stop hlsearch", mode = "n" },
   ["gd"] = map { "<C-]>", "go to", when = ft "help", noremap = true },
-
-  -- MOVEMENTS
+  -- EDITOR
   {
     mode = "n",
     noremap = true,
@@ -80,7 +79,7 @@ return {
     ["gl"] = map { hop.hint_lines, "Hop anywhere" },
     ["gw"] = map { hop.hint_words, "Hop anywhere" },
   },
-
+  ["<leader>u"] = map { cmd "Telescope undo", "undo tree", mode = "n" },
   -- WINDOWS
   {
     mode = { "n", "v" },
@@ -90,9 +89,7 @@ return {
     ["<C-j>"] = map { "<C-w>j", "Window down" },
     ["<C-k>"] = map { "<C-w>k", "Window up" },
   },
-
   ["<C-w><C-w>"] = map { cmd "PickAny", "pick window" },
-
   -- BUFFERS
   ["<leader>b"] = {
     name = "buffers",
@@ -107,7 +104,6 @@ return {
     ["<C-,>"] = map { cmdfn "CybuLastusedNext", "prev buffer" },
     ["<C-.>"] = map { cmdfn "CybuLastusedPrev", "next buffer" },
   },
-
   ["~"] = map { cmd "buffer #", "recent buffer" },
   ["gj"] = map { cmd "Telescope buffers", "list buffers" },
   ["q"] = {
@@ -118,16 +114,14 @@ return {
       bt { "quickfix", "help" },
     },
   },
-
   -- TABS
-  ["<leader>t"] = {
+  ["gt"] = {
     name = "tabs",
 
     n = map { cmd "tabnew", "new tab" },
     x = map { cmd "tabclose", "close tab" },
     t = map { cmd "Telescope telescope-tabs list_tabs", "list tabs" },
   },
-
   ["g1"] = map { cmd "1tabnext", "tab 1" },
   ["g2"] = map { cmd "2tabnext", "tab 2" },
   ["g3"] = map { cmd "3tabnext", "tab 3" },
@@ -137,7 +131,6 @@ return {
   ["g7"] = map { cmd "7tabnext", "tab 7" },
   ["g8"] = map { cmd "8tabnext", "tab 8" },
   ["g9"] = map { cmd "9tabnext", "tab 9" },
-
   -- TERMINAL
   ["<A-i>"] = {
     act = cmdfn "TermToggle",
@@ -145,7 +138,6 @@ return {
     mode = { "i", "n", "v", "t", "x", "c" },
   },
   ["<C-x>"] = map { termcodes "<C-\\><C-N>", "escape terminal mode", mode = "t" },
-
   -- LSP
   {
     mode = "n",
@@ -192,16 +184,29 @@ return {
 
       w = map { cmd "Telescope lsp_dynamic_workspace_symbols", "lsp workspace symbols" },
       d = map { cmd "Telescope lsp_document_symbols", "lsp document symbols" },
-    },
-
-    ["<A-s>"] = {
-      act = cmd "SymbolsOutline",
-      desc = "toggle outline",
-
-      when_extend = ft "Outline",
+      o = map { cmd "Neotree document_symbols", "lsp document symbols" },
+      n = map { cmd "Navbuddy", "lsp navigate symbols" },
     },
   },
 
+  -- TESTS
+  ["<leader>t"] = {
+    mode = "n",
+    name = "tests",
+
+    when = ft { "scala" },
+
+    r = map { neotest.run.run, "run nearest test" },
+    f = {
+      act = function()
+        neotest.run.run(vim.fn.expand "%")
+      end,
+      desc = "run current buffer tests",
+    },
+    o = map { neotest.output_panel.toggle, "toggle tests output" },
+    s = map { neotest.summary.toggle, "toggle tests summary" },
+    x = map { neotest.run.stop, "stop running tests" },
+  },
   -- GIT
   ["<leader>g"] = {
     name = "git",
@@ -211,7 +216,6 @@ return {
     n = map { cmd "Neogit", "neogit" },
     s = map { cmd "Neotree git_status", "git status" },
   },
-
   {
     when = ck.emitted "Gitsigns",
 
@@ -240,13 +244,10 @@ return {
       D = map { defer_call(gs.diffthis, "~"), "diff this" },
     },
   },
-
   ["ih"] = map { ":<C-U>Gitsigns select_hunk<CR>", desc = "Hunk text object", mode = { "o", "x" } },
-
   -- FIND
   ["<C-n>"] = map { cmdfn "Neotree toggle", "toggle neotree", mode = "n" },
   ["<leader>e"] = map { cmdfn "Neotree focus", "focus neotree", mode = "n" },
-
   ["<leader>f"] = {
     name = "find",
 
@@ -270,7 +271,6 @@ return {
       desc = "live grep",
     },
   },
-
   -- HASKELL
   {
     when = ft { "haskell", "cabal" },

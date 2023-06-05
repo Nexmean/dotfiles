@@ -20,6 +20,7 @@ local html_like_ft = {
 return {
   "formatter",
   "indent-blankline",
+  "neotest",
   "nvim-colorizer",
   "pretty-fold",
   "vim-illuminate",
