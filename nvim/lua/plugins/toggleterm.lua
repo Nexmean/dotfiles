@@ -10,7 +10,7 @@ return {
       end
     end,
     shade_terminals = false,
-    on_open = function(term)
+    on_open = function()
       local wins = vim.api.nvim_list_wins()
 
       local neotree_win
@@ -32,4 +32,15 @@ return {
       end
     end,
   },
+
+  config = function(_, opts)
+    require("toggleterm").setup(opts)
+
+    local Terminal = require("toggleterm.terminal").Terminal
+    local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+
+    vim.api.nvim_create_user_command("LazyGitToggle", function()
+      lazygit:toggle()
+    end, {})
+  end,
 }

@@ -235,6 +235,7 @@ return {
         --   x = map({ neotest.run.stop, "stop running tests" }),
         -- },
         -- GIT
+        ["<A-g>"] = map({ cmd("LazyGitToggle"), "toggle LazyGit", mode = { "n", "t" } }),
         ["<leader>g"] = {
           name = "git",
 
