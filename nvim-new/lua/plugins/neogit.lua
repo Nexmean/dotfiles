@@ -1,18 +1,16 @@
 return {
   "TimUntersberger/neogit",
-  dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" },
+  dependencies = { "nvim-lua/plenary.nvim" },
   cmd = { "Neogit" },
 
   config = function()
-    local M = {}
-
-    require("neogit").setup {
+    require("neogit").setup({
       disable_signs = false,
       disable_hint = true,
       disable_context_highlighting = false,
       disable_builtin_notifications = true,
       status = {
-        recent_commit_count = 20,
+        recent_commit_count = 50,
       },
       -- customize displayed signs
       signs = {
@@ -20,9 +18,6 @@ return {
         section = { "", "" },
         item = { "", "" },
         hunk = { "", "" },
-      },
-      integrations = {
-        diffview = true,
       },
       sections = {
         recent = {
@@ -40,18 +35,26 @@ return {
           ["B"] = "BranchPopup",
         },
       },
-    }
-
-    Config.common.au.declare_group("neogit_config", {}, {
-      { "FileType", pattern = "Neogit*", command = "setl nolist" },
-      {
-        { "BufEnter", "FileType" },
-        pattern = "NeogitCommitView",
-        command = "setl eventignore+=CursorMoved",
-      },
-      { "BufLeave", pattern = "NeogitCommitView", command = "setl eventignore-=CursorMoved" },
     })
 
-    Config.plugin.neogit = M
+    local augroup_id = vim.api.nvim_create_augroup("neogit_config", {})
+
+    vim.api.nvim_create_autocmd("FileType", {
+      group = augroup_id,
+      pattern = "Neogit*",
+      command = "setl nolist",
+    })
+
+    vim.api.nvim_create_autocmd({ "BufEnter, FileType" }, {
+      group = augroup_id,
+      pattern = "NeogitCommitView",
+      command = "setl eventignore+=CursorMoved",
+    })
+
+    vim.api.nvim_create_autocmd("BufLeave", {
+      group = augroup_id,
+      pattern = "NeogitCommitView",
+      command = "setl eventignore-=CursorMoved",
+    })
   end,
 }

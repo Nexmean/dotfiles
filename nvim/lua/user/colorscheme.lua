@@ -627,11 +627,6 @@ function M.apply_tweaks()
     M.generate_diff_colors(diff_gen_opt)
   end
 
-  -- Update feline theme
-  if Config.plugin.feline then
-    Config.plugin.feline.current_theme = feline_theme
-  end
-
   -- FloatBorder
   hi("FloatBorder", {
     bg = hl.get_bg "NormalFloat" or "NONE",
@@ -665,50 +660,6 @@ function M.apply_tweaks()
   if M.supports_sp_underline() then
     M.apply_sp_underline()
   end
-  hi_link("barbecue_dirname", "NormalDim200")
-  hi_link({
-    "WinBar",
-    "barbecue_normal",
-    "barbecue_context",
-    "barbecue_basename",
-    "barbecue_dirname",
-    "barbecue_separator",
-    "barbecue_ellipsis",
-    "barbecue_modified",
-    "barbecue_context_file",
-    "barbecue_context_event",
-  }, "Normal")
-  hi_link("barbecue_context_boolean", "@boolean")
-  hi_link("barbecue_context_number", "@number")
-  hi_link("barbecue_context_string", "@string")
-  hi_link("barbecue_context_function", "@function")
-  hi_link("barbecue_context_operator", "@operator")
-  hi_link("barbecue_context_constant", "@constant")
-  hi_link("barbecue_context_null", "@constant.builtin")
-  hi_link("barbecue_context_property", "@property")
-  hi_link("barbecue_context_method", "@method")
-  hi_link("barbecue_context_variable", "@function")
-  hi_link("barbecue_context_field", "@field")
-  hi_link("barbecue_context_key", "@field.lua")
-  hi_link("barbecue_context_event", "@repeat")
-  hi_link({
-    "barbecue_context_namespace",
-    "barbecue_context_module",
-    "barbecue_context_package",
-  }, "@namespace")
-  hi_link({
-    "barbecue_context_struct",
-    "barbecue_context_class",
-    "barbecue_context_enum",
-    "barbecue_context_interface",
-    "barbecue_context_type_parameter",
-  }, "@type")
-  hi_link({
-    "barbecue_context_array",
-    "barbecue_context_object",
-    "barbecue_context_enum_member",
-    "barbecue_context_constructor",
-  }, "@constructor")
 
   -- Custom diff hl
   hi("DiffAddAsDelete", {
@@ -793,10 +744,6 @@ function M.apply_tweaks()
     bg = bg_normal:clone():mod_value(-0.05):to_css(),
     fg = "NONE",
   })
-
-  hi_link("CybuFocus", "CursorLine")
-  hi_link("CybuBackground", "Normal")
-  hi_link("CybuBorder", "Normal")
 
   if Config.plugin.feline then
     Config.plugin.feline.reload()

@@ -1,0 +1,10 @@
+{
+    "workspace.library": [
+        "/Users/al.makarov/.local/share/nvim/lazy/neodev.nvim/types/stable",
+        "/Users/al.makarov/.local/share/bob/v0.9.0/nvim-macos/share/nvim/runtime/lua",
+        "/Users/al.makarov/.local/share/nvim/lazy/caskey.nvim/lua",
+        "/Users/al.makarov/.local/share/nvim/lazy/plenary.nvim/lua",
+        "/Users/al.makarov/dotfiles/nvim-new/lua",
+        "${3rd}/luv/library"
+    ]
+}

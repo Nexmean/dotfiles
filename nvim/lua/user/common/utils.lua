@@ -1,7 +1,7 @@
-local lazy = require("user.lazy")
+local lazy = require "user.lazy"
 
-local async = lazy.require("plenary.async") ---@module "plenary.async"
-local winshift_lib = lazy.require("winshift.lib") ---@module "winshift.lib"
+local async = lazy.require "plenary.async" ---@module "plenary.async"
+local winshift_lib = lazy.require "winshift.lib" ---@module "winshift.lib"
 
 local api = vim.api
 
@@ -14,7 +14,7 @@ local path_sep = package.config:sub(1, 1)
 ---Path lib
 ---@type PathLib
 M.pl = lazy.require("diffview.path", function(m)
-  return m.PathLib({ separator = "/" })
+  return m.PathLib { separator = "/" }
 end)
 
 ---@module "plenary.job"
@@ -30,12 +30,12 @@ end)
 local Job = M.Job
 
 -- Set up completion wrapper used by `vim.ui.input()`
-vim.cmd([[
+vim.cmd [[
   function! Config__ui_input_completion(...) abort
     return luaeval("Config.state.current_completer(
           \ unpack(vim.fn.eval('a:000')))")
   endfunction
-]])
+]]
 
 ---Echo string with multiple lines.
 ---@param msg string|string[]
@@ -57,11 +57,11 @@ function M.echo_multiln(msg, hl, schedule)
 
   for _, line in ipairs(msg) do
     line = line:gsub('"', [[\"]])
-    line = line:gsub('\t', "    ")
+    line = line:gsub("\t", "    ")
     vim.cmd(string.format('echom "%s"', line))
   end
 
-  vim.cmd("echohl None")
+  vim.cmd "echohl None"
 end
 
 ---@param msg string|string[]
@@ -123,7 +123,7 @@ function M.exec_lua(code, ...)
 end
 
 function M.printi(...)
-  local args = vim.tbl_map(function (v)
+  local args = vim.tbl_map(function(v)
     return vim.inspect(v)
   end, M.tbl_pack(...))
   print(M.tbl_unpack(args))
@@ -177,9 +177,7 @@ end
 function M.no_win_event_call(f)
   local last = vim.o.eventignore
   ---@diagnostic disable-next-line: undefined-field
-  vim.opt.eventignore:prepend(
-    "WinEnter,WinLeave,WinNew,WinClosed,BufWinEnter,BufWinLeave,BufEnter,BufLeave"
-  )
+  vim.opt.eventignore:prepend "WinEnter,WinLeave,WinNew,WinClosed,BufWinEnter,BufWinLeave,BufEnter,BufLeave"
   local ok, err = pcall(f)
   vim.opt.eventignore = last
 
@@ -234,7 +232,9 @@ function M.str_right_pad(s, min_size, fill)
   if #s >= min_size then
     return s
   end
-  if not fill then fill = " " end
+  if not fill then
+    fill = " "
+  end
   return s .. string.rep(fill, math.ceil((min_size - #s) / #fill))
 end
 
@@ -242,7 +242,9 @@ function M.str_left_pad(s, min_size, fill)
   if #s >= min_size then
     return s
   end
-  if not fill then fill = " " end
+  if not fill then
+    fill = " "
+  end
   return string.rep(fill, math.ceil((min_size - #s) / #fill)) .. s
 end
 
@@ -250,7 +252,9 @@ function M.str_center_pad(s, min_size, fill)
   if #s >= min_size then
     return s
   end
-  if not fill then fill = " " end
+  if not fill then
+    fill = " "
+  end
   local left_len = math.floor((min_size - #s) / #fill / 2)
   local right_len = math.ceil((min_size - #s) / #fill / 2)
   return string.rep(fill, left_len) .. s .. string.rep(fill, right_len)
@@ -272,7 +276,7 @@ function M.str_quote(s, opt)
     only_if_whitespace = false,
   }) --[[@as utils.StrQuoteSpec ]]
 
-  if opt.only_if_whitespace and not s:find("%s") then
+  if opt.only_if_whitespace and not s:find "%s" then
     return s
   end
 
@@ -319,7 +323,7 @@ function M.str_match(str, patterns)
 end
 
 function M.tbl_pack(...)
-  return { n = select('#',...); ... }
+  return { n = select("#", ...), ... }
 end
 
 function M.tbl_unpack(t, i, j)
@@ -343,7 +347,9 @@ function M.tbl_clone(t)
 end
 
 function M.tbl_deep_clone(t)
-  if not t then return end
+  if not t then
+    return
+  end
   local clone = {}
 
   for k, v in pairs(t) do
@@ -387,7 +393,7 @@ function M.tbl_union_extend(t, ...)
     return sub
   end
 
-  for _, theirs in ipairs({ ... }) do
+  for _, theirs in ipairs { ... } do
     res = recurse(res, theirs)
   end
 
@@ -420,9 +426,8 @@ end
 ---@param table_path string|string[] Either a `.` separated string of table keys, or a list.
 ---@return any?
 function M.tbl_access(t, table_path)
-  local keys = type(table_path) == "table"
-      and table_path
-      or vim.split(table_path, ".", { plain = true })
+  local keys = type(table_path) == "table" and table_path
+    or vim.split(table_path, ".", { plain = true })
 
   local cur = t
 
@@ -442,9 +447,8 @@ end
 ---@param table_path string|string[] Either a `.` separated string of table keys, or a list.
 ---@param value any
 function M.tbl_set(t, table_path, value)
-  local keys = type(table_path) == "table"
-      and table_path
-      or vim.split(table_path, ".", { plain = true })
+  local keys = type(table_path) == "table" and table_path
+    or vim.split(table_path, ".", { plain = true })
 
   local cur = t
 
@@ -465,9 +469,8 @@ end
 ---@param t table
 ---@param table_path string|string[] Either a `.` separated string of table keys, or a list.
 function M.tbl_ensure(t, table_path)
-  local keys = type(table_path) == "table"
-      and table_path
-      or vim.split(table_path, ".", { plain = true })
+  local keys = type(table_path) == "table" and table_path
+    or vim.split(table_path, ".", { plain = true })
 
   if not M.tbl_access(t, keys) then
     M.tbl_set(t, keys, {})
@@ -513,7 +516,7 @@ end
 ---@return vector
 function M.vec_join(...)
   local result = {}
-  local args = {...}
+  local args = { ... }
   local c = 0
 
   for i = 1, select("#", ...) do
@@ -538,19 +541,19 @@ end
 ---@return vector
 function M.vec_union(...)
   local result = {}
-  local args = {...}
+  local args = { ... }
   local seen = {}
 
   for i = 1, select("#", ...) do
     if type(args[i]) ~= "nil" then
       if type(args[i]) ~= "table" and not seen[args[i]] then
         seen[args[i]] = true
-        result[#result+1] = args[i]
+        result[#result + 1] = args[i]
       else
         for _, v in ipairs(args[i]) do
           if not seen[v] then
             seen[v] = true
-            result[#result+1] = v
+            result[#result + 1] = v
           end
         end
       end
@@ -564,13 +567,13 @@ end
 ---@param ... vector
 ---@return vector
 function M.vec_diff(...)
-  local args = {...}
+  local args = { ... }
   local seen = {}
 
   for i = 1, select("#", ...) do
     if type(args[i]) ~= "nil" then
       if type(args[i]) ~= "table" then
-        if i == 1  then
+        if i == 1 then
           seen[args[i]] = true
         elseif seen[args[i]] then
           seen[args[i]] = nil
@@ -595,7 +598,7 @@ end
 ---@return vector
 function M.vec_symdiff(...)
   local result = {}
-  local args = {...}
+  local args = { ... }
   local seen = {}
 
   for i = 1, select("#", ...) do
@@ -612,7 +615,7 @@ function M.vec_symdiff(...)
 
   for v, state in pairs(seen) do
     if state == 1 then
-      result[#result+1] = v
+      result[#result + 1] = v
     end
   end
 
@@ -638,7 +641,7 @@ end
 ---@param t vector
 ---@return vector t
 function M.vec_push(t, ...)
-  for _, v in ipairs({...}) do
+  for _, v in ipairs { ... } do
     t[#t + 1] = v
   end
   return t
@@ -712,7 +715,7 @@ function M.system_list(cmd, cwd_or_opt)
     stdout, code = job:sync()
     empty = not (stdout[1] and stdout[1] ~= "")
 
-    if (code ~= 0 or not empty) then
+    if code ~= 0 or not empty then
       break
     end
   end
@@ -747,7 +750,7 @@ function M.list_bufs(opt)
     for _, winid in ipairs(wins) do
       bufnr = api.nvim_win_get_buf(winid)
       if not seen[bufnr] then
-        bufs[#bufs+1] = bufnr
+        bufs[#bufs + 1] = bufnr
       end
       seen[bufnr] = true
     end
@@ -818,7 +821,7 @@ function M.get_unique_file_bufname(filename)
 
   local collisions = vim.tbl_map(function(bufnr)
     return api.nvim_buf_get_name(bufnr)
-  end, M.vec_union(M.list_bufs({ listed = true }), M.list_bufs({ no_hidden = true })))
+  end, M.vec_union(M.list_bufs { listed = true }, M.list_bufs { no_hidden = true }))
 
   collisions = vim.tbl_filter(function(name)
     return name ~= filename and vim.fn.fnamemodify(name, ":t") == basename
@@ -891,7 +894,7 @@ end
 
 function M.clear_prompt()
   vim.api.nvim_echo({ { "" } }, false, {})
-  vim.cmd("redraw")
+  vim.cmd "redraw"
 end
 
 ---@class InputCharSpec
@@ -944,7 +947,9 @@ function M.input_char(prompt, opt)
       end
     end
 
-    if valid or not opt.loop then break end
+    if valid or not opt.loop then
+      break
+    end
   end
 
   if not valid then
@@ -988,10 +993,7 @@ end
 function M.confirm(prompt, opt)
   local ok, s = pcall(
     M.input_char,
-    ("%s %s: "):format(
-      prompt,
-      opt.default and "[Y/n]" or "[y/N]"
-    ),
+    ("%s %s: "):format(prompt, opt.default and "[Y/n]" or "[y/N]"),
     { filter = "[yYnN\27\r]", loop = true }
   )
 
@@ -1000,12 +1002,17 @@ function M.confirm(prompt, opt)
   if not ok then
     opt.callback(false)
   else
-    if s == "\27" then opt.callback(false); return end
+    if s == "\27" then
+      opt.callback(false)
+      return
+    end
     local value = ({
       y = true,
       n = false,
     })[(s or ""):lower()]
-    if value == nil then value = opt.default end
+    if value == nil then
+      value = opt.default
+    end
     opt.callback(value)
   end
 end
@@ -1016,7 +1023,7 @@ end
 
 ---@param msg? string
 function M.pause(msg)
-  vim.cmd("redraw")
+  vim.cmd "redraw"
   M.input_char(
     "-- PRESS ANY KEY TO CONTINUE -- " .. (msg or ""),
     { allow_non_ascii = true, prompt_hl = "Directory" }
@@ -1069,7 +1076,6 @@ function M.set_local(winids, option_map, opt)
 
         if o.method == "set" then
           vim.opt_local[option] = value
-
         else
           if o.method == "remove" then
             if is_list_like then
@@ -1077,14 +1083,12 @@ function M.set_local(winids, option_map, opt)
             else
               vim.opt_local[fullname]:remove(value)
             end
-
           elseif o.method == "append" then
             if is_list_like then
               vim.opt_local[fullname] = ("%s%s"):format(cur_value ~= "" and cur_value .. ",", value)
             else
               vim.opt_local[fullname]:append(value)
             end
-
           elseif o.method == "prepend" then
             if is_list_like then
               vim.opt_local[fullname] = ("%s%s%s"):format(
@@ -1161,7 +1165,7 @@ function M.set_cursor(winid, line, column)
 
   pcall(api.nvim_win_set_cursor, winid, {
     M.clamp(line or 1, 1, api.nvim_buf_line_count(bufnr)),
-    math.max(0, column or 0)
+    math.max(0, column or 0),
   })
 end
 
@@ -1197,16 +1201,30 @@ function M.cmdfn(command)
 end
 
 function M.dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k,v in pairs(o) do
-       if type(k) ~= 'number' then k = '"'..k..'"' end
-       s = s .. '['..k..'] = ' .. M.dump(v) .. ','
+  if type(o) == "table" then
+    local s = "{ "
+    for k, v in pairs(o) do
+      if type(k) ~= "number" then
+        k = '"' .. k .. '"'
+      end
+      s = s .. "[" .. k .. "] = " .. M.dump(v) .. ","
     end
-    return s .. '} '
+    return s .. "} "
   else
     return tostring(o)
   end
+end
+
+function M.fg(name)
+  ---@type {foreground?:number}?
+  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name })
+    or vim.api.nvim_get_hl_by_name(name, true)
+  local fg = hl and hl.fg or hl.foreground
+  return fg and { fg = string.format("#%06x", fg) }
+end
+
+function M.has(plugin)
+  return require("lazy.core.config").plugins[plugin] ~= nil
 end
 
 return M

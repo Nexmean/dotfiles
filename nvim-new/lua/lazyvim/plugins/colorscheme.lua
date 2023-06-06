@@ -1,16 +1,13 @@
 return {
-  { "rktjmp/lush.nvim" },
-  { "arzg/vim-colors-xcode" },
-  { "sainnhe/gruvbox-material" },
-  { "gruvbox-community/gruvbox" },
-  { "folke/tokyonight.nvim" },
-  { "sindrets/material.nvim" },
-  { "sindrets/rose-pine-neovim", name = "rose-pine" },
-  { "mcchrish/zenbones.nvim", dependencies = "rktjmp/lush.nvim" },
-  { "sainnhe/everforest" },
-  { "Cybolic/palenight.vim" },
-  { "olimorris/onedarkpro.nvim", branch = "main" },
-  { "NTBBloodbath/doom-one.nvim" },
+
+  -- tokyonight
+  {
+    "folke/tokyonight.nvim",
+    lazy = true,
+    opts = { style = "moon" },
+  },
+
+  -- catppuccin
   {
     "catppuccin/nvim",
     name = "catppuccin",
@@ -44,11 +41,4 @@ return {
       },
     },
   },
-  { "sindrets/dracula-vim", name = "dracula" },
-  { "projekt0n/github-nvim-theme" },
-  { "rebelot/kanagawa.nvim" },
-  { "sindrets/oxocarbon-lua.nvim" },
-  { "nyoom-engineering/oxocarbon.nvim" },
-  { "EdenEast/nightfox.nvim" },
-  { "kvrohit/mellow.nvim" },
 }
