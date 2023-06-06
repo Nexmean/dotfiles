@@ -1,5 +1,0 @@
-return {
-  "diffview",
-  "gitsigns",
-  "neogit",
-}
