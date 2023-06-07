@@ -63,13 +63,13 @@ return {
           ["g#"] = map([[g#<Cmd>lua require('hlslens').start()<CR>]]),
         },
         {
-          mode = { "i", "t", "c" },
+          mode = { "i", "c" },
 
           ["<C-a>"] = map({ "<Home>", "Beginning of line" }),
           ["<C-e>"] = map({ "<End>", "End of line" }),
           ["<C-f>"] = map({ "<Right>", "Move forward" }),
           ["<C-b>"] = map({ "<Left>", "Move back" }),
-          ["<C-d>"] = map({ "<Delete>", "Delete next character", mode = { "i", "c" } }),
+          ["<C-d>"] = map({ "<Delete>", "Delete next character" }),
         },
         {
           mode = { "n", "v", "x" },
@@ -158,7 +158,13 @@ return {
         ["g7"] = map({ cmd("7tabnext"), "tab 7" }),
         ["g8"] = map({ cmd("8tabnext"), "tab 8" }),
         ["g9"] = map({ cmd("9tabnext"), "tab 9" }),
+
         -- TERMINAL
+        ["<A-p>"] = {
+          act = cmd("MprocsToggle"),
+          desc = "toggle mprocs",
+          mode = { "i", "n", "v", "t", "x", "c" },
+        },
         ["<A-i>"] = {
           act = cmdfn("ToggleTerm"),
           desc = "toggle terminal",

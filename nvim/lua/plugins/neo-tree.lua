@@ -26,6 +26,15 @@ return {
         git_status = {
           follow_current_file = true,
           group_empty_dirs = true,
+          window = {
+            mappings = {
+              ["o"] = function(state)
+                local fs_commands = require("neo-tree.sources.filesystem.commands")
+                fs_commands.open(state)
+                vim.cmd("Gitsigns diffthis")
+              end,
+            },
+          },
         },
         default_component_configs = {
           modified = {
