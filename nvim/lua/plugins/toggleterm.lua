@@ -24,6 +24,7 @@ local horizontal_on_open = function()
       local width_before = vim.api.nvim_win_get_width(0)
       vim.cmd("wincmd H")
       vim.cmd("vertical resize " .. width_before)
+      vim.cmd("wincmd =")
     end)
   end
 end

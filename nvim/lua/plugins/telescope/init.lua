@@ -31,7 +31,7 @@ return {
           height = config.resolve_height(0.9),
           width = config.resolve_width({ 0.9, max = 150 }),
           preview_cutoff = 30,
-          preview_height = config.resolve_height(0.4),
+          preview_height = 0.4,
         },
       })
 
@@ -57,7 +57,7 @@ return {
           layout_config = {
             height = 0.9,
             width = { 0.9, max = 150 },
-            preview_height = 0.4,
+            -- preview_height = 0.4,
           },
           path_display = {
             "absolute",

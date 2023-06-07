@@ -106,12 +106,6 @@ return {
           n = map({ cmd("enew"), "new buffer" }),
           x = map({ cmd("BRemove"), "close buffer" }),
         },
-        {
-          mode = { "n", "v", "i" },
-
-          ["<C-,>"] = map({ cmdfn("CybuLastusedNext"), "prev buffer" }),
-          ["<C-.>"] = map({ cmdfn("CybuLastusedPrev"), "next buffer" }),
-        },
         ["~"] = map({ cmd("buffer #"), "recent buffer" }),
         ["gj"] = map({
           function()

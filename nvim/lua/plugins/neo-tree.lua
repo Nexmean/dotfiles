@@ -108,6 +108,17 @@ return {
           },
         },
       })
+
+      local neotree_group = vim.api.nvim_create_augroup("neo-tree-user", {})
+
+      vim.api.nvim_create_autocmd("WinResized", {
+        group = neotree_group,
+        callback = function(e)
+          if vim.api.nvim_buf_get_option(e.buf, "filetype") == "neo-tree" then
+            vim.cmd("wincmd =")
+          end
+        end,
+      })
     end,
   },
 }
