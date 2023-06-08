@@ -166,7 +166,7 @@ end)
 
 return {
   font = wezterm.font "JetbrainsMono Nerd Font",
-  font_size = 16,
+  font_size = 17,
   color_scheme = "Catppuccin Mocha",
   default_cursor_style = "SteadyBar",
   window_padding = {

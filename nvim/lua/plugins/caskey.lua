@@ -92,10 +92,10 @@ return {
         {
           mode = { "n", "v" },
 
-          ["<C-h>"] = map({ "<C-w>h", "Window left" }),
-          ["<C-l>"] = map({ "<C-w>l", "Window right" }),
-          ["<C-j>"] = map({ "<C-w>j", "Window down" }),
-          ["<C-k>"] = map({ "<C-w>k", "Window up" }),
+          ["<C-h>"] = map({ cmd("TmuxNavigateLeft"), "Window left" }),
+          ["<C-l>"] = map({ cmd("TmuxNavigateRight"), "Window right" }),
+          ["<C-j>"] = map({ cmd("TmuxNavigateDown"), "Window down" }),
+          ["<C-k>"] = map({ cmd("TmuxNavigateUp"), "Window up" }),
         },
         ["<C-w><C-w>"] = map({ cmd("PickAny"), "pick window" }),
         -- BUFFERS
