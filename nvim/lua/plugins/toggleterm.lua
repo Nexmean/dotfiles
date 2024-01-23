@@ -9,12 +9,18 @@ end
 local horizontal_on_open = function()
   local wins = vim.api.nvim_list_wins()
 
-  local neotree_win
+  local neotree_win, overseer_win
   for _, win in ipairs(wins) do
     local buf = vim.api.nvim_win_get_buf(win)
     local win_ft = vim.api.nvim_buf_get_option(buf, "filetype")
     if win_ft == "neo-tree" then
       neotree_win = win
+    elseif win_ft == "OverseerList" then
+      overseer_win = win
+      vim.notify("Found OverseerList", vim.log.levels.INFO)
+    end
+
+    if neotree_win ~= nil and overseer_win ~= nil then
       break
     end
   end
@@ -26,6 +32,10 @@ local horizontal_on_open = function()
       vim.cmd("vertical resize " .. width_before)
       vim.cmd("wincmd =")
     end)
+  end
+
+  if overseer_win ~= nil then
+    vim.cmd("OverseerClose")
   end
 end
 

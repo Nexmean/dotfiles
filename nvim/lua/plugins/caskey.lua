@@ -57,10 +57,6 @@ return {
           --   vim.cmd([[execute('normal! ' . v:count1 . 'N')]])
           --   require("hlslens").start()
           -- end),
-          ["*"] = map([[*<Cmd>lua require('hlslens').start()<CR>]]),
-          ["#"] = map([[#<Cmd>lua require('hlslens').start()<CR>]]),
-          ["g*"] = map([[g*<Cmd>lua require('hlslens').start()<CR>]]),
-          ["g#"] = map([[g#<Cmd>lua require('hlslens').start()<CR>]]),
         },
         {
           mode = { "i", "c" },
@@ -290,7 +286,7 @@ return {
                 require("telescope").extensions.live_grep_args.live_grep_args()
               end,
               v = function()
-                local selected_text = require("user.common.selection").get_visual_selection()
+                local selected_text = require("util.selection").get_visual_selection()
                 require("telescope").extensions.live_grep_args.live_grep_args({
                   default_text = selected_text,
                 })
@@ -323,6 +319,14 @@ return {
             end,
             desc = "quit GHCi",
           },
+        },
+
+        -- Tasks
+        ["<leader>t"] = {
+          name = "tasks",
+
+          ["r"] = map({ cmd("OverseerRun"), "run task" }),
+          ["t"] = map({ cmd("OverseerToggle"), "toggle tasks" }),
         },
       })
     end,

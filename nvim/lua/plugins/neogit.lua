@@ -1,5 +1,5 @@
 return {
-  "TimUntersberger/neogit",
+  "NeogitOrg/neogit",
   dependencies = { "nvim-lua/plenary.nvim" },
   cmd = { "Neogit" },
 
@@ -31,8 +31,8 @@ return {
       mappings = {
         -- modify status buffer mappings
         status = {
-          -- Adds a mapping with "B" as key that does the "BranchPopup" command
-          ["B"] = "BranchPopup",
+          -- -- Adds a mapping with "B" as key that does the "BranchPopup" command
+          -- ["B"] = "BranchPopup",
         },
       },
     })

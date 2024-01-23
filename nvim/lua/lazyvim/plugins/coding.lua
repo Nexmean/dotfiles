@@ -40,6 +40,28 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
+      {
+        {
+          "tzachar/cmp-tabnine",
+          build = "./install.sh",
+          opts = {
+            max_lines = 1000,
+            max_num_results = 20,
+            sort = true,
+            run_on_every_keystroke = true,
+            snippet_placeholder = "..",
+            ignored_file_types = {
+              -- default is not to ignore
+              -- uncomment to ignore in lua:
+              -- lua = true
+            },
+            show_prediction_strength = false,
+          },
+          config = function(_, opts)
+            require("cmp_tabnine.config"):setup(opts)
+          end,
+        },
+      },
     },
     opts = function()
       local cmp = require("cmp")
@@ -67,6 +89,7 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
+          { name = "cmp_tabnine" },
           { name = "luasnip" },
           { name = "git" },
           { name = "buffer" },
@@ -91,6 +114,14 @@ return {
     config = function(_, opts)
       local cmp = require("cmp")
       cmp.setup(opts)
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          { name = "cmdline" },
+        }),
+      })
       cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {

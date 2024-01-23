@@ -20,12 +20,12 @@ return {
         },
         filesystem = {
           follow_current_file = true,
-          group_empty_dirs = true,
+          group_empty_dirs = false,
           use_libuv_file_watcher = true,
         },
         git_status = {
           follow_current_file = true,
-          group_empty_dirs = true,
+          group_empty_dirs = false,
           window = {
             mappings = {
               ["o"] = function(state)

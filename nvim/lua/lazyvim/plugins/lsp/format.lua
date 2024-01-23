@@ -21,6 +21,10 @@ end
 
 ---@param opts? {force?:boolean}
 function M.format(opts)
+  if vim.o.ft == "cabal" or vim.o.ft == "haskell" then
+    return
+  end
+
   local buf = vim.api.nvim_get_current_buf()
   if vim.b.autoformat == false and not (opts and opts.force) then
     return

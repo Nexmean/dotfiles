@@ -6,7 +6,7 @@ return {
       "nvim-telescope/telescope.nvim", -- optional
       "mfussenegger/nvim-dap",
     },
-    branch = "1.x.x", -- recommended
+    branch = "2.x.x", -- recommended
     ft = { "haskell", "cabal" },
     opts = function()
       return {
@@ -76,7 +76,7 @@ return {
             haskell = { -- haskell-language-server options
               formattingProvider = "fourmolu",
               -- Setting this to true could have a performance impact on large mono repos.
-              checkProject = true,
+              checkProject = false,
               -- ...
             },
           },
@@ -85,7 +85,7 @@ return {
     end,
     config = function(_, opts)
       -- defaults
-      require("haskell-tools").start_or_attach(opts)
+      vim.g.haskell_tools = opts
     end,
   },
 }
