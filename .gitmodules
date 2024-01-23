@@ -4,3 +4,6 @@
 [submodule "deps/kitty-themes"]
 	path = deps/kitty-themes
 	url = git@github.com:kovidgoyal/kitty-themes.git
+[submodule "deps/nu_plugin_bash_env"]
+	path = deps/nu_plugin_bash_env
+	url = git@github.com:tesujimath/nu_plugin_bash_env.git
