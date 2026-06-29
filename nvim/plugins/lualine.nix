@@ -1,6 +1,7 @@
 { icons, ... }:
 {
   extraFiles."lua/plugins/lualine/branch.lua".source = ./lualine/branch.lua;
+  extraFiles."lua/plugins/lualine/macro_recording.lua".source = ./lualine/macro_recording.lua;
 
   plugins.lualine = {
     enable = true;
@@ -48,21 +49,12 @@
           end
         end
 
-        -- Refresh lualine when starting/stopping macro recording.
-        vim.api.nvim_create_autocmd("RecordingEnter", {
-          callback = function()
-            pcall(require("lualine").refresh)
-          end,
-        })
-
-        vim.api.nvim_create_autocmd("RecordingLeave", {
-          callback = function()
-            -- reg_recording() clears slightly after the event.
-            vim.defer_fn(function()
-              pcall(require("lualine").refresh)
-            end, 50)
-          end,
-        })
+        do
+          local ok, mod = pcall(require, "plugins.lualine.macro_recording")
+          if ok and mod and mod.setup then
+            mod.setup()
+          end
+        end
 
         vim.api.nvim_create_autocmd("User", {
           pattern = "DirenvLoaded",
@@ -95,12 +87,12 @@
         globalstatus = true;
         # Use slanted Powerline separators instead of arrow ones.
         section_separators = {
-          left = "";
-          right = "";
+          left = "";
+          right = "▐";
         };
         component_separators = {
-          left = "";
-          right = "";
+          left = "";
+          right = "·";
         };
         disabled_filetypes.statusline = [
           "dashboard"
@@ -135,7 +127,7 @@
                 return vim.fn.fnamemodify(root, ":t")
               end
             '';
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#%*";
           }
           {
             __unkeyed-1 = "diagnostics";
@@ -145,7 +137,7 @@
               info = icons.diagnostics.Info;
               hint = icons.diagnostics.Hint;
             };
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#%*";
           }
           {
             __unkeyed-1 = "filetype";
@@ -232,7 +224,7 @@
               left = 0;
               right = 1;
             };
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#%*";
           }
           {
             __unkeyed-1 = "diff";
@@ -267,12 +259,12 @@
           {
             __unkeyed-1.__raw = ''
               function()
-                local reg = vim.fn.reg_recording()
-                if reg == "" then return "" end
-                return "%#@error#󰑋 " .. reg .. "%*"
+                local ok, mod = pcall(require, "plugins.lualine.macro_recording")
+                if not ok or not mod or not mod.component then return "" end
+                return mod.component()
               end
             '';
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#·%*";
           }
           {
             __unkeyed-1 = "lsp_status";
@@ -295,7 +287,7 @@
             };
             ignore_lsp = { };
             show_name = true;
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#·%*";
           }
           {
             __unkeyed-1.__raw = ''
@@ -305,7 +297,7 @@
                 return direnv.statusline()
               end
             '';
-            separator = "%#LualineCSeparator#%*";
+            separator = "%#LualineCSeparator#·%*";
           }
         ];
 
