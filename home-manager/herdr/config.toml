@@ -5,34 +5,30 @@ name = "terminal"
 [ui]
 agent_panel_scope = "all"
 prompt_new_tab_name = false
-
+sidebar_collapsed_mode = "hidden"
 show_agent_labels_on_pane_borders = true
 agent_panel_sort = "priority"
-[keys]
-switch_tab = "prefix+1..9"
-switch_workspace = "prefix+ctrl+1..9"
-focus_agent = "prefix+alt+1..9"
 
 [[keys.command]]
-key = "ctrl+h"
+key = ["ctrl+h", "ctrl+р"]
 type = "plugin_action"
 command = "vim-herdr-navigation.left"
 description = "navigate left (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+j"
+key = ["ctrl+j", "ctrl+о"]
 type = "plugin_action"
 command = "vim-herdr-navigation.down"
 description = "navigate down (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+k"
+key = ["ctrl+k", "ctrl+л"]
 type = "plugin_action"
 command = "vim-herdr-navigation.up"
 description = "navigate up (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+l"
+key = ["ctrl+l", "ctrl+д"]
 type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
@@ -43,3 +39,38 @@ delivery = "herdr"
 [experimental]
 switch_ascii_input_source_in_prefix = true
 pane_history = true
+
+[keys]
+prefix = "ctrl+space"
+switch_tab = "prefix+1..9"
+switch_workspace = "prefix+ctrl+1..9"
+focus_agent = "prefix+alt+1..9"
+
+detach = ["prefix+q", "prefix+й"]
+workspace_picker = ["prefix+w", "prefix+ц"]
+goto = ["prefix+g", "prefix+п"]
+new_workspace = ["prefix+shift+n", "prefix+shift+т"]
+new_worktree = ["prefix+shift+g", "prefix+shift+п"]
+rename_workspace = ["prefix+shift+w", "prefix+shift+ц"]
+close_workspace = ["prefix+shift+d", "prefix+shift+в"]
+remote_image_paste = "ctrl+v"
+new_tab = ["prefix+c", "prefix+с"]
+previous_tab = ["prefix+p", "prefix+з"]
+next_tab = ["prefix+n", "prefix+т"]
+rename_tab = ["prefix+shift+t", "prefix+shift+е"]
+close_tab = ["prefix+shift+x", "prefix+shift+ч"]
+copy_mode = ["prefix+[", "prefix+х"]
+focus_pane_left = ["prefix+h", "prefix+р"]
+focus_pane_down = ["prefix+j", "prefix+о"]
+focus_pane_up = ["prefix+k", "prefix+л"]
+focus_pane_right = ["prefix+l", "prefix+д"]
+swap_pane_left = ["prefix+shift+h", "prefix+shift+р"]
+swap_pane_down = ["prefix+shift+j", "prefix+shift+о"]
+swap_pane_up = ["prefix+shift+k", "prefix+shift+л"]
+swap_pane_right = ["prefix+shift+l", "prefix+shift+д"]
+split_vertical = ["prefix+v", "prefix+м"]
+split_horizontal = "prefix+minus"
+close_pane = ["prefix+x", "prefix+ч"]
+zoom = ["prefix+z", "prefix+я"]
+resize_mode = ["prefix+r", "prefix+к"]
+toggle_sidebar = ["prefix+b", "prefix+и"]
