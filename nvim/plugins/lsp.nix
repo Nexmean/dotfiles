@@ -7,10 +7,26 @@
 }:
 let
   nixvimLib = nvimInputs.nixvim.lib;
+  spec42 = nvimInputs.spec42.packages.${pkgs.stdenv.hostPlatform.system}.default or null;
 
   virtualTypes = pkgs.vimUtils.buildVimPlugin {
     name = "virtual-types-nvim";
     src = nvimInputs.plugins-virtual-types-nvim;
+  };
+
+  quintLanguageServer = pkgs.buildNpmPackage {
+    pname = "quint-language-server";
+    version = "0.19.0";
+    src = "${pkgs.quint.src}/vscode/quint-vscode/server";
+    npmDepsHash = "sha256-BT5KN9E5aRUIJQR0zGlT00tDmRpS2oFF/yOdQOPIGgQ=";
+    npmBuildScript = "compile";
+    postPatch = ''
+      substituteInPlace src/complete.ts \
+        --replace-fail "import { MarkupContent } from 'vscode-languageclient'" "" \
+        --replace-fail \
+          "import { CompletionItem, CompletionItemKind, MarkupKind, Position } from 'vscode-languageserver/node'" \
+          "import { CompletionItem, CompletionItemKind, MarkupContent, MarkupKind, Position } from 'vscode-languageserver/node'"
+    '';
   };
 in
 {
@@ -35,6 +51,7 @@ in
     enable = true;
     servers = {
       bashls.enable = true;
+      just.enable = true;
       jsonls.enable = true;
       lua_ls = {
         enable = true;
@@ -180,6 +197,46 @@ in
       end
     '';
   };
+
+  lsp.servers.quint = {
+    enable = true;
+    package = quintLanguageServer;
+    config = {
+      cmd = [
+        "quint-language-server"
+        "--stdio"
+      ];
+      filetypes = [ "quint" ];
+      root_dir.__raw = ''
+        function(bufnr, on_dir)
+          on_dir(vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+        end
+      '';
+    };
+  };
+
+  lsp.servers.spec42 = lib.mkIf (spec42 != null) {
+    enable = true;
+    package = spec42;
+    config = {
+      cmd = [
+        "spec42"
+        "lsp"
+      ];
+      filetypes = [
+        "sysml"
+        "kerml"
+      ];
+      root_dir.__raw = ''
+        function(bufnr, on_dir)
+          local path = vim.api.nvim_buf_get_name(bufnr)
+          on_dir(vim.fs.root(path, { "sysand.toml", "sysand.lock", ".git" }) or vim.fs.dirname(path))
+        end
+      '';
+    };
+  };
+
+  filetype.extension.kerml = "kerml";
 
   # Global keymaps related to LSP
   keymaps = [

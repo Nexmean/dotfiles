@@ -39,15 +39,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    spec42 = {
+      url = "path:./spec42";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nvim = {
       url = "path:./nvim";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixvim.inputs.nixpkgs.follows = "nixpkgs";
+      inputs.spec42.follows = "spec42";
     };
 
     agents = {
       url = "path:./agents";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.spec42.follows = "spec42";
     };
   };
 

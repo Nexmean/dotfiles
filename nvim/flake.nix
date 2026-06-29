@@ -15,6 +15,11 @@
       inputs.nixvim.follows = "nixvim";
     };
 
+    spec42 = {
+      url = "path:../spec42";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Plugins not in nixpkgs
     plugins-opencode-nvim = {
       url = "github:nickjvandyke/opencode.nvim";

@@ -5,9 +5,10 @@ darwin-rebuild-switch:
 home-manager-switch:
   nix run .#home-manager -- switch --flake .
 
-update: update-flakes update-opencode-vim
+update: update-opencode-vim update-spec42 update-flakes
 
 update-flakes:
+  nix flake update --flake ./spec42
   nix flake update --flake ./agents
   nix flake update --flake ./nvim
   nix flake update --flake .
@@ -29,11 +30,11 @@ switch TARGET="":
   just setup-shell
 
 [linux]
-upgrade: update-flakes update-opencode-vim
+upgrade: update-opencode-vim update-spec42 update-flakes
   just switch
 
 [macos]
-upgrade: update-flakes update-opencode-vim
+upgrade: update-opencode-vim update-spec42 update-flakes
   just switch
   brew update
   brew upgrade
@@ -96,6 +97,9 @@ update-opencode-vim:
   mv "$hashes_json" "$hashes_file"
 
   printf 'Updated opencode-vim to %s in %s\n' "$version" "$hashes_file"
+
+update-spec42:
+  ./spec42/update.sh
 
 setup-shell:
   #!/usr/bin/env sh
