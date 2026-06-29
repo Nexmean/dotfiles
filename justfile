@@ -5,6 +5,8 @@ darwin-rebuild-switch:
 home-manager-switch:
   nix run .#home-manager -- switch --flake .
 
+update: update-flakes update-opencode-vim
+
 update-flakes:
   nix flake update --flake ./agents
   nix flake update --flake ./nvim

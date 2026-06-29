@@ -43,7 +43,6 @@ in
   home.file."${configDir}/instructions/base.md".source = ./opencode/instructions/base.md;
   home.file."${configDir}/instructions/subagent-json-format.md".source =
     ./opencode/instructions/subagent-json-format.md;
-  programs.bun.enable = true; # need for plannotator
 
   programs.opencode = {
     enable = true;

@@ -24,6 +24,11 @@
       flake = false;
     };
 
+    crit = {
+      url = "github:tomasz-tomczyk/crit";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     openspecSchemas = {
       url = "github:intent-driven-dev/openspec-schemas";
       flake = false;
@@ -50,6 +55,7 @@
           codegraph
           openspec
           qmd
+          inputs.crit.packages.${system}.default
         ];
       };
     in

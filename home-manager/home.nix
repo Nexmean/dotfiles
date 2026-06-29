@@ -57,8 +57,8 @@ in
           -e APPLE_CONTAINER_MACHINE=1
       ''
     ))
-    pkgs.bat
     pkgs.bash-language-server
+    pkgs.bat
     pkgs.bottom
     pkgs.bun
     pkgs.devcontainer
@@ -69,12 +69,13 @@ in
     pkgs.gnumake
     pkgs.htop
     pkgs.hydra-check
+    pkgs.jetbrains-mono
     pkgs.jiq
     pkgs.jless
     pkgs.jq
     pkgs.kind
     pkgs.kubectl
-    pkgs.jetbrains-mono
+    pkgs.lumen
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.nerd-fonts.symbols-only
     pkgs.nixd
@@ -192,6 +193,7 @@ in
     enable = true;
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
+    historyWidget.command = "";
   };
 
   programs.git = {
