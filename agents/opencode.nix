@@ -39,6 +39,8 @@ in
   home.file."${configDir}/instructions/base.md".source = ./opencode/instructions/base.md;
   home.file."${configDir}/instructions/subagent-json-format.md".source =
     ./opencode/instructions/subagent-json-format.md;
+  home.file."${configDir}/plugins/arcadia-search-guard.ts".source =
+    ./opencode/plugins/arcadia-search-guard.ts;
 
   programs.opencode = {
     enable = true;
@@ -135,29 +137,6 @@ in
           type = "local";
           enabled = true;
           command = [ "${spec42}/bin/spec42-mcp" ];
-        };
-
-        vision = {
-          type = "local";
-          enabled = true;
-          command = [
-            "npx"
-            "-y"
-            "@z_ai/mcp-server"
-          ];
-          environment = {
-            Z_AI_MODE = "ZAI";
-            Z_AI_API_KEY = "{file:${config.sops.secrets.zai-api-key.path}}";
-          };
-        };
-
-        zread = {
-          type = "remote";
-          enabled = true;
-          url = "https://api.z.ai/api/mcp/zread/mcp";
-          headers = {
-            Authorization = "Bearer {file:${config.sops.secrets.zai-api-key.path}}";
-          };
         };
       };
 
