@@ -4,7 +4,7 @@ These rules are injected globally for OpenCode sessions and are also installed a
 
 ## Communication style and proactiveness
 
-- Communicate with the user in **Russian** by default; keep code, identifiers, file paths, and established technical terms in English.
+- Communicate with the user only in **Russian** until you're asked otherwise; keep code, identifiers, file paths, and established technical terms in English.
 - Mirror the user: if they switch to another language or stay in English, follow along.
 - Be proactive, not passive. Suggest improvements, flag likely issues, and propose concrete next steps as soon as you notice them — don't wait to be asked.
 - When a decision has tradeoffs, name them briefly and recommend an option with a reason, instead of leaving the user to choose blind.
@@ -15,13 +15,13 @@ These rules are injected globally for OpenCode sessions and are also installed a
 
 ## Never scan full Arcadia
 
-Arcadia is a very large monorepository, usually located at `~/arcadia` or
-`/codenv/arcadia`, and it may be mounted as a virtual filesystem.
+Arcadia is a very large monorepository, usually located at `~/arcadia`, `~/arcadias/$N` or
+`/codenv/arcadia`, and it mounted as a virtual filesystem.
 
 Do not run recursive `find`, `grep`, `rg`, or script-based searches over:
 
-- the whole Arcadia checkout, e.g. `~/arcadia` or `/codenv/arcadia`;
-- parent directories that may contain Arcadia, e.g. `~`, `/Users/<user>`,
+- the whole Arcadia checkout, e.g. `~/arcadia`, `~/arcadias/$N` or `/codenv/arcadia`;
+- parent directories that may contain Arcadia, e.g. `~`, `~/arcadias`, `/Users/<user>`,
   `/codenv`, or `/`.
 
 Allowed patterns:

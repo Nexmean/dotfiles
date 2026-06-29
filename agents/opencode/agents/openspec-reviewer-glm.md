@@ -1,6 +1,6 @@
 ---
 description: OpenSpec change and implementation reviewer using GLM.
-disable: true
+disable: false
 mode: subagent
 model: zai-coding-plan/glm-5.2
 temperature: 0.1

@@ -63,10 +63,8 @@ in
       autoupdate = false;
 
       plugin = [
-        "@mohak34/opencode-notifier"
         "@plannotator/opencode"
         "@cortexkit/opencode-magic-context"
-        # "@cortexkit/aft-opencode"
         "opencode-direnv"
       ];
 
@@ -105,12 +103,6 @@ in
             "--api-key"
             "{file:${config.sops.secrets.context7-api-key.path}}"
           ];
-        };
-
-        grep_app = {
-          type = "remote";
-          enabled = true;
-          url = "https://mcp.grep.app";
         };
 
         web_fetch_md = {
