@@ -11,7 +11,11 @@ let
   herdrWrapper = pkgs.writeShellScriptBin "herdr" ''
     set -euo pipefail
 
-    if [[ "''${1:-}" != "remote-client-bridge" ]]; then
+    if [[ -z "''${SSH_AUTH_SOCK:-}" ]]; then
+      exec ${herdr}/bin/herdr "$@"
+    fi
+
+    if [[ $# -gt 0 && "''${1:-}" != "remote-client-bridge" ]]; then
       exec ${herdr}/bin/herdr "$@"
     fi
 
