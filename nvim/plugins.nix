@@ -55,5 +55,6 @@
     ./plugins/tabterm.nix
     ./plugins/vim-maximizer.nix
     ./plugins/herdr-navigation.nix
+    ./plugins/lazydev.nix
   ];
 }
