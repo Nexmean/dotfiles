@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    spec42 = {
+      url = "path:../spec42";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     astGrepSkill = {
       url = "github:ast-grep/agent-skill";
       flake = false;
@@ -21,6 +26,16 @@
 
     qmd = {
       url = "github:tobi/qmd";
+      flake = false;
+    };
+
+    quintLlmKit = {
+      url = "github:quint-co/quint-llm-kit";
+      flake = false;
+    };
+
+    sysmlv2Skill = {
+      url = "github:DeciSym/sysmlv2-skill";
       flake = false;
     };
 
@@ -41,23 +56,31 @@
       ...
     }:
     let
-      mkHomeModule = system: {
-        _module.args.agentsInputs = inputs;
-        _module.args.agents = self;
-        _module.args.system = system;
+      mkHomeModule =
+        system:
+        let
+          spec42 = inputs.spec42.packages.${system}.default or null;
+        in
+        {
+          _module.args.agentsInputs = inputs;
+          _module.args.agents = self;
+          _module.args.system = system;
 
-        imports = [
-          ./opencode.nix
-          ./openspec.nix
-        ];
+          imports = [
+            ./opencode.nix
+            ./openspec.nix
+          ];
 
-        home.packages = with inputs.llm-agents.packages.${system}; [
-          codegraph
-          openspec
-          qmd
-          inputs.crit.packages.${system}.default
-        ];
-      };
+          home.packages =
+            (with inputs.llm-agents.packages.${system}; [
+              codegraph
+              jscpd
+              openspec
+              qmd
+              inputs.crit.packages.${system}.default
+            ])
+            ++ inputs.nixpkgs.lib.optional (spec42 != null) spec42;
+        };
     in
     {
       homeModules = builtins.mapAttrs (system: _: {

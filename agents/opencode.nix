@@ -12,31 +12,27 @@ let
   localSkillDirs = lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./skills);
   localSkills = lib.mapAttrs (name: _: agents + "/skills/${name}") localSkillDirs;
   opencodeVim = import ./opencode-vim { inherit agentsInputs pkgs system; };
+  spec42 = agentsInputs.spec42.packages.${system}.default or null;
 in
 {
-  home.sessionVariables = {
-    OPENCODE_ENABLE_EXA = 1;
-  };
-
-  home.file."${configDir}/magic-context.jsonc".text = builtins.toJSON {
+  home.file.".config/cortexkit/magic-context.jsonc".text = builtins.toJSON {
     "$schema" =
       "https://raw.githubusercontent.com/cortexkit/opencode-magic-context/master/assets/magic-context.schema.json";
     enabled = true;
 
-    historian = {
-      model = "openai/gpt-5.5";
-    };
+    historian.model = "openai/gpt-5.6-terra";
 
     execute_threshold_tokens."zai-coding-plan/glm-5.2" = 160 * 1000;
+    execute_threshold_tokens."openai/gpt-5.6-sol" = 200 * 1000;
 
     dreamer = {
       enabled = true;
-      model = "openai/gpt-5.5";
+      model = "openai/gpt-5.6-sol";
     };
 
     sidekick = {
       enabled = true;
-      model = "opencode-go/minimax-m3";
+      model = "openai/gpt-5.6-terra";
     };
   };
 
@@ -53,6 +49,10 @@ in
       ast-grep = agentsInputs.astGrepSkill + "/ast-grep/skills/ast-grep";
       skill-creator = agentsInputs.openaiSkills + "/skills/.system/skill-creator";
       qmd = agentsInputs.qmd + "/skills/qmd";
+      quint-execute-spec = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-execute-spec";
+      quint-lang = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-lang";
+      quint-modeling = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-modeling";
+      sysmlv2-skill = agentsInputs.sysmlv2Skill + "/.";
     }
     // localSkills;
 
@@ -62,8 +62,8 @@ in
       autoupdate = false;
 
       plugin = [
-        "@plannotator/opencode"
-        "@cortexkit/opencode-magic-context"
+        "@cortexkit/opencode-magic-context@latest"
+        "@dietrichgebert/ponytail"
         "opencode-direnv"
       ];
 
@@ -85,13 +85,20 @@ in
           };
         in
         {
-          websearch = "allow";
           "codegraph_*" = "allow";
+          "spec42_*" = "allow";
         }
         // readonly "/nix/store/**"
         // readonly "~/.cargo/registry/**";
 
       mcp = {
+        exa = {
+          type = "remote";
+          enabled = true;
+          url = "https://mcp.exa.ai/mcp";
+          headers.x-api-key= "{file:${config.sops.secrets.exa-api-key.path}}";
+        };
+
         context7 = {
           type = "local";
           enabled = true;
@@ -124,6 +131,12 @@ in
           ];
         };
 
+        spec42 = lib.mkIf (spec42 != null) {
+          type = "local";
+          enabled = true;
+          command = [ "${spec42}/bin/spec42-mcp" ];
+        };
+
         vision = {
           type = "local";
           enabled = true;
@@ -151,19 +164,19 @@ in
       agent = {
         plan = {
           mode = "primary";
-          model = "openai/gpt-5.5";
+          model = "openai/gpt-5.6-sol";
           reasoningEffort = "xhigh";
         };
 
         build = {
           mode = "primary";
-          model = "openai/gpt-5.5";
+          model = "openai/gpt-5.6-sol";
           reasoningEffort = "xhigh";
         };
 
         ask = {
           mode = "primary";
-          model = "openai/gpt-5.5";
+          model = "openai/gpt-5.6-sol";
           reasoningEffort = "xhigh";
           description = "Answer questions and analyze without editing code";
           permission = {
@@ -172,8 +185,20 @@ in
         };
 
         general = {
-          model = "openai/gpt-5.5-fast";
+          model = "openai/gpt-5.6-sol-fast";
           reasoningEffort = "high";
+          permission.task."*" = "allow";
+          permission.task.general = "deny";
+        };
+
+        general-fast = {
+          mode = "subagent";
+          model = "openai/gpt-5.6-terra-fast";
+          reasoningEffort = "high";
+          description = "Faster but less capable general-purpose agent. Use for straightforward research and execution tasks where speed matters more than deep reasoning.";
+          permission.todowrite = "deny";
+          permission.task."*" = "allow";
+          permission.task.general = "deny";
         };
       };
 
@@ -192,7 +217,7 @@ in
 
     tui = {
       plugin = [
-        "@cortexkit/opencode-magic-context"
+        "@cortexkit/opencode-magic-context@latest"
       ];
 
       keybinds = {

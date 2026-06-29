@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "likec4-dsl": {
+      "source": "likec4/likec4",
+      "sourceType": "github",
+      "skillPath": "skills/likec4-dsl/SKILL.md",
+      "computedHash": "a5b8f83dd30b551e9dd3c862c8847d02f1ca7beac4e32ef996e708b82b442d9e"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 ---
 description: "Adversarial design/spec critic. Use before implementation to challenge task specs, architecture, APIs, invariants, trade-offs, migrations, and hidden requirements."
 mode: subagent
-model: openai/gpt-5.5-fast
+model: openai/gpt-5.6-sol-fast
 reasoningEffort: high
 temperature: 0.15
 steps: 50

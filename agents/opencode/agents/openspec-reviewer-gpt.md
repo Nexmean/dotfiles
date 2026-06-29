@@ -1,7 +1,7 @@
 ---
 description: OpenSpec change and implementation reviewer using GPT.
 mode: subagent
-model: openai/gpt-5.5-fast
+model: openai/gpt-5.6-sol
 reasoningEffort: high
 temperature: 0.1
 maxSteps: 80
