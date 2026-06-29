@@ -89,7 +89,6 @@ let
       sensitivity = 1;
       deceleration = 3;
       gesture.fingers_count = 3;
-      vertical = true;
     };
     decorations.inactive.dim = {
       opacity = -0.015;
