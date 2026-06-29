@@ -62,6 +62,7 @@ in
     pkgs.bottom
     pkgs.bun
     pkgs.devcontainer
+    pkgs.devenv
     pkgs.docker
     pkgs.fd
     pkgs.gitu
