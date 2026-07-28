@@ -183,9 +183,9 @@ External plugin sources are usually declared in `nvim/flake.nix` as `flake = fal
 - `agents/opencode.nix` configures OpenCode, plugins, MCP servers, provider API key paths, shared instructions, commands, skills, agents, and TUI keybindings.
 - `agents/pi.nix` installs Pi from `llm-agents.nix` and symlinks Pi settings, theme, agents, skills, and magic-context config into `~/.pi/agent`.
 - Shared base instructions live in `agents/opencode/instructions/`; `agents/pi.nix` concatenates them into Pi's global `AGENTS.md`.
-- OpenCode subagents live in `agents/opencode/agents/`: `researcher`, `explore`, and `openspec-reviewer-{gpt,glm,kimi}`.
+- OpenCode subagents live in `agents/opencode/agents/`: `researcher` and `explore`.
 - Pi subagents live in `agents/pi/agents/` with matching custom agents plus exact-name disabled overrides for upstream `Explore`, `Plan`, and `general-purpose`.
-- Shared skills live in `agents/skills/`: `add-nixvim-plugin`, `jujutsu`, `vcs-detect`, and OpenSpec review skills.
+- Shared local skills live in `agents/skills/`; OpenCode also imports engineering and productivity skills from `mattpocock/skills`.
 - Local project Pi OpenSpec workflow skills live under `.pi/skills/` when present (the `.pi/` directory is ignored by git).
 - Pi packages are listed in `agents/pi/settings.json` (subagents, Plannotator, Tavily web search, magic context, processes, smart fetch, hashline readmap, Mermaid, MCP adapter, ask-user).
 - After changing agent configs, run `task switch:home`; restart or reload the relevant OpenCode/Pi session before manual testing.

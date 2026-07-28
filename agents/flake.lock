@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "astGrepSkill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1783087819,
-        "narHash": "sha256-awochSE2OupbsmaGx0xc7wHf0ovVMSdtHv4gZAGWOus=",
-        "owner": "ast-grep",
-        "repo": "agent-skill",
-        "rev": "c2a9bc154f4ffe08b25d28d5e852dfac8c0d0d8a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ast-grep",
-        "repo": "agent-skill",
-        "type": "github"
-      }
-    },
     "bun2nix": {
       "inputs": {
         "flake-parts": [
@@ -46,26 +30,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "bun2nix",
-        "type": "github"
-      }
-    },
-    "crit": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1783974944,
-        "narHash": "sha256-pYiJyUw3nj12UAtgwp19ZxLXOCHxV+Lt1JJdPX2v83I=",
-        "owner": "tomasz-tomczyk",
-        "repo": "crit",
-        "rev": "ef5bdae4c3f95e8d177c7f7ef9a70f662bcb5f46",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tomasz-tomczyk",
-        "repo": "crit",
         "type": "github"
       }
     },
@@ -114,6 +78,22 @@
         "type": "github"
       }
     },
+    "mattPocockSkills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785230297,
+        "narHash": "sha256-dQtG6usJWlg/FqTajrjcs8GSdymH92WsgLiUaCfvKPA=",
+        "owner": "mattpocock",
+        "repo": "skills",
+        "rev": "2ab958093e83e0ec752e6c1c5932da465bf23e0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mattpocock",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1784115452,
@@ -143,22 +123,6 @@
       "original": {
         "owner": "openai",
         "repo": "skills",
-        "type": "github"
-      }
-    },
-    "openspecSchemas": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1782463373,
-        "narHash": "sha256-jD9YFcJYH4vtxca5ltmkwijzz9dslvpE3wt0rQ4Nifo=",
-        "owner": "intent-driven-dev",
-        "repo": "openspec-schemas",
-        "rev": "87ec4decf3151b0d7d10b7bf0f6ad9c7e74eccc0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "intent-driven-dev",
-        "repo": "openspec-schemas",
         "type": "github"
       }
     },
@@ -196,31 +160,12 @@
     },
     "root": {
       "inputs": {
-        "astGrepSkill": "astGrepSkill",
-        "crit": "crit",
         "llm-agents": "llm-agents",
+        "mattPocockSkills": "mattPocockSkills",
         "nixpkgs": "nixpkgs",
         "openaiSkills": "openaiSkills",
-        "openspecSchemas": "openspecSchemas",
         "qmd": "qmd",
-        "quintLlmKit": "quintLlmKit",
-        "sysmlv2Skill": "sysmlv2Skill"
-      }
-    },
-    "sysmlv2Skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780335492,
-        "narHash": "sha256-1Dk4X4pEwsVC/jXnBdz9PH6OTytLJ8viDQ1rWZ/luTg=",
-        "owner": "DeciSym",
-        "repo": "sysmlv2-skill",
-        "rev": "bcfbd0cc35eb7b723f09995ce9f27bd62d4c236e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DeciSym",
-        "repo": "sysmlv2-skill",
-        "type": "github"
+        "quintLlmKit": "quintLlmKit"
       }
     },
     "systems": {

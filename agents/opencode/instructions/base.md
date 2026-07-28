@@ -59,33 +59,6 @@ Use subagents by default for mechanical I/O work: heavy search, documentation lo
 
 The parent agent owns interpretation and final decisions. Subagents collect and compress evidence.
 
-### Runtime-specific invocation
-
-#### OpenCode
-
-- Delegate to the named subagent, for example `@explore`, `@researcher`, or `@openspec-reviewer-gpt`.
-- Send a single JSON object matching that subagent's input contract; no prose wrapper.
-
-#### Pi with `npm:@tintinweb/pi-subagents`
-
-- Use the `Agent` tool.
-- Set `subagent_type` to the custom agent filename, for example `explore`, `researcher`, `openspec-reviewer-gpt`, or `openspec-reviewer-minimax`.
-- Put the formatted JSON payload in the `prompt` string and do not add prose around it.
-- Use a short `description` of 3-5 words.
-- Do not set `schedule` unless the user explicitly asked for delayed or recurring execution.
-
-Example Pi call:
-
-```js
-Agent({
-  subagent_type: "explore",
-  description: "Find auth flow",
-  prompt:
-    '{\n  "q": "Trace how login reaches token issuance",\n  "mode": "trace",\n  "focus": "auth login token"\n}',
-  run_in_background: false,
-});
-```
-
 ### Invocation rules (all subagents)
 
 - Send exactly one JSON object matching the target subagent's input contract.
@@ -132,27 +105,6 @@ Input contract:
   "limit": 8,
   "prefer": ["man", "web", "github", "code", "api"],
   "skills": ["optional-skill-name"]
-}
-```
-
-### `openspec-reviewer-*`
-
-- Purpose: independent read-only review of one OpenSpec change and its implementation.
-- Delegate from OpenSpec review workflows when you need multiple model perspectives.
-- Each reviewer must load/follow the shared `openspec-reviewer` skill and return Markdown findings using that skill's output format.
-- Reviewers may use `explore` or `researcher` only for focused evidence gathering. They must not edit files or ask subagents to edit.
-- Keep the payload compact. Reviewers load OpenSpec artifacts and inspect the requested diff/location themselves with read-only tools.
-
-Input contract:
-
-```json
-{
-  "change": "openspec-change-name",
-  "location": {
-    "kind": "working-copy|jj-revset|jj-bookmark|git-branch|git-commit|git-range|github-pr|arc-review|patch|custom",
-    "value": "user-provided location or command details"
-  },
-  "focus": "optional review focus"
 }
 ```
 

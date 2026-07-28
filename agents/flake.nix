@@ -9,8 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    astGrepSkill = {
-      url = "github:ast-grep/agent-skill";
+    mattPocockSkills = {
+      url = "github:mattpocock/skills";
       flake = false;
     };
 
@@ -28,21 +28,6 @@
       url = "github:quint-co/quint-llm-kit";
       flake = false;
     };
-
-    sysmlv2Skill = {
-      url = "github:DeciSym/sysmlv2-skill";
-      flake = false;
-    };
-
-    crit = {
-      url = "github:tomasz-tomczyk/crit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    openspecSchemas = {
-      url = "github:intent-driven-dev/openspec-schemas";
-      flake = false;
-    };
   };
 
   outputs =
@@ -58,16 +43,18 @@
 
         imports = [
           ./opencode.nix
-          ./openspec.nix
         ];
 
-        home.packages = with inputs.llm-agents.packages.${system}; [
-          codegraph
-          jscpd
-          openspec
-          qmd
-          inputs.crit.packages.${system}.default
-        ];
+        home.packages = (
+          with inputs.llm-agents.packages.${system};
+          [
+            beads-rust
+            beads-viewer
+            codegraph
+            jscpd
+            qmd
+          ]
+        );
       };
     in
     {

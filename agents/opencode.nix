@@ -11,6 +11,20 @@ let
   configDir = ".config/opencode";
   localSkillDirs = lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./skills);
   localSkills = lib.mapAttrs (name: _: agents + "/skills/${name}") localSkillDirs;
+  mattPocockEngineeringDir = agentsInputs.mattPocockSkills + "/skills/engineering";
+  mattPocockEngineeringSkillDirs = lib.filterAttrs (_: type: type == "directory") (
+    builtins.readDir mattPocockEngineeringDir
+  );
+  mattPocockEngineeringSkills = lib.mapAttrs (
+    name: _: mattPocockEngineeringDir + "/${name}"
+  ) mattPocockEngineeringSkillDirs;
+  mattPocockProductivityDir = agentsInputs.mattPocockSkills + "/skills/productivity";
+  mattPocockProductivitySkillDirs = lib.filterAttrs (_: type: type == "directory") (
+    builtins.readDir mattPocockProductivityDir
+  );
+  mattPocockProductivitySkills = lib.mapAttrs (
+    name: _: mattPocockProductivityDir + "/${name}"
+  ) mattPocockProductivitySkillDirs;
   opencodeVim = import ./opencode-vim { inherit agentsInputs pkgs system; };
 in
 {
@@ -36,8 +50,6 @@ in
   };
 
   home.file."${configDir}/instructions/base.md".source = ./opencode/instructions/base.md;
-  home.file."${configDir}/instructions/subagent-json-format.md".source =
-    ./opencode/instructions/subagent-json-format.md;
   home.file."${configDir}/plugins/arcadia-search-guard.ts".source =
     ./opencode/plugins/arcadia-search-guard.ts;
 
@@ -47,14 +59,14 @@ in
     agents = ./opencode/agents;
     commands = ./commands;
     skills = {
-      ast-grep = agentsInputs.astGrepSkill + "/ast-grep/skills/ast-grep";
       skill-creator = agentsInputs.openaiSkills + "/skills/.system/skill-creator";
       qmd = agentsInputs.qmd + "/skills/qmd";
       quint-execute-spec = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-execute-spec";
       quint-lang = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-lang";
       quint-modeling = agentsInputs.quintLlmKit + "/quint-llm-kit-plugin/skills/quint-modeling";
-      sysmlv2-skill = agentsInputs.sysmlv2Skill + "/.";
     }
+    // mattPocockEngineeringSkills
+    // mattPocockProductivitySkills
     // localSkills;
 
     settings = {
