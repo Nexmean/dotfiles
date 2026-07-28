@@ -1,23 +1,23 @@
 {
   config,
   lib,
+  nvimInputs,
   pkgs,
   ...
 }:
 let
-  rev = "e413b1b57849a0097478548b25fcae2f3d0171d1";
-  sysmlRev = "07a94a38c3090a0f730dc2b3ecdcd025d63226be";
+  tree-sitter-likec4 = pkgs.tree-sitter.buildGrammar {
+    language = "likec4";
+    version = "0-unstable-${nvimInputs.tree-sitter-likec4.shortRev}";
+    src = nvimInputs.tree-sitter-likec4;
+
+    meta.homepage = "https://github.com/kremovtort/tree-sitter-likec4";
+  };
 
   tree-sitter-quint = pkgs.tree-sitter.buildGrammar {
     language = "quint";
-    version = "0-unstable-${builtins.substring 0 7 rev}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "gruhn";
-      repo = "tree-sitter-quint";
-      inherit rev;
-      hash = "sha256-WVSRFaj+X/S4DgyA6nWmRO+99iWG9Tr5hVrj53VB8E4=";
-    };
+    version = "0-unstable-${nvimInputs.tree-sitter-quint.shortRev}";
+    src = nvimInputs.tree-sitter-quint;
 
     meta.homepage = "https://github.com/gruhn/tree-sitter-quint";
   };
@@ -25,13 +25,7 @@ let
   tree-sitter-sysml = pkgs.tree-sitter.buildGrammar {
     language = "sysml";
     version = "0.1.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "nomograph-ai";
-      repo = "tree-sitter-sysml";
-      rev = sysmlRev;
-      hash = "sha256-HoocmrFwYyYCuH+1b4X2uYMz1+D7q1jMZlExebwWT/A=";
-    };
+    src = nvimInputs.tree-sitter-sysml;
 
     meta.homepage = "https://github.com/nomograph-ai/tree-sitter-sysml";
   };
@@ -41,10 +35,12 @@ in
     enable = true;
 
     grammarPackages = config.plugins.treesitter.package.allGrammars ++ [
+      tree-sitter-likec4
       tree-sitter-quint
       tree-sitter-sysml
     ];
 
+    languageRegister.likec4 = "likec4";
     languageRegister.quint = "quint";
     languageRegister.sysml = "sysml";
 
@@ -55,6 +51,7 @@ in
   };
 
   extraPlugins = [
+    tree-sitter-likec4
     tree-sitter-quint
     tree-sitter-sysml
   ];

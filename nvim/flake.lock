@@ -301,7 +301,10 @@
         "plugins-vim-herdr-navigation": "plugins-vim-herdr-navigation",
         "plugins-vim-maximizer": "plugins-vim-maximizer",
         "plugins-virtual-types-nvim": "plugins-virtual-types-nvim",
-        "tabterm": "tabterm"
+        "tabterm": "tabterm",
+        "tree-sitter-likec4": "tree-sitter-likec4",
+        "tree-sitter-quint": "tree-sitter-quint",
+        "tree-sitter-sysml": "tree-sitter-sysml"
       }
     },
     "systems": {
@@ -342,6 +345,56 @@
         "owner": "kremovtort",
         "ref": "testing",
         "repo": "tabterm.nvim",
+        "type": "github"
+      }
+    },
+    "tree-sitter-likec4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784317256,
+        "narHash": "sha256-3YPUxxi+Me5uE3hixTrQmTEPA6Xf8yotTEbDTUmswhw=",
+        "owner": "kremovtort",
+        "repo": "tree-sitter-likec4",
+        "rev": "2f9b3a1f9cce6de990b9144c881583a013102fc9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kremovtort",
+        "repo": "tree-sitter-likec4",
+        "type": "github"
+      }
+    },
+    "tree-sitter-quint": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1744198699,
+        "narHash": "sha256-WVSRFaj+X/S4DgyA6nWmRO+99iWG9Tr5hVrj53VB8E4=",
+        "owner": "gruhn",
+        "repo": "tree-sitter-quint",
+        "rev": "e413b1b57849a0097478548b25fcae2f3d0171d1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gruhn",
+        "repo": "tree-sitter-quint",
+        "rev": "e413b1b57849a0097478548b25fcae2f3d0171d1",
+        "type": "github"
+      }
+    },
+    "tree-sitter-sysml": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773189645,
+        "narHash": "sha256-HoocmrFwYyYCuH+1b4X2uYMz1+D7q1jMZlExebwWT/A=",
+        "owner": "nomograph-ai",
+        "repo": "tree-sitter-sysml",
+        "rev": "07a94a38c3090a0f730dc2b3ecdcd025d63226be",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nomograph-ai",
+        "ref": "v0.1.0",
+        "repo": "tree-sitter-sysml",
         "type": "github"
       }
     }

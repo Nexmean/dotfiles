@@ -76,6 +76,21 @@
       flake = false;
     };
 
+    tree-sitter-quint = {
+      url = "github:gruhn/tree-sitter-quint/e413b1b57849a0097478548b25fcae2f3d0171d1";
+      flake = false;
+    };
+
+    tree-sitter-likec4 = {
+      url = "github:kremovtort/tree-sitter-likec4";
+      flake = false;
+    };
+
+    tree-sitter-sysml = {
+      url = "github:nomograph-ai/tree-sitter-sysml/v0.1.0";
+      flake = false;
+    };
+
   };
 
   outputs =
@@ -134,6 +149,7 @@
           nvim4vscode-unwrapped = nixvim'.makeNixvimWithModule {
             inherit pkgs;
             module = import ./vscode.nix;
+            extraSpecialArgs.nvimInputs = inputs;
           };
         in
         {
