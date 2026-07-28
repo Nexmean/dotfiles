@@ -56,6 +56,6 @@ in
   # stale entry first (old Nix store path), then link the current source.
   home.activation.herdrNavigationPlugin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD ${herdr}/bin/herdr plugin unlink vim-herdr-navigation 2>/dev/null || true
-    $DRY_RUN_CMD ${herdr}/bin/herdr plugin link ${herdrNavigationSrc}
+    $DRY_RUN_CMD ${herdr}/bin/herdr plugin link ${herdrNavigationSrc} || true
   '';
 }
