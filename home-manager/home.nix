@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   pkgs,
   lib,
   system,
@@ -68,6 +67,7 @@ in
     pkgs.gitu
     pkgs.gnumake
     pkgs.htop
+    pkgs.hunk
     pkgs.hydra-check
     pkgs.jetbrains-mono
     pkgs.jiq
