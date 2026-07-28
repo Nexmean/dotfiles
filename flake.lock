@@ -453,6 +453,26 @@
         "type": "github"
       }
     },
+    "nix-task": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784295167,
+        "narHash": "sha256-tKwxhM2bZEGFXuncm4KnFfXO0wejv7ypO6iDswSiVFE=",
+        "owner": "kremovtort",
+        "repo": "nix-task",
+        "rev": "1662113a65755cee18df2bea0a1db07405eafad5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kremovtort",
+        "repo": "nix-task",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1766840161,
@@ -915,6 +935,7 @@
         "karabinix": "karabinix",
         "llm-agents": "llm-agents_2",
         "nix-darwin": "nix-darwin",
+        "nix-task": "nix-task",
         "nixpkgs": "nixpkgs_4",
         "nvim": "nvim",
         "paneru": "paneru",

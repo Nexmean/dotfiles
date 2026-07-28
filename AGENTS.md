@@ -27,7 +27,7 @@ This is a **Nix-based dotfiles** repository for macOS (aarch64-darwin) and Linux
 ├── flake.nix                 # Main flake entry point
 ├── flake.lock                # Locked root dependencies
 ├── init.sh                   # Bootstrap script (installs Nix, runs switch)
-├── justfile                  # Task runner commands
+├── tasks.nix                 # nix-task task definitions
 ├── darwin/                   # macOS system configuration (nix-darwin)
 │   ├── configuration.nix     # System settings, keyboard, PAM/TouchID
 │   ├── homebrew.nix          # Homebrew taps/brews
@@ -75,17 +75,16 @@ This is a **Nix-based dotfiles** repository for macOS (aarch64-darwin) and Linux
 
 ## Key Commands
 
-All commands are run via `just` (task runner):
+Commands are run with `task` from `nix develop` (or a direnv-loaded shell):
 
 | Command | Description |
 |---------|-------------|
-| `just switch` | Apply all configurations (`darwin` + `home-manager` on macOS; `home-manager` + shell setup on Linux) |
-| `just switch home` | Apply only home-manager configuration (macOS target dispatch) |
-| `just switch darwin` | Apply only darwin/system configuration (macOS target dispatch) |
-| `just upgrade` | Update flake inputs and apply changes (plus `brew update` / `brew upgrade` on macOS) |
-| `just darwin-rebuild-switch` | Low-level: `sudo nix run .#darwin-rebuild -- switch --flake .` |
-| `just home-manager-switch` | Low-level: `nix run .#home-manager -- switch --flake .` |
-| `just setup-shell` | Ensure the Nix profile `zsh` is a valid login shell on non-NixOS Linux |
+| `task switch` | Apply all configurations (`darwin` + `home-manager` on macOS; `home-manager` + shell setup on Linux) |
+| `task switch:home` | Apply only home-manager configuration |
+| `task switch:darwin` | Apply only darwin/system configuration on macOS |
+| `task upgrade` | Update flake inputs and apply changes (plus `brew update` / `brew upgrade` on macOS) |
+| `task update:opencode-vim` | Update opencode-vim release hashes |
+| `task switch:shell` | Ensure the Nix profile `zsh` is a valid login shell on non-NixOS Linux |
 
 ### Bootstrap (Fresh Install)
 
@@ -96,7 +95,7 @@ All commands are run via `just` (task runner):
 This script:
 
 1. Installs Nix via the Determinate Systems installer
-2. Runs `just switch` to apply configurations
+2. Runs `nix develop -c task switch` to apply configurations
 
 ## Configuration Guidelines
 
@@ -189,7 +188,7 @@ External plugin sources are usually declared in `nvim/flake.nix` as `flake = fal
 - Shared skills live in `agents/skills/`: `add-nixvim-plugin`, `jujutsu`, `vcs-detect`, and OpenSpec review skills.
 - Local project Pi OpenSpec workflow skills live under `.pi/skills/` when present (the `.pi/` directory is ignored by git).
 - Pi packages are listed in `agents/pi/settings.json` (subagents, Plannotator, Tavily web search, magic context, processes, smart fetch, hashline readmap, Mermaid, MCP adapter, ask-user).
-- After changing agent configs, run `just switch home`; restart or reload the relevant OpenCode/Pi session before manual testing.
+- After changing agent configs, run `task switch:home`; restart or reload the relevant OpenCode/Pi session before manual testing.
 
 ### OpenSpec Workflow
 
@@ -228,7 +227,7 @@ Provides:
 - `statix` (Nix linter)
 - `shellcheck`
 - `stylua`
-- `just`
+- `task`
 
 ## Important Notes
 
@@ -254,11 +253,11 @@ Provides:
 1. Make changes to Nix/config files.
 2. Format/lint when appropriate (`nixfmt`, `statix`, `stylua`, `shellcheck`).
 3. Apply with the narrowest relevant command:
-   - `just switch home` for home-manager/user/agent changes.
-   - `just switch darwin` for macOS system changes.
-   - `just switch` for full configuration application.
-4. For Neovim-only changes, build/apply the `nvim` flake or run `just switch home`, then restart Neovim.
-5. For OpenCode/Pi changes, run `just switch home`, then restart/reload the affected agent UI.
+   - `task switch:home` for home-manager/user/agent changes.
+   - `task switch:darwin` for macOS system changes.
+   - `task switch` for full configuration application.
+4. For Neovim-only changes, build/apply the `nvim` flake or run `task switch:home`, then restart Neovim.
+5. For OpenCode/Pi changes, run `task switch:home`, then restart/reload the affected agent UI.
 6. Check terminal output for errors.
 
 ## Flake Inputs
@@ -271,6 +270,7 @@ Root `flake.nix` inputs:
 | `flake-parts` | Flake structure helper |
 | `karabinix` | Karabiner-Elements Nix module |
 | `jj-starship` | Starship integration for Jujutsu |
+| `nix-task` | Nix-defined Go Task runner |
 | `paneru` | macOS window-management configuration |
 | `nix-darwin` | macOS system management |
 | `home-manager` | User environment management |

@@ -15,4 +15,4 @@ if ! command -v nix >/dev/null 2>&1; then
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
-nix run .#just -- switch
+nix develop -c task switch

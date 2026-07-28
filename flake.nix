@@ -12,6 +12,11 @@
     karabinix.url = "github:pepegar/karabinix";
     jj-starship.url = "github:dmmulroy/jj-starship";
 
+    nix-task = {
+      url = "github:kremovtort/nix-task";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -86,14 +91,16 @@
             ];
             config = { };
           };
-          packages.just = inputs'.nixpkgs.legacyPackages.just;
           packages.home-manager = inputs'.home-manager.packages.home-manager;
           packages.darwin-rebuild = inputs'.nix-darwin.packages.darwin-rebuild;
 
           devShells.default = pkgs.mkShell {
+            inputsFrom = [
+              (inputs.nix-task.lib.${system}.mkTasks (import ./tasks.nix { inherit pkgs; }))
+            ];
+
             packages = [
               pkgs.bash-language-server
-              pkgs.just
               pkgs.lua
               pkgs.lua-language-server
               pkgs.nixd

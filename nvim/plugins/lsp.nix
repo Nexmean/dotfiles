@@ -51,7 +51,6 @@ in
     enable = true;
     servers = {
       bashls.enable = true;
-      just.enable = true;
       jsonls.enable = true;
       lua_ls = {
         enable = true;
