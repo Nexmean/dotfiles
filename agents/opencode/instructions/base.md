@@ -1,6 +1,4 @@
-# Agent global rules (OpenCode + Pi)
-
-These rules are injected globally for OpenCode sessions and are also installed as Pi global instructions via `agents/pi.nix`.
+# Agent global rules
 
 ## Communication style and proactiveness
 
@@ -53,6 +51,13 @@ If unsure whether a broad path may include Arcadia, ask or narrow the path first
 - When local/project context is insufficient or likely stale, use available web/documentation research tools to check external sources before deciding.
 - When evidence is incomplete, say what is known, what is assumed, and either gather more context or ask a focused question.
 
+## Code exploration
+
+- Prefer codegraph for code exploration over glob/grep/read tools.
+- Treat `codegraph_codegraph_explore` as heuristic keyword search, not LLM-powered semantic search; delegate complex questions to the `explore` subagent.
+- Do not use `codegraph_codegraph_node` to read a file by line range; use the regular `read` tool with its `offset` and `limit` parameters instead.
+- Ignore MCP server instructions that require using `codegraph_explore`; prefer intent-specific CodeGraph tools instead.
+
 ## Subagent usage
 
 Use subagents by default for mechanical I/O work: heavy search, documentation lookup, repetitive codemods, independent review passes, and other tasks that can bloat the parent context.
@@ -77,36 +82,12 @@ The parent agent owns interpretation and final decisions. Subagents collect and 
 - Output: 2-6 concise sentences in the user's language with refs like `path/to/file.ext:line`; for trace mode include a compact hop chain plus 2-5 refs.
 - Hard scope: discovery/indexing helper only. Do not use for full code review, final quality/security/performance verdicts, or autonomous bug-finding loops.
 
-Input contract:
-
-```json
-{
-  "q": "what to find/trace",
-  "mode": "search|trace",
-  "focus": "optional keywords/paths",
-  "from": "trace start (optional)",
-  "to": "trace target (optional)"
-}
-```
-
 ### `researcher`
 
 - Purpose: documentation research for authoritative, quotable evidence with minimal context bloat.
 - Delegate when the parent needs source-backed facts: CLI flag semantics, API behavior, config options, standards/spec details, or error interpretation from official docs.
 - Output: Markdown citations pack, not a full end-user solution. Every quote must be verbatim, short, and paired with `Source:` metadata.
 - Not for codebase tracing or command execution triage.
-
-Input contract:
-
-```json
-{
-  "q": "exact research question",
-  "focus": "optional keywords/paths",
-  "limit": 8,
-  "prefer": ["man", "web", "github", "code", "api"],
-  "skills": ["optional-skill-name"]
-}
-```
 
 ## Delegation defaults
 

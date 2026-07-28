@@ -37,6 +37,7 @@ in
 
     execute_threshold_tokens."zai-coding-plan/glm-5.2" = 160 * 1000;
     execute_threshold_tokens."openai/gpt-5.6-sol" = 200 * 1000;
+    execute_threshold_tokens."kimi-for-coding/k3" = 200 * 1000;
 
     dreamer = {
       enabled = true;
@@ -89,6 +90,8 @@ in
         auto = false;
       };
 
+      subagent_depth = 4;
+
       permission =
         let
           readonly = dir: {
@@ -106,9 +109,20 @@ in
       mcp = {
         exa = {
           type = "remote";
-          enabled = true;
+          enabled = false;
           url = "https://mcp.exa.ai/mcp";
-          headers.x-api-key= "{file:${config.sops.secrets.exa-api-key.path}}";
+          headers.x-api-key = "{file:${config.sops.secrets.exa-api-key.path}}";
+        };
+
+        tavily = {
+          type = "local";
+          enabled = true;
+          command = [
+            "npx"
+            "-y"
+            "tavily-mcp@0.1.3"
+          ];
+          environment.TAVILY_API_KEY = "{file:${config.sops.secrets.tavily-api-key.path}}";
         };
 
         context7 = {
@@ -141,8 +155,8 @@ in
             "serve"
             "--mcp"
           ];
+          environment.CODEGRAPH_MCP_TOOLS = "explore,search,node,callers,callees,impact,files,status";
         };
-
       };
 
       agent = {
@@ -169,7 +183,7 @@ in
         };
 
         general = {
-          model = "openai/gpt-5.6-sol-fast";
+          model = "openai/gpt-5.6-sol";
           reasoningEffort = "high";
           permission.task."*" = "allow";
           permission.task.general = "deny";
@@ -177,12 +191,13 @@ in
 
         general-fast = {
           mode = "subagent";
-          model = "openai/gpt-5.6-terra-fast";
+          model = "openai/gpt-5.6-terra";
           reasoningEffort = "high";
           description = "Faster but less capable general-purpose agent. Use for straightforward research and execution tasks where speed matters more than deep reasoning.";
           permission.todowrite = "deny";
           permission.task."*" = "allow";
           permission.task.general = "deny";
+          permission.task.general-fast = "deny";
         };
       };
 
