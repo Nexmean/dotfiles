@@ -204,25 +204,8 @@
         "openspecSchemas": "openspecSchemas",
         "qmd": "qmd",
         "quintLlmKit": "quintLlmKit",
-        "spec42": "spec42",
         "sysmlv2Skill": "sysmlv2Skill"
       }
-    },
-    "spec42": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "../spec42",
-        "type": "path"
-      },
-      "original": {
-        "path": "../spec42",
-        "type": "path"
-      },
-      "parent": []
     },
     "sysmlv2Skill": {
       "flake": false,

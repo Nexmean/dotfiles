@@ -7,7 +7,6 @@
 }:
 let
   nixvimLib = nvimInputs.nixvim.lib;
-  spec42 = nvimInputs.spec42.packages.${pkgs.stdenv.hostPlatform.system}.default or null;
 
   virtualTypes = pkgs.vimUtils.buildVimPlugin {
     name = "virtual-types-nvim";
@@ -209,27 +208,6 @@ in
       root_dir.__raw = ''
         function(bufnr, on_dir)
           on_dir(vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
-        end
-      '';
-    };
-  };
-
-  lsp.servers.spec42 = lib.mkIf (spec42 != null) {
-    enable = true;
-    package = spec42;
-    config = {
-      cmd = [
-        "spec42"
-        "lsp"
-      ];
-      filetypes = [
-        "sysml"
-        "kerml"
-      ];
-      root_dir.__raw = ''
-        function(bufnr, on_dir)
-          local path = vim.api.nvim_buf_get_name(bufnr)
-          on_dir(vim.fs.root(path, { "sysand.toml", "sysand.lock", ".git" }) or vim.fs.dirname(path))
         end
       '';
     };

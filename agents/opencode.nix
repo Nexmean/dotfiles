@@ -12,7 +12,6 @@ let
   localSkillDirs = lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./skills);
   localSkills = lib.mapAttrs (name: _: agents + "/skills/${name}") localSkillDirs;
   opencodeVim = import ./opencode-vim { inherit agentsInputs pkgs system; };
-  spec42 = agentsInputs.spec42.packages.${system}.default or null;
 in
 {
   home.file.".config/cortexkit/magic-context.jsonc".text = builtins.toJSON {
@@ -88,7 +87,6 @@ in
         in
         {
           "codegraph_*" = "allow";
-          "spec42_*" = "allow";
         }
         // readonly "/nix/store/**"
         // readonly "~/.cargo/registry/**";
@@ -133,11 +131,6 @@ in
           ];
         };
 
-        spec42 = lib.mkIf (spec42 != null) {
-          type = "local";
-          enabled = true;
-          command = [ "${spec42}/bin/spec42-mcp" ];
-        };
       };
 
       agent = {

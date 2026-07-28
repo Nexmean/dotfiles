@@ -301,25 +301,8 @@
         "plugins-vim-herdr-navigation": "plugins-vim-herdr-navigation",
         "plugins-vim-maximizer": "plugins-vim-maximizer",
         "plugins-virtual-types-nvim": "plugins-virtual-types-nvim",
-        "spec42": "spec42",
         "tabterm": "tabterm"
       }
-    },
-    "spec42": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "../spec42",
-        "type": "path"
-      },
-      "original": {
-        "path": "../spec42",
-        "type": "path"
-      },
-      "parent": []
     },
     "systems": {
       "locked": {

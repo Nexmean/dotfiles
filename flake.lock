@@ -12,9 +12,6 @@
         "openspecSchemas": "openspecSchemas",
         "qmd": "qmd",
         "quintLlmKit": "quintLlmKit",
-        "spec42": [
-          "spec42"
-        ],
         "sysmlv2Skill": "sysmlv2Skill"
       },
       "locked": {
@@ -607,9 +604,6 @@
         "plugins-vim-herdr-navigation": "plugins-vim-herdr-navigation",
         "plugins-vim-maximizer": "plugins-vim-maximizer",
         "plugins-virtual-types-nvim": "plugins-virtual-types-nvim",
-        "spec42": [
-          "spec42"
-        ],
         "tabterm": "tabterm"
       },
       "locked": {
@@ -939,8 +933,7 @@
         "nixpkgs": "nixpkgs_4",
         "nvim": "nvim",
         "paneru": "paneru",
-        "sops-nix": "sops-nix",
-        "spec42": "spec42"
+        "sops-nix": "sops-nix"
       }
     },
     "sops-nix": {
@@ -962,22 +955,6 @@
         "repo": "sops-nix",
         "type": "github"
       }
-    },
-    "spec42": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./spec42",
-        "type": "path"
-      },
-      "original": {
-        "path": "./spec42",
-        "type": "path"
-      },
-      "parent": []
     },
     "sysmlv2Skill": {
       "flake": false,
