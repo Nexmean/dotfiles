@@ -12,6 +12,16 @@
     karabinix.url = "github:pepegar/karabinix";
     jj-starship.url = "github:dmmulroy/jj-starship";
 
+    herdr-browser = {
+      url = "github:ogulcancelik/herdr-browser";
+      flake = false;
+    };
+
+    herdr-plannotator = {
+      url = "github:plannotator/herdr-plannotator";
+      flake = false;
+    };
+
     nix-task = {
       url = "github:kremovtort/nix-task";
       inputs.nixpkgs.follows = "nixpkgs";

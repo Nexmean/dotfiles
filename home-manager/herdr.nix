@@ -39,10 +39,17 @@ let
   # Editor side of vim-herdr-navigation is fetched by the nvim flake; reuse the
   # same source for the herdr-side registration so both stay in lockstep.
   herdrNavigationSrc = inputs.nvim.inputs.plugins-vim-herdr-navigation;
+
+  isDarwin = system == "aarch64-darwin";
 in
 {
   home.packages = [
     herdrWrapper
+  ]
+  ++ lib.optionals (!isDarwin) [
+    # herdr-browser finds `chromium` via PATH on Linux; on macOS the
+    # ungoogled-chromium cask (darwin/homebrew.nix) provides Chromium.app.
+    pkgs.chromium
   ];
 
   # herdr config lives in the working tree (herdr/config.toml) and is linked
@@ -57,5 +64,23 @@ in
   home.activation.herdrNavigationPlugin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD ${herdr}/bin/herdr plugin unlink vim-herdr-navigation 2>/dev/null || true
     $DRY_RUN_CMD ${herdr}/bin/herdr plugin link ${herdrNavigationSrc} || true
+  '';
+
+  # herdr-browser persists preference writes into browser.json, so link it
+  # out-of-store like config.toml above.
+  home.file.".config/herdr/plugins/config/official.browser/browser.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/home-manager/herdr/browser.json";
+
+  # Browser and Plannotator plugins are plain Bun/TS sources without runtime
+  # deps, so they link straight from the Nix store. Plannotator must come after
+  # Browser (its doctor requires Browser enabled). `configure` points
+  # Plannotator's presenter at the plugin; re-run on every switch because it
+  # records the realpath of the presenter inside the (hash-changing) store.
+  home.activation.herdrBrowserPlugins = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD ${herdr}/bin/herdr plugin unlink official.browser 2>/dev/null || true
+    $DRY_RUN_CMD ${herdr}/bin/herdr plugin link ${inputs.herdr-browser} || true
+    $DRY_RUN_CMD ${herdr}/bin/herdr plugin unlink official.plannotator 2>/dev/null || true
+    $DRY_RUN_CMD ${herdr}/bin/herdr plugin link ${inputs.herdr-plannotator} || true
+    $DRY_RUN_CMD env PATH="${pkgs.bun}/bin:$PATH" ${herdr}/bin/herdr plugin action invoke configure --plugin official.plannotator || true
   '';
 }

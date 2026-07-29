@@ -14,6 +14,9 @@
     }
     "macism"
   ];
+  casks = [
+    "ungoogled-chromium"
+  ];
   taps = [
     "laishulu/homebrew"
     "homebrew/services"

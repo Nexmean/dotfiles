@@ -266,6 +266,38 @@
         "type": "github"
       }
     },
+    "herdr-browser": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785246706,
+        "narHash": "sha256-4Dlo4YQpLPJKEPuXSS4EO5LMCmUn/tezEiIqlFXhCxo=",
+        "owner": "ogulcancelik",
+        "repo": "herdr-browser",
+        "rev": "be6888b71cf4eb5939ee79a746bd1a1c22ade046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ogulcancelik",
+        "repo": "herdr-browser",
+        "type": "github"
+      }
+    },
+    "herdr-plannotator": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785346999,
+        "narHash": "sha256-npXxoQLzd4tg3KOBI6nWe394iJf+qUi2M+COHoOQF5Y=",
+        "owner": "plannotator",
+        "repo": "herdr-plannotator",
+        "rev": "e10b969ea1655dbfce25d1464eef6f27c790bb79",
+        "type": "github"
+      },
+      "original": {
+        "owner": "plannotator",
+        "repo": "herdr-plannotator",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -887,6 +919,8 @@
       "inputs": {
         "agents": "agents",
         "flake-parts": "flake-parts_2",
+        "herdr-browser": "herdr-browser",
+        "herdr-plannotator": "herdr-plannotator",
         "home-manager": "home-manager",
         "jj-starship": "jj-starship",
         "karabinix": "karabinix",
