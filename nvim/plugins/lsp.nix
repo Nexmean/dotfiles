@@ -74,6 +74,8 @@ in
         };
       };
       nixd.enable = true;
+      protols.enable = true;
+      ty.enable = true;
       yamlls.enable = true;
       ts_ls.enable = true;
     };
@@ -193,23 +195,141 @@ in
           border = border,
         })
       end
+
+      do
+        local dir_cache = {}
+        local arcadia_roots = {}
+
+        local function detect_arcadia_root(dir)
+          local cached = dir_cache[dir]
+          if cached ~= nil then
+            return cached or nil
+          end
+
+          local ok, result = pcall(function()
+            return vim.system({ "arc", "root" }, { cwd = dir, text = true, timeout = 2000 }):wait()
+          end)
+
+          local root = nil
+          if ok and result and result.code == 0 then
+            root = vim.trim(result.stdout or "")
+            if root == "" then
+              root = nil
+            end
+          end
+
+          dir_cache[dir] = root or false
+          return root
+        end
+
+        local function arcadia_index_dirs(arc_root)
+          local env = vim.env.GO_ARCADIA_INDEX_DIRS
+          if env and env ~= "" then
+            local dirs = {}
+            for part in string.gmatch(env, "([^:]+)") do
+              if part:sub(1, 1) == "/" then
+                table.insert(dirs, part)
+              else
+                table.insert(dirs, arc_root .. "/" .. part)
+              end
+            end
+            return dirs
+          end
+          return { arc_root .. "/devtools/webide" }
+        end
+
+        vim.lsp.config("gopls", {
+          root_dir = function(bufnr, on_dir)
+            local fname = vim.api.nvim_buf_get_name(bufnr)
+            if fname == "" then
+              return
+            end
+
+            local dir = vim.fs.dirname(fname)
+            local arc_root = detect_arcadia_root(dir)
+            if arc_root then
+              arcadia_roots[arc_root] = true
+              on_dir(arc_root)
+              return
+            end
+
+            local marker = vim.fs.find({ "go.work", "go.mod", ".git" }, { path = dir, upward = true })[1]
+            if marker then
+              on_dir(vim.fs.dirname(marker))
+            end
+          end,
+
+          cmd = function(dispatchers, config)
+            local root = config.root_dir
+            local argv
+
+            if root and arcadia_roots[root] then
+              argv = { root .. "/ya", "tool", "gopls" }
+
+              local gopls_settings = config.settings.gopls or {}
+              gopls_settings["local"] = "a.yandex-team.ru"
+              gopls_settings.arcadiaIndexDirs = arcadia_index_dirs(root)
+              config.settings.gopls = gopls_settings
+            else
+              argv = { "gopls" }
+            end
+
+            return vim.lsp.rpc.start(argv, dispatchers, { cwd = root })
+          end,
+        })
+      end
     '';
   };
 
-  lsp.servers.quint = {
-    enable = true;
-    package = quintLanguageServer;
-    config = {
-      cmd = [
-        "quint-language-server"
-        "--stdio"
-      ];
-      filetypes = [ "quint" ];
-      root_dir.__raw = ''
-        function(bufnr, on_dir)
-          on_dir(vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
-        end
-      '';
+  lsp.servers = {
+    "*".config.capabilities.__raw = ''
+      (function()
+        local capabilities = require("blink-cmp").get_lsp_capabilities()
+        capabilities.workspace = capabilities.workspace or {}
+        capabilities.workspace.fileOperations = capabilities.workspace.fileOperations or {}
+        capabilities.workspace.fileOperations.didRename = true
+        capabilities.workspace.fileOperations.willRename = true
+        return capabilities
+      end)()
+    '';
+
+    gopls = {
+      enable = true;
+      package = pkgs.gopls;
+      config = {
+        filetypes = [
+          "go"
+          "gomod"
+          "gowork"
+          "gotmpl"
+        ];
+        settings.gopls.hints = {
+          assignVariableTypes = true;
+          compositeLiteralFields = true;
+          compositeLiteralTypes = true;
+          constantValues = true;
+          functionTypeParameters = true;
+          parameterNames = true;
+          rangeVariableTypes = true;
+        };
+      };
+    };
+
+    quint = {
+      enable = true;
+      package = quintLanguageServer;
+      config = {
+        cmd = [
+          "quint-language-server"
+          "--stdio"
+        ];
+        filetypes = [ "quint" ];
+        root_dir.__raw = ''
+          function(bufnr, on_dir)
+            on_dir(vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+          end
+        '';
+      };
     };
   };
 
