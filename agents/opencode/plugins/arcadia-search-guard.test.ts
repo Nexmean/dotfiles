@@ -1,22 +1,7 @@
-import { afterAll, describe, expect, mock, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-
-mock.module("@opencode-ai/plugin", () => {
-  const string = () => {
-    const schema = {
-      describe: () => schema,
-      optional: () => schema,
-    };
-    return schema;
-  };
-  return {
-    tool: Object.assign((definition: unknown) => definition, {
-      schema: { string },
-    }),
-  };
-});
 
 const {
   default: searchPlugin,

@@ -114,13 +114,20 @@ in
           headers.x-api-key = "{file:${config.sops.secrets.exa-api-key.path}}";
         };
 
+        websearch = {
+          type = "remote";
+          enabled = true;
+          url = "https://api.you.com/mcp";
+          headers.Authorization = "Bearer {file:${config.sops.secrets.youcom-api-key.path}}";
+        };
+
         tavily = {
           type = "local";
-          enabled = true;
+          enabled = false;
           command = [
             "npx"
             "-y"
-            "tavily-mcp@0.1.3"
+            "tavily-mcp@0.2.21"
           ];
           environment.TAVILY_API_KEY = "{file:${config.sops.secrets.tavily-api-key.path}}";
         };

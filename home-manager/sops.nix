@@ -46,5 +46,6 @@
     secrets.minimax-coding-plan-key = { };
     secrets.morphllm-key = { };
     secrets.mercury-ai-token = { };
+    secrets.youcom-api-key = { };
   };
 }

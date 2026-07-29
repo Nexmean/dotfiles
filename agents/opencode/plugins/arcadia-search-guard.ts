@@ -1,9 +1,34 @@
-import { tool, type Plugin, type ToolContext } from "@opencode-ai/plugin";
+// ponytail: no @opencode-ai/plugin import — opencode realpaths this symlinked
+// file into /nix/store, where bare package imports cannot resolve.
 import { spawn } from "node:child_process";
 import { existsSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import path from "node:path";
 import { createInterface } from "node:readline";
+
+type ToolContext = {
+  directory: string;
+  worktree: string;
+  ask(input: {
+    permission: string;
+    patterns: string[];
+    always: string[];
+    metadata: Record<string, unknown>;
+  }): Promise<void>;
+};
+
+function tool<T>(definition: T) {
+  return definition;
+}
+tool.schema = {
+  string() {
+    const schema = {
+      describe: () => schema,
+      optional: () => schema,
+    };
+    return schema;
+  },
+};
 
 const SEARCH_TIMEOUT_MS = 10_000;
 const RESULT_LIMIT = 100;
@@ -25,58 +50,71 @@ export async function runRipgrep<T>({
   timeoutMs?: number;
   command?: string;
 }) {
-  const timeout = AbortSignal.timeout(timeoutMs);
-  const signal = parentSignal
-    ? AbortSignal.any([parentSignal, timeout])
-    : timeout;
   const child = spawn(command, args, {
     cwd,
-    signal,
     stdio: ["ignore", "pipe", "pipe"],
   });
-  let processError: Error | undefined;
-  let stderr = "";
-  child.on("error", (error) => {
-    processError = error;
-  });
-  child.stderr.setEncoding("utf8");
-  child.stderr.on("data", (chunk: string) => {
-    if (stderr.length < 8192) stderr += chunk;
-  });
-  const closed = new Promise<{ code: number | null }>((resolve) => {
-    child.once("close", (code) => resolve({ code }));
-  });
-
-  const items: T[] = [];
-  let truncated = false;
-  for await (const line of createInterface({ input: child.stdout })) {
-    const item = parse(line);
-    if (item === undefined) continue;
-    items.push(item);
-    if (items.length <= RESULT_LIMIT) continue;
-    truncated = true;
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
     child.kill();
-    break;
+  }, timeoutMs);
+  timer.unref?.();
+  const abortParent = () => child.kill();
+  if (parentSignal?.aborted) child.kill();
+  else parentSignal?.addEventListener("abort", abortParent, { once: true });
+  try {
+    return await run(child);
+  } finally {
+    clearTimeout(timer);
+    parentSignal?.removeEventListener("abort", abortParent);
   }
 
-  const { code } = await closed;
-  if (timeout.aborted) {
-    throw new Error(`${label} timed out after ${timeoutMs / 1000} seconds`);
-  }
-  if (parentSignal?.aborted)
-    throw processError ?? new Error(`${label} aborted`);
-  if (processError) throw processError;
-  if (!truncated && code !== 0 && code !== 1 && code !== 2) {
-    throw new Error(stderr.trim() || `${label} failed with code ${code}`);
-  }
-  if (code === 2 && /regex parse error|error parsing regex/.test(stderr)) {
-    throw new Error(stderr.trim());
-  }
+  async function run(proc: typeof child) {
+    let processError: Error | undefined;
+    let stderr = "";
+    proc.on("error", (error) => {
+      processError = error;
+    });
+    proc.stderr.setEncoding("utf8");
+    proc.stderr.on("data", (chunk: string) => {
+      if (stderr.length < 8192) stderr += chunk;
+    });
+    const closed = new Promise<{ code: number | null }>((resolve) => {
+      proc.once("close", (code) => resolve({ code }));
+    });
 
-  return {
-    items: code === 1 ? [] : items.slice(0, RESULT_LIMIT),
-    truncated,
-  };
+    const items: T[] = [];
+    let truncated = false;
+    for await (const line of createInterface({ input: proc.stdout })) {
+      const item = parse(line);
+      if (item === undefined) continue;
+      items.push(item);
+      if (items.length <= RESULT_LIMIT) continue;
+      truncated = true;
+      proc.kill();
+      break;
+    }
+
+    const { code } = await closed;
+    if (timedOut) {
+      throw new Error(`${label} timed out after ${timeoutMs / 1000} seconds`);
+    }
+    if (parentSignal?.aborted)
+      throw processError ?? new Error(`${label} aborted`);
+    if (processError) throw processError;
+    if (!truncated && code !== 0 && code !== 1 && code !== 2) {
+      throw new Error(stderr.trim() || `${label} failed with code ${code}`);
+    }
+    if (code === 2 && /regex parse error|error parsing regex/.test(stderr)) {
+      throw new Error(stderr.trim());
+    }
+
+    return {
+      items: code === 1 ? [] : items.slice(0, RESULT_LIMIT),
+      truncated,
+    };
+  }
 }
 
 export function resolveSearchPath(
@@ -320,7 +358,7 @@ const grepTool = tool({
   },
 });
 
-export default (async ({ directory }) => ({
+export default (async ({ directory }: { directory: string }) => ({
   tool: { glob: globTool, grep: grepTool },
   "tool.execute.before": async (input, output) => {
     if (!["glob", "grep"].includes(input.tool)) return;
@@ -335,4 +373,4 @@ export default (async ({ directory }) => ({
       `Broad ${input.tool} over Arcadia or a parent directory is disabled. Use ya grep, or narrow path to a child directory.`,
     );
   },
-})) satisfies Plugin;
+}));
